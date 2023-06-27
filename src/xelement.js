@@ -54,6 +54,8 @@ export default class xElement extends HTMLElement{
             //      si .isXElement = databinding
             //      sinon attribut binding ou property binding
         }
+
+        // replaceWith(root1, root2, root3)
     }
 }
 
