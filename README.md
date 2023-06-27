@@ -3,7 +3,6 @@
 chaque x-... est un web composant custom en js vanilla
 
 - x-node -> bind d'attributs
-- x-text -> noeud
 - x-for
 - x-if
 
