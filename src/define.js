@@ -9,8 +9,10 @@ export default function define(name, render, properties){
     
     window[className] = class extends xElement{
         constructor(){ super(); }
+        class = window[className];
         static name = name;
         static render = render;
+        static template = false;
     };
     
     if(properties){
@@ -19,10 +21,14 @@ export default function define(name, render, properties){
 
     customElements.define(`x-${name}`, window[className]);
 
-    console.log(name, window[className].render)
+    // console.log(name, window[className].render)
 
 }
 
-define('input', ()=>{});
+define('input', (datas)=>{
+    return `<input x-type="datas.type" x-placeholder="datas.placeholder" x-required="!datas.optionnal">`;
+});
+
+// <x-input x-type="text" x-placeholder="Votre nom..." x-datas="mydatas"></x-input>
 
 // utiliser un proxy pour les propriétés

@@ -1,4 +1,5 @@
-
-export default dataProxyManager = {
+const dataProxyManager = {
 
 };
+
+export default dataProxyManager;
