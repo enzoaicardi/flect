@@ -67,3 +67,61 @@ function define(name, renderFunction){
     // bind les attributs
 }
 ```
+
+- boucles
+- conditions
+
+```html
+<x-for var="index" from="0" x-to="datas.array.length">
+    <!-- Récupérer un index dedans -->
+</x-for>
+<x-for var="item" from="0" x-to="datas.array.length">
+    <!-- Récupérer un item -->
+</x-for>
+```
+
+Il va falloir certainement se passer du selecteur `*` pour un `:scope > *` afin d'avoir les enfants directs en de pouvoir leur passer le contexte ? Après il s'agit peut-être d'une mauvaise analyse a voir comment on définit le comportement de l'analyseur lors de l'initialisation d'une boucle for.
+
+Probleme de la fonction de rendu.
+- comme la fonction de rendu est aussi utilisée pour executer des actions les events listeners ne peuvent pas s'appliquer au bon moment comme le rendu ne se fait qu'après leur execution, il faut donc séparer le template de rendu et la fonction de mofification.
+
+```js
+define(
+    'input',
+
+    /* html */`
+    <label ref="label">
+        <p x-text="data.name"></p>
+        <input x-type="data.type">
+    </label>`,
+
+    (data)=>{
+        data.type = data.type || 'text';
+        this.ref['label'].addEventListener()
+    }
+);
+```
+
+ou alors il faudrait une fonction de render passée en argument de la fonction d'état.
+
+```js
+define('input', (data, render)=>{
+
+    data.type = data.type || 'text';
+
+    render(/* html */`
+        <label ref="label">
+            <p x-text="data.name"></p>
+            <input x-type="data.type">
+        </label>
+    `);
+
+    this.ref['label'].addEventListener();
+
+});
+```
+
+Dans le premier cas on est plus optimisé en terme de performance car la fonction en mémoire est moins lourde.
+Dans le second on est plus explicite et on a l'impression de mieux comprendre ce qu'il se passe dans le composant.
+
+L'avantage de la seconde approche c'est qu'on peut décider d'avoir des paramètres par défaut. Cette approche est plus avantageuse en terme de flexibilité, elle sera donc privilégiée

@@ -14,8 +14,7 @@ export default class xElement extends HTMLElement{
 
         this.setStaticDatas();
         this.setProxy();
-        this.setTemplate();
-        this.buildDOM();
+        this.setDOM();
 
         // analyse dom
         // chaque element :
@@ -36,27 +35,43 @@ export default class xElement extends HTMLElement{
         this.datas = new Proxy(this._datas, dataProxyManager);
     }
 
-    setTemplate(){
-        if(!this.class.template){
-            const html = this.class.render(this.datas);
-            this.class.template = xElement.domParser.parseFromString(html, 'text/html');
-        } else {
-            this.class.render(this.datas);
-        }
+    setDOM(){
+        this.class.render(this.datas, this.buildDOM);
     }
 
-    buildDOM(){
+    buildDOM(html){
+
+        if(!html){
+            return;
+        }
+
+        if(!this.class.template){
+            this.class.template = xElement.domParser.parseFromString('text/html');
+        }
+
         const templateClone = this.class.template.cloneNode(true);
         const allElements = templateClone.querySelectorAll('*');
 
         for(let element of allElements){
-            //  analyse attribut
-            //      si .isXElement = databinding
-            //      sinon attribut binding ou property binding
+            if(element.isXElement){
+                this.bindDatas(element);
+            }
+            else {
+                this.bindAttributes(element);
+            }
         }
 
         // replaceWith(root1, root2, root3)
     }
+
+    bindDatas(element){
+        // datas binding
+    }
+
+    bindAttributes(element){
+        // attributes binding
+    }
+
 }
 
 customElements.define('x-element-prototype-factory', xElement);

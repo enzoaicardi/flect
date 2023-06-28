@@ -1,4 +1,4 @@
-import xElement from "./xelement.js";
+import xElement from "./element.js";
 
 export default function define(name, render, properties){
 
@@ -25,8 +25,23 @@ export default function define(name, render, properties){
 
 }
 
-define('input', (datas)=>{
-    return `<input x-type="datas.type" x-placeholder="datas.placeholder" x-required="!datas.optionnal">`;
+define('input', (datas, render)=>{
+
+    datas.count = 0;
+
+    setTimeout(() => {
+        datas.count++;
+    }, 500);
+
+    render(/* html */`
+        <label ref="label">
+            <input x-type="datas.type" x-placeholder="datas.placeholder" x-required="!datas.optionnal">
+        </label>
+    `);
+
+    this.ref['label'].addEventListener('click');
+    this.refs['label'].forEach(el => '...');
+
 });
 
 // <x-input x-type="text" x-placeholder="Votre nom..." x-datas="mydatas"></x-input>
