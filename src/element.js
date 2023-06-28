@@ -1,27 +1,20 @@
-import dataProxyManager from './proxy.js';
+import proxyFactory from './proxy.js';
 
 export default class xElement extends HTMLElement{
 
     static domParser = new DOMParser();
 
-    class = xElement;
-
     constructor(){
-
         super();
         this.isXElement = true;
-        this._datas = {};
+        this.init();
+    }
 
+    init(){
+        this._datas = {};
         this.setStaticDatas();
         this.setProxy();
         this.setDOM();
-
-        // analyse dom
-        // chaque element :
-        //      analyse attribut
-        //      si .isXElement = databinding
-        //      sinon attribut binding ou property binding
-
     }
 
     setStaticDatas(){
@@ -32,11 +25,12 @@ export default class xElement extends HTMLElement{
     }
 
     setProxy(){
-        this.datas = new Proxy(this._datas, dataProxyManager);
+        this.proxy = proxyFactory();
+        this.datas = new Proxy(this._datas, this.proxy);
     }
 
     setDOM(){
-        this.class.render(this.datas, this.buildDOM);
+        this.class.render.call(this, this.datas, this.buildDOM.bind(this));
     }
 
     buildDOM(html){
@@ -46,7 +40,7 @@ export default class xElement extends HTMLElement{
         }
 
         if(!this.class.template){
-            this.class.template = xElement.domParser.parseFromString('text/html');
+            this.class.template = xElement.domParser.parseFromString(html, 'text/html');
         }
 
         const templateClone = this.class.template.cloneNode(true);
@@ -61,15 +55,56 @@ export default class xElement extends HTMLElement{
             }
         }
 
-        // replaceWith(root1, root2, root3)
+        const rootElements = templateClone.querySelectorAll(':scope > *');
+        this.replaceWith(...rootElements);
+
     }
 
     bindDatas(element){
-        // datas binding
+
+        for(let attribute of element.attributes){
+
+            if(attribute.name[0] === 'x' && attribute.name[1] === '-'){
+                let name = attribute.name.substring(2);
+                // observer les changements avec getter
+            }
+            else{
+                // envoyer les données bruttes
+            }
+
+        }
+
     }
 
     bindAttributes(element){
-        // attributes binding
+
+        for(let attribute of element.attributes){
+
+            if(attribute.name[0] === 'x' && attribute.name[1] === '-'){
+
+                let name = attribute.name.substring(2);
+
+                if(name === 'text'){
+
+                }
+                else if(name === 'html'){
+
+                }
+                else{
+                    const pair = [element, name];
+                    // todo obtenir le nom de la variable a observer
+                    this.proxy.addPair('attributes', name, pair);
+                    this.removeAttribute(attribute.name);
+                }
+                // observer les changements avec getter
+            }
+
+            else if(attribute.name === 'ref'){
+                // ajouter la référence
+            }
+
+        }
+
     }
 
 }
