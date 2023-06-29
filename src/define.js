@@ -24,20 +24,24 @@ export default function define(name, render, properties){
 
 }
 
-define('input', (datas, render)=>{
-
-    datas.count = 0;
-
-    // setInterval(() => {
-    //     datas.count++;
-    //     console.log('fired :)');
-    // }, 500);
+define('input', function(datas, render){
 
     render(/* html */`
         <label ref="label">
-            <input x-type="type" x-placeholder="count" x-required="optionnal">
+            <input x-type="type" x-placeholder="style" x-required="optionnal" x-style="style" x-onclick="log">
         </label>
     `);
+
+    datas.style;
+    datas.count = 0;
+    
+    this.bind('count', 'isCount', ()=>{ return !datas.count })
+
+    setTimeout(() => {
+        datas.count++;
+    }, 500);
+
+    this.ref('label').addEventListener('click', e => datas.style = 'background-color:red;');
 
     // this.ref['label'].addEventListener('click');
     // this.refs['label'].forEach(el => '...');

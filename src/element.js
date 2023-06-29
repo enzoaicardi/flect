@@ -92,6 +92,9 @@ export default class xElement extends HTMLElement{
                 let name = attribute.name.substring(2);
                 // observer les changements avec getter
             }
+            else if(attribute.name === 'datas'){
+                // json parse + object.assign
+            }
             else{
                 // envoyer les données bruttes
             }
@@ -125,7 +128,6 @@ export default class xElement extends HTMLElement{
 
             }
 
-            console.log(i)
         }
 
     }
