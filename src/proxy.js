@@ -20,15 +20,31 @@ export default function proxyFactory(){
             console.log('change prop', variable, 'for', value);
 
             if(this.attributes[variable]){
+
                 for(let pair of this.attributes[variable]){
-                    pair[0].setAttribute(pair[1], value);
+
+                    if(pair[0] === 'text'){
+                        pair[1].textContent = value;
+                    }
+
+                    else if(pair[0] === 'html'){
+                        pair[1].innerHTML = value;
+                    }
+
+                    else{
+                        pair[1].setAttribute(pair[0], value);
+                    }
+
                 }
+
             }
 
             if(this.datas[variable]){
+                
                 for(let pair of this.datas[variable]){
-                    pair[0].setAttribute(pair[1], value);
+                    pair[1].setAttribute(pair[0], value);
                 }
+
             }
 
             return true;

@@ -28,14 +28,14 @@ define('input', (datas, render)=>{
 
     datas.count = 0;
 
-    setTimeout(() => {
-        datas.count++;
-        console.log('fired :)');
-    }, 500);
+    // setInterval(() => {
+    //     datas.count++;
+    //     console.log('fired :)');
+    // }, 500);
 
     render(/* html */`
         <label ref="label">
-            <input x-type="type" x-placeholder="count" x-required="!datas.optionnal">
+            <input x-type="type" x-placeholder="count" x-required="optionnal">
         </label>
     `);
 

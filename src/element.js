@@ -11,11 +11,24 @@ export default class xElement extends HTMLElement{
     }
 
     init(){
+        this._refs = {};
         this._datas = {};
         this.setStaticDatas();
         this.setProxy();
         this.setDOM();
     }
+
+    // getters
+
+    ref(name){
+        return this._refs[name] ? this._refs[name][0] : undefined;
+    }
+
+    refs(name){
+        return this._refs[name];
+    }
+
+    // setters
 
     setStaticDatas(){
         for(let attribute of this.attributes){
@@ -32,6 +45,15 @@ export default class xElement extends HTMLElement{
     setDOM(){
         this.class.render.call(this, this.datas, this.buildDOM.bind(this));
     }
+
+    addRef(name, element){
+        if(!this._refs[name]){
+            this._refs[name] = [];
+        }
+        this._refs[name].push(element);
+    }
+
+    // builders
 
     buildDOM(html){
 
@@ -55,10 +77,12 @@ export default class xElement extends HTMLElement{
             }
         }
 
-        const rootElements = templateClone.querySelectorAll(':scope > *');
+        const rootElements = templateClone.children;
         this.replaceWith(...rootElements);
 
     }
+
+    // binders
 
     bindDatas(element){
 
@@ -78,31 +102,30 @@ export default class xElement extends HTMLElement{
 
     bindAttributes(element){
 
-        for(let attribute of element.attributes){
+        for(let x=0, i=0; x<element.attributes.length; x++, i++){
+
+            let attribute = element.attributes[x];
 
             if(attribute.name[0] === 'x' && attribute.name[1] === '-'){
 
                 let name = attribute.name.substring(2);
 
-                if(name === 'text'){
+                const pair = [name, element];
+                this.proxy.addPair('attributes', attribute.value, pair);
+                element.removeAttribute(attribute.name);
+                x--;
 
-                }
-                else if(name === 'html'){
-
-                }
-                else{
-                    const pair = [element, name];
-                    // todo obtenir le nom de la variable a observer
-                    this.proxy.addPair('attributes', name, pair);
-                    this.removeAttribute(attribute.name);
-                }
-                // observer les changements avec getter
             }
 
             else if(attribute.name === 'ref'){
-                // ajouter la référence
+                this.addRef(attribute.value, element);
             }
 
+            else {
+
+            }
+
+            console.log(i)
         }
 
     }
