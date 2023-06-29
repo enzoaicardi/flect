@@ -84,6 +84,10 @@ export default class xElement extends HTMLElement{
 
     // binders
 
+    bind(emitter, reciever, transformer){
+        // bind une valeur à une autre valeur
+    }
+
     bindDatas(element){
 
         for(let attribute of element.attributes){
