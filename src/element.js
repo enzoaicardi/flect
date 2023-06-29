@@ -7,7 +7,9 @@ export default class xElement extends HTMLElement{
     constructor(){
         super();
         this.isXElement = true;
-        this.init();
+        if(!this.hasAttribute('noinit')){
+            this.init();
+        }
     }
 
     init(){
@@ -67,6 +69,15 @@ export default class xElement extends HTMLElement{
 
         const templateClone = this.class.template.cloneNode(true);
         const allElements = templateClone.querySelectorAll('*');
+
+        // todo :
+        // - un bind par element
+        // - chaue element ajouté = bind (permet if et for) pour clear le proxy
+        // - ajouter un event pour ondelete afin de unbind pour clear le proxy
+        // - certainement revoir le proxy avec un map ayant un element comme clé permet de clear facilement le proxy comme ça
+        // - bind data au niveau global ?
+        // - bind data au niveau block ?
+        // - ou alors for et if encapsulent leur elements et les delete du dom + heritent des datas du parent ? (enfin plutot le parent les donne)
 
         for(let element of allElements){
             if(element.isXElement){
