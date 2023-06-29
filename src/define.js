@@ -35,8 +35,6 @@ define('input', function(datas, render){
     datas.style;
     datas.count = 0;
     
-    this.bind('count', 'isCount', ()=>{ return !datas.count })
-
     setTimeout(() => {
         datas.count++;
     }, 500);

@@ -71,21 +71,14 @@ export default class xElement extends HTMLElement{
         const allElements = templateClone.querySelectorAll('*');
 
         // todo :
-        // - un bind par element
-        // - chaue element ajouté = bind (permet if et for) pour clear le proxy
-        // - ajouter un event pour ondelete afin de unbind pour clear le proxy
-        // - certainement revoir le proxy avec un map ayant un element comme clé permet de clear facilement le proxy comme ça
+        // - le clear pose probleme uniquement pour le for qui créer plusieurs elements a la volée, alors
+        //   que dans le cas d'un if on part du principe que l'élément est deja rendu, pour un for le nombre est impredictible
         // - bind data au niveau global ?
         // - bind data au niveau block ?
         // - ou alors for et if encapsulent leur elements et les delete du dom + heritent des datas du parent ? (enfin plutot le parent les donne)
 
         for(let element of allElements){
-            if(element.isXElement){
-                this.bindDatas(element);
-            }
-            else {
-                this.bindAttributes(element);
-            }
+            this.bindElement(element);
         }
 
         const rootElements = templateClone.children;
@@ -95,8 +88,21 @@ export default class xElement extends HTMLElement{
 
     // binders
 
-    bind(emitter, reciever, transformer){
+    addState(variable, transformer){
         // bind une valeur à une autre valeur
+        // todo :
+
+        // cascade('count', (value ?)=>this.isCount = true)
+        // data.isCount -> changements automatiques dans tout les cas
+    }
+
+    bindElement(element){
+        if(element.isXElement){
+            this.bindDatas(element);
+        }
+        else {
+            this.bindAttributes(element);
+        }
     }
 
     bindDatas(element){
@@ -128,8 +134,7 @@ export default class xElement extends HTMLElement{
 
                 let name = attribute.name.substring(2);
 
-                const pair = [name, element];
-                this.proxy.addPair('attributes', attribute.value, pair);
+                this.proxy.addState('attributes', attribute.value, element, name);
                 element.removeAttribute(attribute.name);
                 x--;
 
