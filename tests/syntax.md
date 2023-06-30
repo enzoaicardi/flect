@@ -60,4 +60,31 @@ Et la on a résolu les problèmes de binding.
 
 Il faut donc : mettre a disposition une telle méthode pour les objets créés de toute pièce dans la fonction de rendu, mais aussi fait la manipulation de manière automatique au data-binding sur l'élément afin d'éviter une surcharge cognitive !
 
-Il faut aussi prendre en compte la directive speciale `datas` du data-binding qui convertit un json en objet js qui sera importé directement. Mais que faire si les utilisateurs passent directement un objet js ? A voir quels sont les cas pratiques car le passage d'un objet js semble plus pertinent a première vue. Sachant qu'il est toujours possible de faire un `this.flat(JSON.parse(data.objectAsString))`
+Il faut aussi prendre en compte la directive speciale `datas` du data-binding qui convertit un json en objet js qui sera importé directement. Mais que faire si les utilisateurs passent directement un objet js ? A voir quels sont les cas pratiques car le passage d'un objet js semble plus pertinent a première vue. Sachant qu'il est toujours possible de faire un `this.flat(JSON.parse(data.objectAsString))`.
+
+## Le proxy
+
+Pourquoi utiliser le triple binding avec :
+- attributs
+- datas
+- effets
+
+Il semble en effet logique de proceder de cette manière pour éviter les erreurs et dans le futur peut-etre netoyer la mémoire. En effet les attributs et les datas sont liés à des éléments, alors s'il semble qu'on pourrait economiser de légères performances en passant directement une fonction pour chaque attribut (car on eviterait la vérification de chaque attribut s'il est `x-if`, `x-show` ou `x-for`) on serait obligé de garder les références aux éléments à l'intérieur des fonctions, cela veut dire qu'on ne pourrait pas netoyer la mémoire.
+
+La solution possible serait d'avoir un objet central de cette forme avec une clé artitraire pour les effets.
+
+```js
+effects = { // Object
+    dataVarName: [[ // Map
+        keyOrElement: [ // Array
+            mofifierFunction1, // Function
+            modifierFunction2,
+            ...
+        ]
+    ]]
+}
+```
+
+De fait lors de la suppression d'un élément on peut supprimer toutes les fonctions de référence attachées à un élément en ignorant les clés arbitraires. On peut même ainsi créer une fonction `clearEffect(name)` qui supprime les effets d'un element ou d'une variable.
+
+Le revert de cette approche est qu'on ne peut pas décider de `clear` uniquement les datas / attributs / effets.
