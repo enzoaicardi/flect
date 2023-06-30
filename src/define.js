@@ -28,15 +28,17 @@ define('input', function(datas, render){
 
     render(/* html */`
         <label ref="label">
-            <input x-type="type" x-placeholder="count">
+            <input x-type="type" x-placeholder="count" x-show="zero">
         </label>
     `);
 
+    this.effect('count', (value)=>{datas.zero = value; console.log(value);});
     datas.count = 0;
+    // datas.count = datas.count || 0;
     
-    setTimeout(() => {
-        datas.count++;
-    }, 1000);
+    // setTimeout(() => {
+    //     datas.count++;
+    // }, 1000);
 
 });
 
@@ -45,9 +47,16 @@ define('container', function(datas, render){
     render(/* html */`
         <div style="background-color:red">
             <p>Input</p>
-            <x-input></x-input>
+            <x-input x-count="count"></x-input>
         </div>
     `);
+
+    datas.count = 0;
+
+    setTimeout(() => {
+        datas.count+=10;
+        console.log('linked ?', datas.count)
+    }, 1500);
 
 });
 

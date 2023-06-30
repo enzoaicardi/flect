@@ -6,15 +6,16 @@ export default class xElement extends HTMLElement{
 
     constructor(){
         super();
-        this.isXElement = true;
+        this._xelement = true;
+        this._xrefs = {};
+        this._xdatas = this._xdatas || {};
+
         if(!this.hasAttribute('noinit')){
             this.init();
         }
     }
 
     init(){
-        this._refs = {};
-        this._datas = {};
         this.setStaticDatas();
         this.setProxy();
         this.setDOM();
@@ -23,31 +24,31 @@ export default class xElement extends HTMLElement{
     // getters
 
     ref(name){
-        return this._refs[name] ? this._refs[name][0] : undefined;
+        return this._xrefs[name] ? this._xrefs[name][0] : undefined;
     }
 
     refs(name){
-        return this._refs[name];
+        return this._xrefs[name];
     }
 
     // setters
 
     setStaticDatas(){
 
-        this._datas.body = this.innerHTML;
-        this._datas.childs = [].slice.call(this.childNodes);
-        this._datas.content = this.textContent;
+        this._xdatas.body = this.innerHTML;
+        this._xdatas.childs = [].slice.call(this.childNodes);
+        this._xdatas.content = this.textContent;
 
         for(let attribute of this.attributes){
             if(attribute.name[0] === 'x' && attribute.name[1] === '-'){ continue; }
-            this._datas[attribute.name] = attribute.value;
+            this._xdatas[attribute.name] = attribute.value;
         }
 
     }
 
     setProxy(){
         this.proxy = proxyFactory();
-        this.datas = new Proxy(this._datas, this.proxy);
+        this.datas = new Proxy(this._xdatas, this.proxy);
     }
 
     setDOM(){
@@ -55,10 +56,10 @@ export default class xElement extends HTMLElement{
     }
 
     addRef(name, element){
-        if(!this._refs[name]){
-            this._refs[name] = [];
+        if(!this._xrefs[name]){
+            this._xrefs[name] = [];
         }
-        this._refs[name].push(element);
+        this._xrefs[name].push(element);
     }
 
     // builders
@@ -76,13 +77,6 @@ export default class xElement extends HTMLElement{
         const templateClone = this.class.template.cloneNode(true).body;
         const allElements = templateClone.querySelectorAll('*');
 
-        // todo :
-        // - le clear pose probleme uniquement pour le for qui créer plusieurs elements a la volée, alors
-        //   que dans le cas d'un if on part du principe que l'élément est deja rendu, pour un for le nombre est impredictible
-        // - bind data au niveau global ?
-        // - bind data au niveau block ?
-        // - ou alors for et if encapsulent leur elements et les delete du dom + heritent des datas du parent ? (enfin plutot le parent les donne)
-
         for(let element of allElements){
             this.bindElement(element);
         }
@@ -95,15 +89,11 @@ export default class xElement extends HTMLElement{
     // binders
 
     effect(variable, transformer){
-        // bind une valeur à une autre valeur
-        // todo :
-
-        // cascade('count', (value ?)=>this.isCount = true)
-        // data.isCount -> changements automatiques dans tout les cas
+        this.proxy.addEffect(variable, transformer);
     }
 
     bindElement(element){
-        if(element.isXElement){
+        if(element.tagName[0] === 'X' && element.tagName[1] === '-'){
             this.bindDatas(element);
         }
         else {
@@ -116,8 +106,15 @@ export default class xElement extends HTMLElement{
         for(let attribute of element.attributes){
 
             if(attribute.name[0] === 'x' && attribute.name[1] === '-'){
+
                 let name = attribute.name.substring(2);
-                // observer les changements avec getter
+                if(!element._xdatas){
+                    element._xdatas = {};
+                }
+
+                element._xdatas[name] = this._xdatas[attribute.value];
+                this.proxy.addBind('datas', attribute.value, element, name);
+
             }
             else if(attribute.name === 'datas'){
                 // json parse + object.assign
@@ -140,7 +137,7 @@ export default class xElement extends HTMLElement{
             if(attribute.name[0] === 'x' && attribute.name[1] === '-'){
 
                 let name = attribute.name.substring(2);
-                this.proxy.effect('attributes', attribute.value, element, name);
+                this.proxy.addBind('attributes', attribute.value, element, name);
 
             }
 
