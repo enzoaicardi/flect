@@ -27,24 +27,27 @@ export default function define(name, render, properties){
 define('input', function(datas, render){
 
     render(/* html */`
-        <label x-ref="label" x-if="visible" x-show="visible">
-            <input x-type="type" x-placeholder="style" x-required="optionnal" x-style="style" x-onclick="log">
+        <label ref="label">
+            <input x-type="type" x-placeholder="count">
         </label>
     `);
 
-    datas.visible = false;
-    datas.style;
     datas.count = 0;
     
     setTimeout(() => {
         datas.count++;
-        datas.visible = true
     }, 1000);
 
-    this.ref('label').addEventListener('click', e => datas.style = 'background-color:red;');
+});
 
-    // this.ref['label'].addEventListener('click');
-    // this.refs['label'].forEach(el => '...');
+define('container', function(datas, render){
+
+    render(/* html */`
+        <div style="background-color:red">
+            <p>Input</p>
+            <x-input></x-input>
+        </div>
+    `);
 
 });
 

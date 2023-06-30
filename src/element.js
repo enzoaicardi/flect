@@ -33,10 +33,16 @@ export default class xElement extends HTMLElement{
     // setters
 
     setStaticDatas(){
+
+        this._datas.body = this.innerHTML;
+        this._datas.childs = [].slice.call(this.childNodes);
+        this._datas.content = this.textContent;
+
         for(let attribute of this.attributes){
             if(attribute.name[0] === 'x' && attribute.name[1] === '-'){ continue; }
             this._datas[attribute.name] = attribute.value;
         }
+
     }
 
     setProxy(){
@@ -67,7 +73,7 @@ export default class xElement extends HTMLElement{
             this.class.template = xElement.domParser.parseFromString(html, 'text/html');
         }
 
-        const templateClone = this.class.template.cloneNode(true);
+        const templateClone = this.class.template.cloneNode(true).body;
         const allElements = templateClone.querySelectorAll('*');
 
         // todo :
@@ -81,7 +87,7 @@ export default class xElement extends HTMLElement{
             this.bindElement(element);
         }
 
-        const rootElements = templateClone.children;
+        const rootElements = templateClone.childNodes;
         this.replaceWith(...rootElements);
 
     }
@@ -162,15 +168,3 @@ export default class xElement extends HTMLElement{
 }
 
 customElements.define('x-element-prototype-factory', xElement);
-
-/*
-    Trois choses a prendre en compte
-    - attribute binding (x-class x-type ...)
-    - property binding (x-text x-html)
-    - data bindind (datas data-...)
-
-    datas.content (recupère le text de l'élément)
-    datas.body (recupère le htmlcontent de l'élément)
-
-    supprimer les attributs relatifs a data binding et property binding pour plus de clarté
-*/
