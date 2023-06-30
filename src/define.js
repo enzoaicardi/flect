@@ -27,17 +27,19 @@ export default function define(name, render, properties){
 define('input', function(datas, render){
 
     render(/* html */`
-        <label ref="label">
+        <label x-ref="label" x-if="visible" x-show="visible">
             <input x-type="type" x-placeholder="style" x-required="optionnal" x-style="style" x-onclick="log">
         </label>
     `);
 
+    datas.visible = false;
     datas.style;
     datas.count = 0;
     
     setTimeout(() => {
         datas.count++;
-    }, 500);
+        datas.visible = true
+    }, 1000);
 
     this.ref('label').addEventListener('click', e => datas.style = 'background-color:red;');
 

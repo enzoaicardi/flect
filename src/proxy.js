@@ -4,81 +4,91 @@ export default function proxyFactory(){
 
         datas: {},
 
-        attributes: { // Obj
-            /*
-                count: {
-                    el: [attr, attr, attr]
-                }
-            */
-        },
+        /*{ *Object
+            data: [[ *Map
+                element: [attr, attr, attr]
+            ]]
+        }*/
+        attributes: {},
 
-        garbage: {
-            // el: [count] -> delete
-        },
+        effect(property, variable, key, value){
 
-        addState(property, variable, key, value){
-
+            // get property
             let obj = this[property];
 
+            // setup the default variable key
             if(!obj[variable]){
-                obj[variable] = {};
+                obj[variable] = new Map();
             }
 
-            if(!obj[variable][key]){
-                obj[variable][key] = [];
+            // setup the default key value
+            if(!obj[variable].get(key)){
+                obj[variable].set(key, []);
             }
 
-            obj[variable][key].push(value);
-
-            addGarbage(variable, key);
-
-        },
-
-        addGarbage(variable, key){
-
-            let obj = this.garbage;
-
-            if(!obj[key]){
-                obj[key] = [];
-            }
-            obj[key].push(variable);
-
-        },
-
-        clear(key){
-
-            let obj = this.garbage;
-
-            if(obj[key]){
-                for(let value of obj[key]){
-                    if(this.datas[value]){ delete this.datas[value][key]; }
-                    if(this.attributes[value]){ delete this.attributes[value][key]; }
-                }
-                delete obj[key];
-            }
+            // push the current binded value
+            obj[variable].get(key).push(value);
 
         },
 
         set(target, variable, value){
 
+            // update the value first
             target[variable] = value;
+            // console.log('change prop', variable, 'for', value);
 
-            console.log('change prop', variable, 'for', value);
-
+            // explore attribute binding
             if(this.attributes[variable]){
 
-                for(let pair of this.attributes[variable]){
+                // for each data loop over attached elements
+                for(let [element, attributes] of this.attributes[variable]){
 
-                    if(pair[1] === 'text'){
-                        pair[0].textContent = value;
-                    }
+                    // for each element loop over attached attributes
+                    for(let attribute of attributes){
 
-                    else if(pair[1] === 'html'){
-                        pair[0].innerHTML = value;
-                    }
+                        // special binding
+                        if(attribute === 'text'){
+                            element.textContent = value;
+                        }
+    
+                        else if(attribute === 'html'){
+                            element.innerHTML = value;
+                        }
 
-                    else{
-                        pair[0].setAttribute(pair[1], value);
+                        else if(attribute === 'show'){
+                            if(!value){ element.style.display = 'none'; }
+                            else{ element.style.removeProperty('display'); }
+                        }
+
+                        else if(attribute === 'if'){
+
+                            if(!element.xChilds){
+                                element.xChilds = [].slice.call(element.childNodes);
+                            }
+
+                            let hasChild = element.childNodes.length;
+
+                            if(!!value && !hasChild){
+                                element.append(...element.xChilds);
+                            }
+                            if(!value && hasChild){
+                                for(let node of element.xChilds){
+                                    element.removeChild(node);
+                                }
+                                console.log(element);
+                            }
+
+                        }
+
+                        else if(attribute === 'for'){
+
+                        }
+    
+                        // regular binding
+                        else{
+                            element.setAttribute(attribute, value);
+                        }
+
                     }
 
                 }

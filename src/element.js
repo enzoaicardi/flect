@@ -88,7 +88,7 @@ export default class xElement extends HTMLElement{
 
     // binders
 
-    addState(variable, transformer){
+    effect(variable, transformer){
         // bind une valeur à une autre valeur
         // todo :
 
@@ -129,14 +129,12 @@ export default class xElement extends HTMLElement{
         for(let x=0, i=0; x<element.attributes.length; x++, i++){
 
             let attribute = element.attributes[x];
+            let remove = true;
 
             if(attribute.name[0] === 'x' && attribute.name[1] === '-'){
 
                 let name = attribute.name.substring(2);
-
-                this.proxy.addState('attributes', attribute.value, element, name);
-                element.removeAttribute(attribute.name);
-                x--;
+                this.proxy.effect('attributes', attribute.value, element, name);
 
             }
 
@@ -144,8 +142,17 @@ export default class xElement extends HTMLElement{
                 this.addRef(attribute.value, element);
             }
 
-            else {
+            else if(attribute.name === 'var'){
+                element.xVar = attribute.value
+            }
 
+            else {
+                remove = false;
+            }
+
+            if(remove){
+                element.removeAttribute(attribute.name);
+                x--;
             }
 
         }
