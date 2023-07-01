@@ -9,7 +9,7 @@
     "scripts": {
         "dist": "npm run build && npm run doc",
         "minify": "rollup --config",
-        "build": "rollup --config && gzip dist/composite.js",
+        "build": "rollup --config && gzip dist/flect.js",
         "doc": "documentation build src/** -f html -o web/doc"
     },
     "prettier": {

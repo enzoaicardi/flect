@@ -1,9 +1,10 @@
 {
-    "name": "composite",
+    "name": "flect",
     "version": "1.0.0",
     "description": "The first 1.5kb truly reactive components library",
     "keywords": [
-      "composite",
+      "flect",
+      "reflect",
       "components",
       "web-components",
       "es6 components",
@@ -15,7 +16,7 @@
       "state",
       "attribute"
     ],
-    "main": "composite.js",
+    "main": "flect.js",
     "scripts": {
       "test": "echo \"Error: no test specified\" && exit 1"
     },
