@@ -33,6 +33,4 @@ clear(key){
 },
 ```
 
-regler probleme de HTML + HEAD lors de l'import d'un composant.
-
 utiliser node.getRootNode(options) pour le data-binding car permet de remonter a l'element source ?

@@ -1,6 +1,7 @@
 import xElement from "./element.js";
+import scopedStyle from "./style.js";
 
-export default function define(name, render, properties){
+export default function define(name, render, style){
 
     let className = `x${name}Element`;
 
@@ -12,54 +13,11 @@ export default function define(name, render, properties){
         static name = name;
         static render = render;
         static template = false;
+        static style = style ? scopedStyle(style) : false;
     };
 
     window[className].prototype.class = window[className];
-    
-    if(properties){
-        Object.assign(window[className].prototype, properties);
-    }
 
     customElements.define(`x-${name}`, window[className]);
 
 }
-
-define('input', function(datas, render){
-
-    render(/* html */`
-        <label ref="label">
-            <input x-type="type" x-placeholder="count" x-show="zero">
-        </label>
-    `);
-
-    this.effect('count', (value)=>{datas.zero = value; console.log(value);});
-    datas.count = 0;
-    // datas.count = datas.count || 0;
-    
-    // setTimeout(() => {
-    //     datas.count++;
-    // }, 1000);
-
-});
-
-define('container', function(datas, render){
-
-    render(/* html */`
-        <div style="background-color:red">
-            <p>Input</p>
-            <x-input x-count="count"></x-input>
-        </div>
-    `);
-
-    datas.count = 0;
-
-    setTimeout(() => {
-        datas.count+=10;
-        console.log('linked ?', datas.count)
-    }, 1500);
-
-});
-
-// <x-input x-type="text" x-placeholder="Votre nom..." x-datas="mydatas"></x-input>
-
-// utiliser un proxy pour les propriétés

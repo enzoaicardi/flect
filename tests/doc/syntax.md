@@ -87,4 +87,6 @@ effects = { // Object
 
 De fait lors de la suppression d'un élément on peut supprimer toutes les fonctions de référence attachées à un élément en ignorant les clés arbitraires. On peut même ainsi créer une fonction `clearEffect(name)` qui supprime les effets d'un element ou d'une variable.
 
-Le revert de cette approche est qu'on ne peut pas décider de `clear` uniquement les datas / attributs / effets.
+Le clear effect devrait aussi bien marcher en supprimant la référence au proxy ?
+Donc clear permet de clear certains effets en se basant sur le nom de la donnée / le nom de la clé.
+Et si l'on veut un clear total il faut supprimer le proxy.

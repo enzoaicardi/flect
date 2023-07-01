@@ -1,0 +1,18 @@
+{
+    "type": "module",
+    "devDependencies": {
+        "@rollup/plugin-terser": "^0.4.3",
+        "documentation": "^14.0.2",
+        "gzip-cli": "^1.2.0",
+        "rollup": "^3.23.0"
+    },
+    "scripts": {
+        "dist": "npm run build && npm run doc",
+        "minify": "rollup --config",
+        "build": "rollup --config && gzip dist/composite.js",
+        "doc": "documentation build src/** -f html -o web/doc"
+    },
+    "prettier": {
+        "tabWidth": 4
+    }
+}
