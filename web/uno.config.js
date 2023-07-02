@@ -11,7 +11,7 @@ export default defineConfig({
     presets: [presetPruno()],
     theme: {
         colors: {
-          'primary': 'red',
+          'primary': 'var(--color-primary)',
           'secondary': 'blue',
         }
     },

@@ -1,5 +1,5 @@
 
 :root{
-    --color-primary: red;
-    --color-secondary: blue;
+    --color-primary: #6666FF;
+    --color-secondary: hsl(240, 74%, 70%);
 }

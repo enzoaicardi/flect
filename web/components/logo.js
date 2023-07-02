@@ -1,16 +1,18 @@
 
 define('logo', function(datas, render){
 
+    datas.class = datas.class + ' relative';
+
     render(/*html*/`
         <div x-class="class">
-            <svg viewBox="0 0 40 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg class="relative z-10" viewBox="0 0 40 60" fill="none" xmlns="http://www.w3.org/2000/svg">
             <g clip-path="url(#clip0_501_79)">
             <path d="M30 0L40 5V7L10 22L0 17V15L30 0Z" fill="url(#paint0_linear_501_79)"/>
             <path d="M20 20L30 25V26.5L10 37L0 32V30L20 20Z" fill="url(#paint1_linear_501_79)"/>
             <path d="M10 40L0 45V47L10 52L20 47V45L10 40Z" fill="url(#paint2_linear_501_79)"/>
-            <path d="M0 30V40L10 45V35L0 30Z" fill="url(#paint3_linear_501_79)"/>
-            <path d="M10 50L0 45V55L10 60V50Z" fill="url(#paint4_linear_501_79)"/>
-            <path d="M10 20L0 15V25L10 30V20Z" fill="url(#paint5_linear_501_79)"/>
+            <path d="M0 30V40L10 45L12 44V34L10 35L0 30Z" fill="url(#paint3_linear_501_79)"/>
+            <path d="M10 50L0 45V55L10 60L12 59V49L10 50Z" fill="url(#paint4_linear_501_79)"/>
+            <path d="M10 20L0 15V25L10 30L12 29V19L10 20Z" fill="url(#paint5_linear_501_79)"/>
             <path d="M10 30V20L40 5V15L10 30Z" fill="url(#paint6_linear_501_79)"/>
             <path d="M30 35V25L10 35V45L30 35Z" fill="url(#paint7_linear_501_79)"/>
             <path d="M20 55V45L10 50V60L20 55Z" fill="url(#paint8_linear_501_79)"/>
@@ -57,7 +59,19 @@ define('logo', function(datas, render){
             </clipPath>
             </defs>
             </svg>
+
+            <div x-if="background">
+                <div class="backdrop absolute w-full h-full inset-0 rounded-full"></div>
+            </div>
         </div>
     `)
 
+}, ($)=>{
+    return /* css */`
+        ${$} .backdrop{
+            background-color: var(--color-primary);
+            opacity: 0.6;
+            filter: blur(100px);
+        }
+    `
 })
