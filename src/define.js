@@ -1,7 +1,7 @@
 import xElement from "./element.js";
 import scopedStyle from "./style.js";
 
-export default function define(name, render, style){
+function define(name, render, style){
 
     let className = `x${name}Element`;
 
@@ -21,3 +21,5 @@ export default function define(name, render, style){
     customElements.define(`x-${name}`, window[className]);
 
 }
+
+window.define = define;

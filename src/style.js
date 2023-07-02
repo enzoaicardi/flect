@@ -10,10 +10,9 @@ export default function scopedStyle(style){
     }
 
     let scopedName = 'x' + (xStyleIndex++);
+    let scopedSelector = `[style-ref="${scopedName}"]`;
 
-    for(let rule in style){
-        scopedStyleSheet.textContent += `[style-ref="${scopedName}"] ${rule}${style[rule]}`;
-    }
+    scopedStyleSheet.textContent += style(scopedSelector);
 
     return scopedName;
 

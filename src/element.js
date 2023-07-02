@@ -17,8 +17,8 @@ export default class xElement extends HTMLElement{
     }
 
     init(){
-        this.setStaticDatas();
         this.setProxy();
+        this.setStaticDatas();
         this.setDOM();
     }
 
@@ -57,9 +57,9 @@ export default class xElement extends HTMLElement{
 
     setStaticDatas(){
 
-        this._xdatas.body = this.innerHTML;
-        this._xdatas.childs = [].slice.call(this.childNodes);
-        this._xdatas.content = this.textContent;
+        this._xdatas.body = [].slice.call(this.childNodes);
+        this._xdatas.html = this.innerHTML;
+        this._xdatas.text = this.textContent;
 
         for(let attribute of this.attributes){
 
@@ -99,8 +99,8 @@ export default class xElement extends HTMLElement{
     }
 
     flat(name, object){
-        this._xdatas[name] = object;
-        this.getDatasFromObject(name, object, (name, value) => { this._xdatas[name] = value; });
+        this.datas[name] = object;
+        this.getDatasFromObject(name, object, (name, value) => { this.datas[name] = value; });
     }
 
     // builders
@@ -116,7 +116,7 @@ export default class xElement extends HTMLElement{
         }
 
         this._xtemplate = this.class.template.cloneNode(true).body;
-        this.bindElements(this._xtemplate);
+        this.bindChilds(this._xtemplate);
 
         const rootElements = this._xtemplate.childNodes;
 
@@ -126,7 +126,6 @@ export default class xElement extends HTMLElement{
             node.composite = this;
 
             if(this.class.style && node.nodeType === 1){
-                console.log(node);
                 node.setAttribute('style-ref', this.class.style);
             }
         }
@@ -138,7 +137,18 @@ export default class xElement extends HTMLElement{
     // binders
 
     effect(dataName, action){
-        this.proxy.effect(dataName, this, action);
+        this.proxy.effect(dataName, this, action, this._xdatas[dataName]);
+    }
+
+    replaceAttributes(root, oldName, newName){
+        let allElements = root.querySelectorAll('*');
+        for(let element of allElements){
+            for(let attribute of element.attributes){
+                if(attribute.name[0] === 'x' && attribute.name[1] === '-' && attribute.value === oldName){
+                    element.setAttribute(attribute.name, newName);
+                }
+            }
+        }
     }
 
     bindElement(element){
@@ -151,19 +161,23 @@ export default class xElement extends HTMLElement{
     }
 
     bindElements(root){
-        let allElements = root.querySelectorAll('*');
+        this.bindElement(root);
+        let allElements = root.querySelectorAll(':scope > *');
         for(let element of allElements){
-            this.bindElement(element);
+            this.bindElements(element);
+        }
+    }
+
+    bindChilds(root){
+        let allElements = root.querySelectorAll(':scope > *');
+        for(let element of allElements){
+            this.bindElements(element);
         }
     }
 
     bindData(element, dataName, mirrorName){
-
         let action = (value, item)=>{ item.datas[mirrorName] = value; }
-
-        element._xdatas[mirrorName] = this._xdatas[dataName];
-        this.proxy.effect(dataName, element, action);
-
+        this.proxy.effect(dataName, element, action, this._xdatas[dataName]);
     }
 
     bindDatas(element){
@@ -213,6 +227,20 @@ export default class xElement extends HTMLElement{
                     action = (value, item)=>{ item.innerHTML = value; };
                 }
 
+                else if(name === 'append'){
+                    action = (value, item)=>{
+                        if(value.length){ item.append(...value); }
+                        else{ item.append(value); }
+                    };
+                }
+
+                else if(name === 'prepend'){
+                    action = (value, item)=>{
+                        if(value.length){ item.prepend(...value); }
+                        else{ item.prepend(value); }
+                    };
+                }
+
                 else if(name === 'toggle'){
                     action = (value, item)=>{ item.classList.toggle(value, value); };
                 }
@@ -224,7 +252,7 @@ export default class xElement extends HTMLElement{
                     };
                 }
     
-                else if(name === 'if'){
+                else if(name === 'if' || name === 'unless'){
 
                     action = (value, item)=>{
 
@@ -233,14 +261,23 @@ export default class xElement extends HTMLElement{
                         }
 
                         let hasChild = item.childNodes.length;
-                        if(!!value && !hasChild){ this.cession(item._xjar, item); }
-                        if(!value && hasChild){ this.cession(item, item._xjar); }
+                        
+                        if(name === 'if'){
+                            if(!!value && !hasChild){ this.cession(item._xjar, item); }
+                            else if(!value && hasChild){ this.cession(item, item._xjar); }
+                        }
+                        else if(name === 'unless'){
+                            if(!!value && hasChild){ this.cession(item, item._xjar); }
+                            else if(!value && !hasChild){ this.cession(item._xjar, item); }
+                        }
 
                     }
 
                 }
 
                 else if(name === 'for'){
+
+                    const arrayName = attribute.value;
 
                     action = (array, item)=>{
 
@@ -251,25 +288,41 @@ export default class xElement extends HTMLElement{
                             this.cession(item, item._xmodel);
                         }
 
-                        let gap = array.length - item._xcount;
+                        let isNumber = typeof array === 'number';
+                        let itemName = isNumber ? false : item.getAttribute('var'); 
+                        let length = isNumber ? array : array.length;
+                        let gap = length - item._xcount;
 
                         if(gap > 0){
-                            for(let x = item._xcount; x < item._xcount + gap; x++){
-                                if(!item._xjarList[x]){
-                                    let jar = item._xmodel.cloneNode(true);
-                                    jar.childNodes.forEach(node => node._xindex = x);
-                                    this.bindElements(jar);
-                                    item._xjarList.push(jar);
+                            for(let x = 0; (x < item._xcount + gap) && x < length; x++){
+
+                                if(itemName) {
+                                    this.datas[arrayName + '.' + x] = array[x];
                                 }
-                                this.cession(item._xjarList[x], item);
+
+                                if(x >= item._xcount){
+
+                                    if(!item._xjarList[x]){
+                                        let jar = item._xmodel.cloneNode(true);
+
+                                        if(itemName) { this.replaceAttributes(jar, itemName, arrayName + '.' + x); }
+                                        jar.childNodes.forEach(node => { node._xindex = x; });
+                                        
+                                        this.bindChilds(jar);
+                                        item._xjarList.push(jar);
+                                    }
+
+                                    this.cession(item._xjarList[x], item);
+                                }
+
                             }
                         }
                         else if(gap < 0){
-                            for(let x = item._xcount - 1; x > (item._xcount - 1) + gap; x--){
+                            for(let x = item._xcount - 1; (x > (item._xcount - 1) + gap) && x >= 0; x--){
                                 while(item.childNodes.length){
                                     let node = item.childNodes[item.childNodes.length-1];
                                     if(node._xindex !== x){ break; }
-                                    item._xjarList[x].appendChild(node);
+                                    item._xjarList[x].prepend(node);
                                 }
                             }
                         }
@@ -280,17 +333,12 @@ export default class xElement extends HTMLElement{
 
                 }
                 
-                action(this._xdatas[attribute.value], element);
-                this.proxy.effect(attribute.value, element, action);
+                this.proxy.effect(attribute.value, element, action, this._xdatas[attribute.value]);
 
             }
 
             else if(attribute.name === 'ref'){
                 this.addRef(attribute.value, element);
-            }
-
-            else if(attribute.name === 'var'){
-                element._xvar = attribute.value
             }
 
             else {

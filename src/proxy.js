@@ -9,7 +9,7 @@ export default function proxyFactory(){
         }*/
         effects: {},
 
-        effect(dataName, key, action){
+        effect(dataName, key, action, defaultValue){
 
             // setup the default dataName Map
             if(!this.effects[dataName]){
@@ -23,6 +23,7 @@ export default function proxyFactory(){
 
             // push the current binded action
             this.effects[dataName].get(key).push(action);
+            action(defaultValue, key);
 
         },
 
@@ -35,7 +36,6 @@ export default function proxyFactory(){
 
             // update the value first
             target[dataName] = value;
-            // console.log('change prop', dataName, 'for', value);
 
             // explore related effects
             if(this.effects[dataName]){
