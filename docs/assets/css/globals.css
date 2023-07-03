@@ -1,0 +1,131 @@
+:root{
+
+    /* fonts */
+    --font-sans: 'Manrope', 'Inter', Arial, sans-serif;
+    --font-mono: 'Roboto Mono', monospace;
+    font-family: var(--font-sans);
+
+    /* colors */
+    --color-light: hsl(240, 10%, 98%);
+    --color-dark: hsl(240, 10%, 8%);
+    --color-primary: hsl(240, 100%, 65%);
+    --color-secondary: hsl(140, 100%, 65%);
+    --color-text: hsl(240, 10%, 80%);
+    --color-text-secondary: hsl(240, 10%, 60%);
+    --color-background-alpha: hsla(240, 10%, 85%, 0.05);
+    color: var(--color-text);
+
+    /* gradients */
+    --gradient: linear-gradient(45deg, var(--color-secondary), var(--color-primary));
+
+    /* sizes */
+    --size-heading: 40rem;
+
+}
+
+body{
+    background-color: var(--color-dark);
+}
+
+body > *{
+    margin-top: 6rem;
+    margin-bottom: 6rem;
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+h2{
+    font-size: 3rem;
+    font-weight: 800;
+}
+
+h3{
+    font-size: 2rem;
+    font-weight: 800;
+}
+
+a{
+    text-decoration: none;
+    color: inherit;
+    line-height: 1;
+}
+
+code{
+    display: block;
+    width: 100%;
+    padding: 1rem;
+    font-family: var(--font-mono);
+    background-color: var(--color-background-alpha);
+    border-radius: 0.25rem;
+}
+
+section{
+    width: 100%;
+    max-width: 67rem;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+button,
+.button{
+    display: block;
+    cursor: pointer;
+    min-height: 2.5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    border-radius: 0.25rem;
+    border: none;
+    font-family: inherit;
+    font-weight: 600;
+    font-size: inherit;
+    background-color: var(--color-background-alpha);
+    color: var(--color-primary);
+}
+
+button:hover,
+.button:hover{
+    color: var(--color-secondary);
+}
+
+button.selected,
+.button.selected{
+    background-color: var(--color-light);
+    color: var(--color-dark);
+}
+
+/* atomic classes */
+
+/* - icons */
+
+.icon{
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+.icon-medium{
+    width: 2rem;
+    height: 2rem;
+}
+
+.icon-large{
+    width: 2.5rem;
+    height: 2.5rem;
+}
+
+/* - gradient text */
+
+.text-gradient{
+    background-image: var(--gradient);
+    background-clip: text;
+    text-fill-color: transparent;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent; 
+    -moz-background-clip: text;
+    -moz-text-fill-color: transparent;
+}

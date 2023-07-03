@@ -1,0 +1,104 @@
+
+/* navigation */
+
+.navigation{
+    margin-top: 0;
+    background-color: var(--color-background-alpha);
+}
+
+.navigation section{
+    height: 4rem;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.navigation section .space{
+    margin-right: auto;
+}
+
+.navigation svg{
+    fill: var(--color-text);
+}
+
+/* heading */
+
+.heading{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.heading .logo-with-backdrop{
+    position: relative;
+    height: 16rem;
+    width: 16rem;
+}
+
+.heading .logo{
+    height: 100%;
+    padding: 2rem;
+}
+
+.heading .backdrop{
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background-image: var(--gradient);
+    z-index: -1;
+    filter: blur(3rem);
+    opacity: 0.5;
+}
+
+.heading h2{
+    max-width: var(--size-heading);
+}
+
+/* get started */
+
+.get-started p{
+    text-align: center;
+    margin-top: 1rem;
+}
+
+/* features */
+
+.features .switch{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 4rem;
+}
+
+.features .case{
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.features .case .sidebar{
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    flex: none;
+    width: 16rem;
+}
+
+.features .case .sidebar .item h3{
+    margin-bottom: 0.5rem;
+}
+
+/* footer */
+
+footer{
+    margin-bottom: 0;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--color-text-secondary);
+}

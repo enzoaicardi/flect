@@ -19,7 +19,7 @@ Allows passing a JSON object as data.
 
 ### x-datas-(name)
 
-Allows you to pass an object or an array as data and make all of its properties dynamic.
+Allows you to pass an object or an array as data and make all of its properties dynamics.
 
 ::: code-group
 ```html [render]

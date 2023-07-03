@@ -11,6 +11,7 @@ export default class xElement extends HTMLElement{
         this._xrefs = {};
         this._xdatas = this._xdatas || {};
         this._xindex = this._xindex || false;
+        this.x = {};
 
         if(!this.hasAttribute('noinit')){
             this.init();
@@ -35,22 +36,16 @@ export default class xElement extends HTMLElement{
 
     getDatasFromObject(path, object, hook){
 
+        hook(path, object);
+
         if(typeof object === 'string'){
             return false;
         }
 
         for(let key in object){
-
-            var fill = true;
             let name = path + '.' + key;
-
-            if(!this.getDatasFromObject(name, object[key], hook)){
-                hook(name, object[key]);
-            }
-
+            this.getDatasFromObject(name, object[key], hook);
         }
-
-        return fill || false;
 
     }
 
@@ -96,8 +91,7 @@ export default class xElement extends HTMLElement{
     }
 
     flat(name, object = false){
-        if(object){ this.datas[name] = object; }
-        else{ object = this._xdatas[name]; }
+        if(!object){ object = this._xdatas[name]; }
         this.getDatasFromObject(name, object, (name, value) => { this.datas[name] = value; });
     }
 
@@ -154,14 +148,24 @@ export default class xElement extends HTMLElement{
         let allElements = root.querySelectorAll('*');
         for(let element of allElements){
             for(let attribute of element.attributes){
-                if(attribute.name[0] === 'x' && attribute.name[1] === '-' && attribute.value === oldName){
-                    element.setAttribute(attribute.name, newName);
+                if(attribute.name[0] === 'x' && attribute.name[1] === '-'){
+                    if(attribute.value.startsWith(oldName + '.')){
+                        element.setAttribute(attribute.name, newName + attribute.value.substring(oldName.length));
+                    }
+                    else{
+                        element.setAttribute(attribute.name, newName);
+                    }
                 }
             }
         }
     }
 
     bindElement(element){
+
+        element.component = this;
+        element.datas = this.datas;
+        element.x = this.x;
+
         if(element.tagName[0] === 'X' && element.tagName[1] === '-'){
             this.bindDatas(element);
         }
