@@ -54,13 +54,21 @@ a{
     line-height: 1;
 }
 
-code{
+code,
+.code{
     display: block;
     width: 100%;
     padding: 1rem;
     font-family: var(--font-mono);
     background-color: var(--color-background-alpha);
-    border-radius: 0.25rem;
+    overflow: hidden;
+}
+
+code:hover,
+code:focus,
+.code:hover,
+.code:focus{
+    overflow: auto;
 }
 
 section{
