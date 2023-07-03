@@ -70,8 +70,13 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-wrap: wrap;
     gap: 1rem;
     margin-bottom: 4rem;
+}
+
+.features .switch button{
+    min-width: max-content;
 }
 
 .features .case{

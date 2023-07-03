@@ -11,7 +11,7 @@ export default class xElement extends HTMLElement{
         this._xrefs = {};
         this._xdatas = this._xdatas || {};
         this._xindex = this._xindex || false;
-        this.x = {};
+        this.custom = {};
 
         if(!this.hasAttribute('noinit')){
             this.init();
@@ -161,11 +161,7 @@ export default class xElement extends HTMLElement{
     }
 
     bindElement(element){
-
-        element.component = this;
-        element.datas = this.datas;
-        element.x = this.x;
-
+        element.x = this;
         if(element.tagName[0] === 'X' && element.tagName[1] === '-'){
             this.bindDatas(element);
         }

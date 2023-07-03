@@ -10,7 +10,7 @@
 
 ## this.effect
 
-`this.effect(name, function)` allows to add an effect when detecting change on a dynamic data. Effects are the basis of variable dynamism and are used internally by Flect.
+`this.effect(name, function)` add an effect when detecting change on a dynamic data. Effects are the basis of variable dynamism and are used internally by Flect.
 
 ```js
 define('input', function(datas){
@@ -26,6 +26,6 @@ define('input', function(datas){
 
 ## this.flat
 
-`this.flat(name, object)` allows to distribute all the properties of an object in the dynamic data of the component. To understand its usefulness, it must be understood that by default only first-level data is dynamic and accessible in HTML, [Learn more here](/resources/datas).
+`this.flat(name, object)` distribute all the properties of an object into the dynamic datas of the component. To understand its usefulness, it must be understood that by default only first-level data is dynamic and accessible in HTML, [Learn more here](/resources/datas).
 
 The `object` parametter is optionnal, if you dont specify it, it will try to find the object corresponding to `datas[name]`.

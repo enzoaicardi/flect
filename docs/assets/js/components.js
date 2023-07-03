@@ -22,12 +22,14 @@ define('features', function(datas, render){
             index: 1,
         },
         {
-            title: '4 methods',
+            title: '5 methods',
             code: 'other code',
             props: [
-                ['datas', 'Access to your component related datas. Datas are one level deep only. Learn more in documentation.'],
-                ['render', 'Render your HTML directly into your javascript. Enable the vscode es6-string-html extension to get syntax color.'],
-                ['style', 'Define scoped style (or not) for your components.'],
+                ['this.ref', 'Return the first matching element with attribute ref=name.'],
+                ['this.refs', 'Return an array of all matching elements with attribute ref=name.'],
+                ['this.effect', 'Run a function when detecting a change on a dynamic data.'],
+                ['this.flat', 'Distribute all the properties of an object into the dynamic datas of the component.'],
+                ['this.custom', 'Just an object where you can store custom properties and functions.'],
             ],
             index: 2,
         },
@@ -49,6 +51,17 @@ define('features', function(datas, render){
                 ['datas', 'Pass a JSON object as data.'],
             ],
             index: 3,
+        },
+        {
+            title: '4 properties',
+            code: 'other code',
+            props: [
+                ['datas.body', 'Access to the body elements of the x-element.'],
+                ['datas.text', 'Access to the textContent of the x-element.'],
+                ['datas.html', 'Access to the innerHtml of the x-element.'],
+                ['el.x', 'Access to the component from every child element.']
+            ],
+            index: 4,
         }
     ]
 
@@ -60,7 +73,7 @@ define('features', function(datas, render){
         <div class="features">
 
             <div class="switch" x-for="cases" var="case">
-                <button onclick="this.x.switch(this)" ref="button" x-data-index="case.index" x-text="case.title">button</button>
+                <button onclick="this.x.custom.switch(this)" ref="button" x-data-index="case.index" x-text="case.title">button</button>
             </div>
 
             <article class="case">
@@ -79,7 +92,7 @@ define('features', function(datas, render){
         </div>
     `)
 
-    this.x.switch = (el)=>{
+    this.custom.switch = (el)=>{
 
         let item = datas['cases'][Number(el.dataset.index)];
         this.flat('props', item.props);
@@ -90,6 +103,6 @@ define('features', function(datas, render){
 
     }
 
-    this.x.switch(this.ref('button'));
+    this.custom.switch(this.ref('button'));
 
 })
