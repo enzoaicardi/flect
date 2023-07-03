@@ -3,4 +3,3 @@
 /*/*/node_modules/
 /docs/dev/.vitepress/dist/
 /docs/dev/.vitepress/cache/
-.DS_Store
