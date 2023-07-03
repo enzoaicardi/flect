@@ -1,4 +1,5 @@
 import proxyFactory from './proxy.js';
+import scopedStyle from './style.js';
 
 export default class xElement extends HTMLElement{
 
@@ -19,7 +20,7 @@ export default class xElement extends HTMLElement{
     init(){
         this.setProxy();
         this.setStaticDatas();
-        this.setDOM();
+        this.build();
     }
 
     // getters
@@ -87,10 +88,6 @@ export default class xElement extends HTMLElement{
         this.datas = new Proxy(this._xdatas, this.proxy);
     }
 
-    setDOM(){
-        this.class.render.call(this, this.datas, this.buildDOM.bind(this));
-    }
-
     addRef(name, element){
         if(!this._xrefs[name]){
             this._xrefs[name] = [];
@@ -98,12 +95,17 @@ export default class xElement extends HTMLElement{
         this._xrefs[name].push(element);
     }
 
-    flat(name, object){
-        this.datas[name] = object;
+    flat(name, object = false){
+        if(object){ this.datas[name] = object; }
+        else{ object = this._xdatas[name]; }
         this.getDatasFromObject(name, object, (name, value) => { this.datas[name] = value; });
     }
 
     // builders
+
+    build(){
+        this.class.render.call(this, this.datas, this.buildDOM.bind(this), this.buildStyle.bind(this));
+    }
 
     buildDOM(html){
 
@@ -112,26 +114,34 @@ export default class xElement extends HTMLElement{
         }
 
         if(!this.class.template){
+            
             this.class.template = xElement.domParser.parseFromString(html, 'text/html');
+            
+            if(!!this.class.style){
+                let selector = scopedStyle(this.class.style);
+                let childs = this.class.template.body.querySelectorAll(':scope > *');
+                for(let element of childs){ element.setAttribute('style-ref', selector); }
+            }
+
         }
 
         this._xtemplate = this.class.template.cloneNode(true).body;
         this.bindChilds(this._xtemplate);
 
         const rootElements = this._xtemplate.childNodes;
-
-        for(let node of rootElements){
-
-            node._xindex = this._xindex;
-            node.composite = this;
-
-            if(this.class.style && node.nodeType === 1){
-                node.setAttribute('style-ref', this.class.style);
-            }
-        }
+        for(let node of rootElements){ node._xindex = this._xindex; }
 
         this.replaceWith(...rootElements);
 
+    }
+
+    buildStyle(styleRender){
+        if(!this.class.style && !!this.class.template){
+            throw `You should render style before DOM !`;
+        }
+        if(!this.class.style){
+            this.class.style = styleRender;
+        }
     }
 
     // binders
@@ -176,8 +186,9 @@ export default class xElement extends HTMLElement{
     }
 
     bindData(element, dataName, mirrorName){
+        element._xdatas[mirrorName] = this._xdatas[dataName];
         let action = (value, item)=>{ item.datas[mirrorName] = value; }
-        this.proxy.effect(dataName, element, action, this._xdatas[dataName]);
+        this.proxy.effect(dataName, element, action);
     }
 
     bindDatas(element){
@@ -194,13 +205,18 @@ export default class xElement extends HTMLElement{
 
                 if(name.substring(0, 6) === 'datas-'){
                     name = name.substring(6);
-                    this.getDatasFromObject('', this._xdatas[attribute.value], (prop) => {
+                    this.getDatasFromObject('', this._xdatas[attribute.value], (prop, value) => {
+                        this.datas[attribute.value + prop] = value;
                         this.bindData(element, attribute.value + prop, name + prop);
                     });
                 }
 
                 this.bindData(element, attribute.value, name);
 
+            }
+
+            else if(attribute.name === 'ref'){
+                this.addRef(attribute.value, element);
             }
 
         }

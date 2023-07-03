@@ -1,7 +1,7 @@
 let xStyleIndex = 0;
 let scopedStyleSheet;
 
-export default function scopedStyle(style){
+export default function scopedStyle(styleRender){
 
     if(!scopedStyleSheet){
         scopedStyleSheet = document.createElement('style');
@@ -12,7 +12,7 @@ export default function scopedStyle(style){
     let scopedName = 'x' + (xStyleIndex++);
     let scopedSelector = `[style-ref="${scopedName}"]`;
 
-    scopedStyleSheet.textContent += style(scopedSelector);
+    scopedStyleSheet.textContent += styleRender(scopedSelector);
 
     return scopedName;
 

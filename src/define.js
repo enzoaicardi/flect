@@ -1,7 +1,6 @@
 import xElement from "./element.js";
-import scopedStyle from "./style.js";
 
-function define(name, render, style){
+function define(name, render){
 
     let className = `x${name}Element`;
 
@@ -13,7 +12,7 @@ function define(name, render, style){
         static name = name;
         static render = render;
         static template = false;
-        static style = style ? scopedStyle(style) : false;
+        static style = false;
     };
 
     window[className].prototype.class = window[className];

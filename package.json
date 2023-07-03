@@ -9,9 +9,9 @@
   "scripts": {
     "minify": "rollup --config",
     "build": "rollup --config && gzip dist/flect.js",
-    "docs:dev": "vitepress dev docs",
-    "docs:build": "vitepress build docs",
-    "docs:preview": "vitepress preview docs"
+    "docs:dev": "vitepress dev docs/dev",
+    "docs:build": "vitepress build docs/dev",
+    "docs:preview": "vitepress preview docs/dev"
   },
   "prettier": {
     "tabWidth": 4

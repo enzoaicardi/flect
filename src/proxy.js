@@ -23,7 +23,11 @@ export default function proxyFactory(){
 
             // push the current binded action
             this.effects[dataName].get(key).push(action);
-            action(defaultValue, key);
+
+            // apply change
+            if(defaultValue !== undefined){
+                action(defaultValue, key);
+            }
 
         },
 

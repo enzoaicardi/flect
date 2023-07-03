@@ -1,25 +1,30 @@
 
-console.log(define);
-define('div', function(datas, render){
+define('div', function(datas, render, style){
 
     render(/*html*/`
-        <section x-append="body">
-            <h2>Ceci est une balise h2 <span x-text="product.name"></span></h2>
-        </section>
+        <p>Should render product name<b x-text="name"></b></p>
+        <section x-text="product.name"></section>
     `)
 
-    this.flat('product', {name: 'fruit'});
+});
 
 
-}, ($)=>{
-    return /* css */`
-        ${$} > *{
-            background-color: red;
+define('section', function(datas, render, style){
+
+    datas['item'] = {
+        name: 'Panier',
+        price: {
+            tax: 5,
+            total: 15
         }
-        @media screen and (max-width: 300px){
-            ${$} > *{
-                background-color: green;
-            }
-        }
-    `;
+    }
+
+    console.log(datas['item'])
+    this.flat('product', datas['item']);
+    console.log(this._xdatas)
+
+    render(/*html*/`
+        <x-div datas-product='{"name":"Panio"}' name="name"></x-div>
+    `)
+
 });
