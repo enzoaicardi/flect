@@ -3,7 +3,7 @@
 layout: home
 
 hero:
-  name: "Flect"
+  name: "Documentation"
   text: "x-Fast.\nx-Light.\nx-Reactive.\nx-Easy to use."
   tagline: the first 2kb fuly reactive component library
   actions:
@@ -12,5 +12,5 @@ hero:
       link: starter/get-started
     - theme: alt
       text: Try-it online
-      link: ../try-it.html
+      link: https://flect.aicardi.pro/try-it.html
 

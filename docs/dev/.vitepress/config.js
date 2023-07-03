@@ -15,7 +15,7 @@ export default defineConfig({
     // https://vitepress.dev/reference/default-theme-config
     nav: [
       { text: 'Home', link: '/' },
-      { text: 'Try-it', link: '../try-it.html' }
+      { text: 'Try-it', link: 'https://flect.aicardi.pro/try-it.html' }
     ],
 
     sidebar: [
