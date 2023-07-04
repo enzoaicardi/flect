@@ -3,7 +3,7 @@ import { defineConfig } from 'vitepress'
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   title: "Flect",
-  description: "the first 2kb fuly reactive component library",
+  description: "the 2kb fuly reactive component library",
   outDir: '../doc',
   base: '/doc/',
   themeConfig: {

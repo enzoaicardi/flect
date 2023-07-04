@@ -5,7 +5,7 @@ layout: home
 hero:
   name: "Documentation"
   text: "x-Fast.\nx-Light.\nx-Reactive.\nx-Easy to use."
-  tagline: the first 2kb fuly reactive component library
+  tagline: A 2kb fuly reactive component library
   actions:
     - theme: brand
       text: Get started
