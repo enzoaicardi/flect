@@ -19,7 +19,7 @@ If that's still too fuzzy, check out the examples here.
 Flect is a fuly front-end library, so the only thing you have to do is import the javascript file into your code, either by uploading it or using the link to the package.
 
 ```html [index.html]
-<script src="https://unpkg.com/flect/flect.js" defer>
+<script src="https://cdn.jsdelivr.net/npm/flect/flect.js" defer>
 <script src="./my-custom-script.js" defer>
 ```
 
