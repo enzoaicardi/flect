@@ -1,4 +1,4 @@
-![logo](./docs/assets/logo.svg)
+![logo](./logo.svg)
 
 The 2kb fuly reactive component library.
 
@@ -22,3 +22,6 @@ define('input', function(datas, render){
     placeholder="Enter a number please">
 </x-input>
 ```
+
+- `flect.js` ~ 4.5kb (minified)
+- `flect.js.gz` ~ 2kb (minified + gzip)

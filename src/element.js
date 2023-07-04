@@ -152,7 +152,7 @@ export default class xElement extends HTMLElement{
                     if(attribute.value.startsWith(oldName + '.')){
                         element.setAttribute(attribute.name, newName + attribute.value.substring(oldName.length));
                     }
-                    else{
+                    else if(attribute.value === oldName){
                         element.setAttribute(attribute.name, newName);
                     }
                 }
@@ -161,12 +161,15 @@ export default class xElement extends HTMLElement{
     }
 
     bindElement(element){
-        element.x = this;
-        if(element.tagName[0] === 'X' && element.tagName[1] === '-'){
-            this.bindDatas(element);
-        }
-        else {
-            this.bindAttributes(element);
+        if(!element._xbinded){
+            element.x = this;
+            element._xbinded = true;
+            if(element.tagName[0] === 'X' && element.tagName[1] === '-'){
+                this.bindDatas(element);
+            }
+            else {
+                this.bindAttributes(element);
+            }
         }
     }
 
@@ -274,6 +277,7 @@ export default class xElement extends HTMLElement{
 
                         if(!item._xjar){
                             item._xjar = document.createElement('div');
+                            this.bindChilds(item);
                         }
 
                         let hasChild = item.childNodes.length;
