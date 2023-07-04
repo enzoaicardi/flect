@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="./docs/assets/logo.svg" width="200">
+    <img src="./docs/assets/logo.svg" width="160">
 </p>
 
 The 2kb fuly reactive component library.
