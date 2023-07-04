@@ -54,6 +54,10 @@ a{
     line-height: 1;
 }
 
+.link{
+    color: var(--color-secondary);
+}
+
 code,
 .code{
     display: block;
