@@ -162,7 +162,7 @@ export default class xElement extends HTMLElement{
 
     bindElement(element){
         if(!element._xbinded){
-            element.x = this;
+            element.component = this;
             element._xbinded = true;
             if(element.tagName[0] === 'X' && element.tagName[1] === '-'){
                 this.bindDatas(element);

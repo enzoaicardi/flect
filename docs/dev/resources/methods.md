@@ -40,6 +40,6 @@ datas.custom.log = txt =>{
 };
 
 this.render(/*html*/`
-    <div onclick="this.x.custom.log('hello')"></div>
+    <div onclick="this.component.custom.log('hello')"></div>
 `);
 ```

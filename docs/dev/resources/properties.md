@@ -1,12 +1,12 @@
 # List of elements and datas properties
 
-## el.x
+## el.component
 
 Access to the component from every child element.
 
 ```js
 render(/*html*/`
-    <div onclick="console.log(this.x)"></div>
+    <div onclick="console.log(this.component)"></div>
 `)
 // <x-component></x-component>
 ```

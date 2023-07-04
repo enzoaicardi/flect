@@ -11,5 +11,5 @@ import{_ as s,o as a,c as n,V as o}from"./chunks/framework.7caa47d6.js";const h=
 <span class="line"><span style="color:#89DDFF;">};</span></span>
 <span class="line"></span>
 <span class="line"><span style="color:#89DDFF;">this.</span><span style="color:#82AAFF;">render</span><span style="color:#A6ACCD;">(</span><span style="color:#676E95;font-style:italic;">/*html*/</span><span style="color:#89DDFF;">\`</span></span>
-<span class="line"><span style="color:#C3E88D;">    &lt;div onclick=&quot;this.x.custom.log(&#39;hello&#39;)&quot;&gt;&lt;/div&gt;</span></span>
+<span class="line"><span style="color:#C3E88D;">    &lt;div onclick=&quot;this.component.custom.log(&#39;hello&#39;)&quot;&gt;&lt;/div&gt;</span></span>
 <span class="line"><span style="color:#89DDFF;">\`</span><span style="color:#A6ACCD;">)</span><span style="color:#89DDFF;">;</span></span></code></pre></div>`,14),l=[e];function p(c,r,i,y,F,D){return a(),n("div",null,l)}const f=s(t,[["render",p]]);export{h as __pageData,f as default};
