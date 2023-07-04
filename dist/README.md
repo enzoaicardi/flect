@@ -1,4 +1,4 @@
-<img src="./docs/assets/logo.svg" width="240">
+![logo](./docs/assets/logo.svg)
 
 The 2kb fuly reactive component library.
 
