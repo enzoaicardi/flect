@@ -16,8 +16,9 @@ function define(name, render){
     };
 
     window[className].prototype.class = window[className];
-
     customElements.define(`x-${name}`, window[className]);
+
+    return window[className];
 
 }
 
