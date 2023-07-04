@@ -58,10 +58,13 @@ code,
 .code{
     display: block;
     width: 100%;
-    padding: 1rem;
     font-family: var(--font-mono);
-    background-color: var(--color-background-alpha);
+}
+
+.code{
     overflow: hidden;
+    padding: 1rem;
+    background-color: var(--color-background-alpha);
 }
 
 code:hover,
