@@ -67,8 +67,13 @@ code,
     background-color: var(--color-background-alpha);
 }
 
-code:hover,
-code:focus,
+code,
+pre{
+    background-color: transparent !important;
+    width: max-content;
+    padding: 0;
+}
+
 .code:hover,
 .code:focus{
     overflow: auto;

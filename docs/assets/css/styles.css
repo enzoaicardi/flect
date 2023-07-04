@@ -99,14 +99,6 @@
 .features .case .code{
     width: 100%;
     flex: 1 1 auto;
-    background-color: var(--color-background-alpha);
-}
-
-.features code,
-.features pre{
-    background-color: transparent !important;
-    width: max-content;
-    padding: 0;
 }
 
 /* footer */
