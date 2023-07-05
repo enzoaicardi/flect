@@ -43,6 +43,12 @@ h2{
     font-weight: 800;
 }
 
+@media screen and (max-width: 720px) {
+    h2{
+        font-size: 2.2rem;
+    }
+}
+
 h3{
     font-size: 2rem;
     font-weight: 800;
@@ -81,6 +87,12 @@ pre{
 .code:hover,
 .code:focus{
     overflow: auto;
+}
+
+@media screen and (max-width: 720px) {
+    .code{
+        overflow: auto;
+    }
 }
 
 section{

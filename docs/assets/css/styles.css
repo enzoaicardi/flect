@@ -36,6 +36,14 @@
     width: 16rem;
 }
 
+@media screen and (max-width: 720px) {
+    .heading .logo-with-backdrop{
+        position: relative;
+        height: 14rem;
+        width: 14rem;
+    }
+}
+
 .heading .logo{
     height: 100%;
     padding: 2rem;
@@ -84,6 +92,13 @@
     align-items: flex-start;
     gap: 1rem;
     margin-bottom: 2rem;
+}
+
+@media screen and (max-width: 720px) {
+    .features .case{
+        display: flex;
+        flex-direction: column;
+    }
 }
 
 .features .case .sidebar{
