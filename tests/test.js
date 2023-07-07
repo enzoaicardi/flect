@@ -33,7 +33,7 @@
 // })
 
 define('price-condition', function(datas, render){
-  // datas['products'] = 10;
+    datas['products'] = 4;
 
     render(`
       <table>
@@ -44,16 +44,26 @@ define('price-condition', function(datas, render){
         <tbody x-for="products" var="item">
           <tr>
             <td x-text="products.length"></td>
-            <td x-text="item.index"></td>
+            <td><x-index x-index="item.index" x-length="products"></x-index></td>
           </tr>
         </tbody>
       </table>
     `)
 
     // setTimeout(() => {
-    //   datas['products'] = datas['products'].slice(1);
-    // }, 1000);
+    //   datas['products'] = 6;
+    //   document.body.insertAdjacentHTML('beforeend', `<x-price-condition timeout="3000"></x-price-condition>`)
+    // }, Number(datas['timeout']));
+
+    // setTimeout(() => {
+    //   datas['products'] = 2;
+    // }, Number(datas['timeout']) + 1000);
+
   })
+
+define('index', function(datas, render){
+  render(`<p><span x-text="length">LENGTH</span>/<span x-text="index">INDEX</span></p>`)
+})
 
 define('div', function(datas, render, style){
 

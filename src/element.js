@@ -4,6 +4,10 @@ import scopedStyle from './style.js';
 export default class xElement extends HTMLElement{
 
     static domParser = new DOMParser();
+    
+    static clone = function(html){
+        return xElement.domParser.parseFromString(html, 'text/html').body;
+    }
 
     constructor(){
         super();
@@ -109,17 +113,17 @@ export default class xElement extends HTMLElement{
 
         if(!this.class.template){
             
-            this.class.template = xElement.domParser.parseFromString(html, 'text/html');
+            this.class.template = xElement.clone(html);
             
             if(!!this.class.style){
                 let selector = scopedStyle(this.class.style);
-                let childs = this.class.template.body.querySelectorAll(':scope > *');
+                let childs = this.class.template.querySelectorAll(':scope > *');
                 for(let element of childs){ element.setAttribute('style-ref', selector); }
             }
 
         }
 
-        this._xtemplate = this.class.template.cloneNode(true).body;
+        this._xtemplate = this.class.template.cloneNode(true);
         this.bindChilds(this._xtemplate);
 
         const rootElements = this._xtemplate.childNodes;
@@ -304,8 +308,8 @@ export default class xElement extends HTMLElement{
                         if(!item._xjarList){
                             item._xjarList = [];
                             item._xcount = 0;
-                            item._xmodel = document.createElement('div');
-                            this.cession(item, item._xmodel);
+                            item._xmodel = item.outerHTML;
+                            item.innerHTML = '';
                         }
 
                         let isNumber = typeof array === 'number';
@@ -323,7 +327,7 @@ export default class xElement extends HTMLElement{
                                 if(x >= item._xcount){
 
                                     if(!item._xjarList[x]){
-                                        let jar = item._xmodel.cloneNode(true);
+                                        let jar = xElement.clone(item._xmodel);
 
                                         this.replaceAttributes(jar, itemName, arrayName + '.' + x);
                                         jar.childNodes.forEach(node => { node._xindex = x; });
