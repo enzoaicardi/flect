@@ -319,26 +319,17 @@ export default class xElement extends HTMLElement{
                         this.datas[arrayName + '.length'] = length;
 
                         if(gap > 0){
-                            for(let x = 0; (x < item._xcount + gap) && x < length; x++){
+                            for(let x = item._xcount; (x < item._xcount + gap) && x < length; x++){
+                                if(!item._xjarList[x]){
+                                    let jar = xElement.clone(item._xmodel);
 
-                                this.datas[arrayName + '.' + x] = isNumber ? x : array[x];
-                                this.datas[arrayName + '.' + x + '.index'] = x;
-
-                                if(x >= item._xcount){
-
-                                    if(!item._xjarList[x]){
-                                        let jar = xElement.clone(item._xmodel);
-
-                                        this.replaceAttributes(jar, itemName, arrayName + '.' + x);
-                                        jar.childNodes.forEach(node => { node._xindex = x; });
-                                        
-                                        this.bindChilds(jar);
-                                        item._xjarList.push(jar);
-                                    }
-
-                                    this.cession(item._xjarList[x], item);
+                                    this.replaceAttributes(jar, itemName, arrayName + '.' + x);
+                                    jar.childNodes.forEach(node => { node._xindex = x; });
+                                    
+                                    this.bindChilds(jar);
+                                    item._xjarList.push(jar);
                                 }
-
+                                this.cession(item._xjarList[x], item);
                             }
                         }
                         else if(gap < 0){
@@ -349,6 +340,12 @@ export default class xElement extends HTMLElement{
                                     item._xjarList[x].prepend(node);
                                 }
                             }
+                        }
+
+                        while(length--){
+                            let x = length;
+                            this.datas[arrayName + '.' + x] = isNumber ? x : array[x];
+                            this.datas[arrayName + '.' + x + '.index'] = x;
                         }
 
                         item._xcount += gap;

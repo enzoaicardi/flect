@@ -1,51 +1,27 @@
-const dayNames = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"]
-const monthNames = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"]
 
-function daysInMonth(year, month){
-    return new Date(year, month, 0).getDate();
-}
+define('test-array', function(datas, render){
 
-define('calendar', function(datas, render){
+  datas['array'] = [1,2,3];
 
-    let date = new Date();
-    datas['year'] = date.getFullYear();
-    datas['month'] = date.getMonth();
-    datas['monthName'] = monthNames[datas['month']];
-    datas['days'] = daysInMonth(datas['year'], datas['month']);
+  render(`
+    <div x-for="array" var="item">
+      <p x-text="item">ITEM</p>
+    </div>
+  `)
 
-    render(/* html */`
-    
-        <section class="x-calendar">
-
-            <header class="x-calendar-header">
-                <button onclick="this.component.custom.nextMonth()">&lt;</button>
-                <h2>
-                    <span x-text="monthName"></span>
-                    <span x-text="year"></span>
-                </h2>
-                <button onclick="this.component.custom.nextMonth()">&gt;</button>
-            </header>
-
-            <div class="x-calendar-grid" x-for="days" var="day">
-                <x-day x-year="year" x-month="month" x-day="day.index"></x-day>
-            </div>
-
-        </section>
-
-    `)
-
-    this.effect('month', value => {
-        datas['days'] = daysInMonth(datas['year'], datas['month'])
-        datas['monthName'] = monthNames[value]
-    });
-
-    this.custom.nextMonth = function(){
-        if(datas['month'] === 11) datas['month'] = 0;
-        else datas['month']++;
-    }
-
-});
-
+  setTimeout(() => {
+    datas['array'] = [3,4,5]
+  }, 1000);
+  setTimeout(() => {
+    datas['array'] = [3,4,5,6]
+  }, 3000);
+  setTimeout(() => {
+    datas['array'] = [90,800]
+  }, 4000);
+  setTimeout(() => {
+    datas['array'] = [3,6,8,9,90,800]
+  }, 5000);
+})
 
 // Condition
 // define('condition', function(datas, render){
