@@ -309,23 +309,23 @@ export default class xElement extends HTMLElement{
                         }
 
                         let isNumber = typeof array === 'number';
-                        let itemName = isNumber ? false : item.getAttribute('var'); 
+                        let itemName = item.getAttribute('var'); 
                         let length = isNumber ? array : array.length;
                         let gap = length - item._xcount;
+                        this.datas[arrayName + '.length'] = length;
 
                         if(gap > 0){
                             for(let x = 0; (x < item._xcount + gap) && x < length; x++){
 
-                                if(itemName) {
-                                    this.datas[arrayName + '.' + x] = array[x];
-                                }
+                                this.datas[arrayName + '.' + x] = isNumber ? x : array[x];
+                                this.datas[arrayName + '.' + x + '.index'] = x;
 
                                 if(x >= item._xcount){
 
                                     if(!item._xjarList[x]){
                                         let jar = item._xmodel.cloneNode(true);
 
-                                        if(itemName) { this.replaceAttributes(jar, itemName, arrayName + '.' + x); }
+                                        this.replaceAttributes(jar, itemName, arrayName + '.' + x);
                                         jar.childNodes.forEach(node => { node._xindex = x; });
                                         
                                         this.bindChilds(jar);

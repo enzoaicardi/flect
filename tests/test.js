@@ -33,7 +33,8 @@
 // })
 
 define('price-condition', function(datas, render){
-    datas['maxPrice'] = 100;
+  // datas['products'] = 10;
+
     render(`
       <table>
         <tr>
@@ -42,12 +43,16 @@ define('price-condition', function(datas, render){
         </tr>
         <tbody x-for="products" var="item">
           <tr>
-            <td x-text="item.name"></td>
-            <td x-text="item.price"></td>
+            <td x-text="products.length"></td>
+            <td x-text="item.index"></td>
           </tr>
         </tbody>
       </table>
     `)
+
+    // setTimeout(() => {
+    //   datas['products'] = datas['products'].slice(1);
+    // }, 1000);
   })
 
 define('div', function(datas, render, style){
