@@ -308,7 +308,7 @@ export default class xElement extends HTMLElement{
                         if(!item._xjarList){
                             item._xjarList = [];
                             item._xcount = 0;
-                            item._xmodel = item.outerHTML;
+                            item._xmodel = item.innerHTML;
                             item.innerHTML = '';
                         }
 
