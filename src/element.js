@@ -53,6 +53,22 @@ export default class xElement extends HTMLElement{
 
     }
 
+    getPath(value){
+        let path = value.split('.');
+        let root = this._xdatas;
+
+        for(let x=0; x < path.length-1; x++){
+            root = typeof root[path[x]] !== 'undefined' ? root[path[x]] : !isNaN(Number(path[x])) ? root[Number(path[x])] : undefined;
+            if(typeof root === 'undefined'){ root = {}; break; }
+        }
+
+        return {
+            root: root,
+            property: path[x+1],
+            get value(){return root[path[x+1]];}
+        };
+    }
+
     // setters
 
     setStaticDatas(){
@@ -179,10 +195,7 @@ export default class xElement extends HTMLElement{
 
     bindElements(root){
         this.bindElement(root);
-        let allElements = root.querySelectorAll(':scope > *');
-        for(let element of allElements){
-            this.bindElements(element);
-        }
+        this.bindChilds(root);
     }
 
     bindChilds(root){
@@ -240,6 +253,8 @@ export default class xElement extends HTMLElement{
             if(attribute.name[0] === 'x' && attribute.name[1] === '-'){
 
                 let name = attribute.name.substring(2);
+                let path = getPath(attribute.value);
+                // todo big changes on data getter / setter using path.value getter (avoid a lot of this.flat + for implicit binding)
                 let action = (value, item) => { item.setAttribute(name, value); };
 
                 if(name === 'text'){

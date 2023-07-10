@@ -25,7 +25,7 @@ export default function proxyFactory(){
             this.effects[dataName].get(key).push(action);
 
             // apply change
-            if(defaultValue !== undefined){
+            if(typeof defaultValue !== 'undefined'){
                 action(defaultValue, key);
             }
 
