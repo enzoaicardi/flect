@@ -54,18 +54,28 @@ export default class xElement extends HTMLElement{
     }
 
     getPath(value){
-        let path = value.split('.');
-        let root = this._xdatas;
 
-        for(let x=0; x < path.length-1; x++){
-            root = typeof root[path[x]] !== 'undefined' ? root[path[x]] : !isNaN(Number(path[x])) ? root[Number(path[x])] : undefined;
-            if(typeof root === 'undefined'){ root = {}; break; }
+        let path = value.split(/\.|\[/);
+        let root = this._xdatas;
+        let x = 0;
+
+        for(;x < path.length; x++){
+
+            if(path[x][path[x].length-1] === ']'){
+                path[x] = Number(path[x].substring(0, path[x].length-1));
+            }
+
+            if(x >= path.length-1){
+                break;
+            }
+
+            root = root[path[x]] || {};
+
         }
 
         return {
-            root: root,
-            property: path[x+1],
-            get value(){return root[path[x+1]];}
+            steps: path,
+            get value(){ return root[path[x]]; }
         };
     }
 
@@ -253,46 +263,46 @@ export default class xElement extends HTMLElement{
             if(attribute.name[0] === 'x' && attribute.name[1] === '-'){
 
                 let name = attribute.name.substring(2);
-                let path = getPath(attribute.value);
+                let path = this.getPath(attribute.value);
                 // todo big changes on data getter / setter using path.value getter (avoid a lot of this.flat + for implicit binding)
-                let action = (value, item) => { item.setAttribute(name, value); };
+                let action = (res, item) => { item.setAttribute(name, path.value); };
 
                 if(name === 'text'){
-                    action = (value, item)=>{ item.textContent = value; };
+                    action = (res, item)=>{ console.log(path.value); item.textContent = path.value; };
                 }
     
                 else if(name === 'html'){
-                    action = (value, item)=>{ item.innerHTML = value; };
+                    action = (res, item)=>{ item.innerHTML = path.value; };
                 }
 
                 else if(name === 'append'){
-                    action = (value, item)=>{
-                        if(value.length){ item.append(...value); }
-                        else{ item.append(value); }
+                    action = (res, item)=>{
+                        if(path.value.length){ item.append(...path.value); }
+                        else{ item.append(path.value); }
                     };
                 }
 
                 else if(name === 'prepend'){
-                    action = (value, item)=>{
-                        if(value.length){ item.prepend(...value); }
-                        else{ item.prepend(value); }
+                    action = (res, item)=>{
+                        if(path.value.length){ item.prepend(...path.value); }
+                        else{ item.prepend(path.value); }
                     };
                 }
 
                 else if(name === 'toggle'){
-                    action = (value, item)=>{ item.classList.toggle(value, value); };
+                    action = (res, item)=>{ item.classList.toggle(path.value, path.value); };
                 }
     
                 else if(name === 'show'){
-                    action = (value, item)=>{ 
-                        if(!value){ item.style.display = 'none'; }
+                    action = (res, item)=>{ 
+                        if(!path.value){ item.style.display = 'none'; }
                         else{ item.style.removeProperty('display'); }
                     };
                 }
     
                 else if(name === 'if' || name === 'unless'){
 
-                    action = (value, item)=>{
+                    action = (res, item)=>{
 
                         if(!item._xjar){
                             item._xjar = document.createElement('div');
@@ -302,12 +312,12 @@ export default class xElement extends HTMLElement{
                         let hasChild = item.childNodes.length;
                         
                         if(name === 'if'){
-                            if(!!value && !hasChild){ this.cession(item._xjar, item); }
-                            else if(!value && hasChild){ this.cession(item, item._xjar); }
+                            if(!!path.value && !hasChild){ this.cession(item._xjar, item); }
+                            else if(!path.value && hasChild){ this.cession(item, item._xjar); }
                         }
                         else if(name === 'unless'){
-                            if(!!value && hasChild){ this.cession(item, item._xjar); }
-                            else if(!value && !hasChild){ this.cession(item._xjar, item); }
+                            if(!!path.value && hasChild){ this.cession(item, item._xjar); }
+                            else if(!path.value && !hasChild){ this.cession(item._xjar, item); }
                         }
 
                     }
@@ -379,7 +389,8 @@ export default class xElement extends HTMLElement{
 
                 }
                 
-                this.proxy.effect(attribute.value, element, action, this._xdatas[attribute.value]);
+                console.log('fired', path.steps[0])
+                this.proxy.effect(path.steps[0], element, action, this._xdatas[path.steps[0]]);
 
             }
 
