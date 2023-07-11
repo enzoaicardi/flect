@@ -4,10 +4,6 @@ import scopedStyle from './style.js';
 export default class xElement extends HTMLElement{
 
     static domParser = new DOMParser();
-    
-    static clone = function(html){
-        return xElement.domParser.parseFromString(html, 'text/html').body;
-    }
 
     constructor(){
         super();
@@ -113,7 +109,7 @@ export default class xElement extends HTMLElement{
 
         if(!this.class.template){
             
-            this.class.template = xElement.clone(html);
+            this.class.template = xElement.domParser.parseFromString(html, 'text/html').body;
             
             if(!!this.class.style){
                 let selector = scopedStyle(this.class.style);
@@ -222,6 +218,7 @@ export default class xElement extends HTMLElement{
 
                 this.proxy.effect(path[0], element, action);
                 element._xdatas[name] = this.access(path);
+                console.log(this.access(path))
 
             }
 
@@ -320,8 +317,8 @@ export default class xElement extends HTMLElement{
                     if(!element._xjarList){
                         element._xjarList = [];
                         element._xcount = 0;
-                        element._xmodel = element.innerHTML;
-                        element.innerHTML = '';
+                        element._xmodel = document.createElement('div');
+                        this.cession(element, element._xmodel);
                     }
 
                     action = ()=>{
@@ -340,7 +337,7 @@ export default class xElement extends HTMLElement{
 
                                 if(x >= element._xcount){
                                     if(!element._xjarList[x]){
-                                        let jar = xElement.clone(element._xmodel);
+                                        let jar = element._xmodel.cloneNode(true);
 
                                         this.replaceAttributes(jar, itemName, arrayName + '.' + x);
                                         jar.childNodes.forEach(node => { node._xindex = x; });

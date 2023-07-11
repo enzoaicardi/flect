@@ -15,20 +15,34 @@ define('test', function(datas, render){
 })
 
 
-define('input', function(datas, render){
+define('price-condition', function(datas, render){
+  
+    datas['matchingProducts'] = datas['products']
+    datas['maxPrice'] = 40
 
-    console.log(datas['inputs'])
-    console.log(JSON.parse(JSON.stringify(this._xdatas)))
-
+    console.log(this.access(this.getPath('matchingProducts.1')))
+    
+    this.effect('maxPrice', value => {
+        datas['matchingProducts'] = datas['products'].filter(product => product.price <= value);
+    })
+    
     render(`
-        <p x-text="inputs"></p>
-        <div x-for="inputs" var="item">
-            <input x-type="type" x-value="item.value">
-        </div>
+      <input ref="input" type="number" placeholder="Enter a maximum price">
+      <table>
+        <tr>
+          <th>Product</th>
+          <th>Price</th>
+        </tr>
+        <tbody x-for="matchingProducts" var="item">
+          <tr>
+            <td x-text="item.name"></td>
+            <td x-text="item.price"></td>
+          </tr>
+        </tbody>
+      </table>
     `)
-
-    console.log(JSON.parse(JSON.stringify(this._xdatas)))
-
-
-
-})
+    
+    this.ref('input').addEventListener('keyup', e => {
+      datas['maxPrice'] = Number(this.ref('input').value)
+    });
+});

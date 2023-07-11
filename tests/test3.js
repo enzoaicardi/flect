@@ -43,6 +43,13 @@ define('calendar', function(datas, render){
     datas['monthName'] = monthNames[datas['month']];
     datas['days'] = daysInMonth(datas['year'], datas['month']+1);
 
+    let proxy = new Proxy({}, {
+      get(target, prop){
+        iterable: datas['days']
+        return Number(prop);
+      }
+    });
+
     render(/* html */`
     
         <section class="x-calendar">
@@ -57,7 +64,7 @@ define('calendar', function(datas, render){
             </header>
 
             <div class="x-calendar-grid" x-for="days" var="day">
-                <x-day x-year="year" x-month="month" x-index="day"></x-day>
+                <x-day x-year="year" x-month="month"></x-day>
             </div>
 
         </section>
@@ -80,6 +87,18 @@ define('calendar', function(datas, render){
     }
 
 });
+
+define('day', function(datas, render){
+
+  this.effect('index', value => datas['day'] = value+1)
+
+  render(/*html*/`
+      <div class="x-day" x-text="month">
+          I'm a day
+      </div>
+  `);
+
+})
 
 // Condition
 // define('condition', function(datas, render){
@@ -114,35 +133,6 @@ define('calendar', function(datas, render){
 //         datas['array'] = [5, 4, 3, 2, 1, 4]
 //     }, 7500);
 // })
-
-define('price-condition', function(datas, render){
-    datas['products'] = 4;
-
-    render(`
-      <table>
-        <tr>
-          <th>Product</th>
-          <th>Price</th>
-        </tr>
-        <tbody x-for="products" var="item">
-          <tr>
-            <td x-text="products.length"></td>
-            <td><x-index x-index="item.index" x-length="products"></x-index></td>
-          </tr>
-        </tbody>
-      </table>
-    `)
-
-    // setTimeout(() => {
-    //   datas['products'] = 6;
-    //   document.body.insertAdjacentHTML('beforeend', `<x-price-condition timeout="3000"></x-price-condition>`)
-    // }, Number(datas['timeout']));
-
-    // setTimeout(() => {
-    //   datas['products'] = 2;
-    // }, Number(datas['timeout']) + 1000);
-
-  })
 
 define('index', function(datas, render){
   render(`<p><span x-text="length">LENGTH</span>/<span x-text="index">INDEX</span></p>`)
