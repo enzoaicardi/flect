@@ -38,45 +38,17 @@ export default class xElement extends HTMLElement{
         return this._xrefs[name];
     }
 
-    getDatasFromObject(path, object, hook){
-
-        hook(path, object);
-
-        if(typeof object === 'string'){
-            return false;
-        }
-
-        for(let key in object){
-            let name = path + '.' + key;
-            this.getDatasFromObject(name, object[key], hook);
-        }
-
+    getPath(str){
+        return str.split('.');
     }
 
-    getPath(value){
-
-        let path = value.split(/\.|\[/);
+    access(path){
         let root = this._xdatas;
-        let x = 0;
-
-        for(;x < path.length; x++){
-
-            if(path[x][path[x].length-1] === ']'){
-                path[x] = Number(path[x].substring(0, path[x].length-1));
-            }
-
-            if(x >= path.length-1){
-                break;
-            }
-
-            root = root[path[x]] || {};
-
+        for(let step of path){
+            root = root[step];
+            if(typeof root === 'undefined'){ break; }
         }
-
-        return {
-            steps: path,
-            get value(){ return root[path[x]]; }
-        };
+        return root;
     }
 
     // setters
@@ -118,11 +90,6 @@ export default class xElement extends HTMLElement{
             this._xrefs[name] = [];
         }
         this._xrefs[name].push(element);
-    }
-
-    flat(name, object = false){
-        if(!object){ object = this._xdatas[name]; }
-        this.getDatasFromObject(name, object, (name, value) => { this.datas[name] = value; });
     }
 
     // builders
@@ -215,12 +182,6 @@ export default class xElement extends HTMLElement{
         }
     }
 
-    bindData(element, dataName, mirrorName){
-        element._xdatas[mirrorName] = this._xdatas[dataName];
-        let action = (value, item)=>{ item.datas[mirrorName] = value; }
-        this.proxy.effect(dataName, element, action);
-    }
-
     bindDatas(element){
 
         for(let attribute of element.attributes){
@@ -228,20 +189,14 @@ export default class xElement extends HTMLElement{
             if(attribute.name[0] === 'x' && attribute.name[1] === '-'){
 
                 let name = attribute.name.substring(2);
+                let path = this.getPath(attribute.value);
+                let action = ()=>{ element.datas[name] = this.access(path); }
 
                 if(!element._xdatas){
                     element._xdatas = {};
                 }
 
-                if(name.substring(0, 6) === 'datas-'){
-                    name = name.substring(6);
-                    this.getDatasFromObject('', this._xdatas[attribute.value], (prop, value) => {
-                        this.datas[attribute.value + prop] = value;
-                        this.bindData(element, attribute.value + prop, name + prop);
-                    });
-                }
-
-                this.bindData(element, attribute.value, name);
+                this.proxy.effect(path[0], element, action);
 
             }
 
@@ -264,60 +219,69 @@ export default class xElement extends HTMLElement{
 
                 let name = attribute.name.substring(2);
                 let path = this.getPath(attribute.value);
-                // todo big changes on data getter / setter using path.value getter (avoid a lot of this.flat + for implicit binding)
-                let action = (res, item) => { item.setAttribute(name, path.value); };
+
+                let action = ()=>{ element.setAttribute(name, this.access(path)); };
 
                 if(name === 'text'){
-                    action = (res, item)=>{ console.log(path.value); item.textContent = path.value; };
+                    action = ()=>{ element.textContent = this.access(path); };
                 }
     
                 else if(name === 'html'){
-                    action = (res, item)=>{ item.innerHTML = path.value; };
+                    action = ()=>{ element.innerHTML = this.access(path); };
                 }
 
                 else if(name === 'append'){
-                    action = (res, item)=>{
-                        if(path.value.length){ item.append(...path.value); }
-                        else{ item.append(path.value); }
+                    action = ()=>{
+                        let value = this.access(path);
+                        if(!value){ return; }
+                        if(value.length){ element.append(...value); }
+                        else{ element.append(value); }
                     };
                 }
 
                 else if(name === 'prepend'){
-                    action = (res, item)=>{
-                        if(path.value.length){ item.prepend(...path.value); }
-                        else{ item.prepend(path.value); }
+                    action = ()=>{
+                        let value = this.access(path);
+                        if(!value){ return; }
+                        if(value.length){ element.prepend(...value); }
+                        else{ element.prepend(value); }
                     };
                 }
 
                 else if(name === 'toggle'){
-                    action = (res, item)=>{ item.classList.toggle(path.value, path.value); };
+                    action = ()=>{
+                        let value = this.access(path);
+                        element.classList.toggle(value, value);
+                    };
                 }
     
                 else if(name === 'show'){
-                    action = (res, item)=>{ 
-                        if(!path.value){ item.style.display = 'none'; }
-                        else{ item.style.removeProperty('display'); }
+                    action = ()=>{ 
+                        if(!this.access(path)){ element.style.display = 'none'; }
+                        else{ element.style.removeProperty('display'); }
                     };
                 }
     
                 else if(name === 'if' || name === 'unless'){
 
-                    action = (res, item)=>{
+                    action = ()=>{
 
-                        if(!item._xjar){
-                            item._xjar = document.createElement('div');
-                            this.bindChilds(item);
+                        let value = this.access(path);
+
+                        if(!element._xjar){
+                            element._xjar = document.createElement('div');
+                            this.bindChilds(element);
                         }
 
-                        let hasChild = item.childNodes.length;
+                        let hasChild = element.childNodes.length;
                         
                         if(name === 'if'){
-                            if(!!path.value && !hasChild){ this.cession(item._xjar, item); }
-                            else if(!path.value && hasChild){ this.cession(item, item._xjar); }
+                            if(!!value && !hasChild){ this.cession(element._xjar, element); }
+                            else if(!value && hasChild){ this.cession(element, element._xjar); }
                         }
                         else if(name === 'unless'){
-                            if(!!path.value && hasChild){ this.cession(item, item._xjar); }
-                            else if(!path.value && !hasChild){ this.cession(item._xjar, item); }
+                            if(!!value && hasChild){ this.cession(element, element._xjar); }
+                            else if(!value && !hasChild){ this.cession(element._xjar, element); }
                         }
 
                     }
@@ -328,69 +292,66 @@ export default class xElement extends HTMLElement{
 
                     const arrayName = attribute.value;
 
-                    action = (array, item)=>{
+                    action = ()=>{
 
-                        if(!item._xjarList){
-                            item._xjarList = [];
-                            item._xcount = 0;
-                            item._xmodel = item.innerHTML;
-                            item.innerHTML = '';
+                        if(!element._xjarList){
+                            element._xjarList = [];
+                            element._xcount = 0;
+                            element._xmodel = element.innerHTML;
+                            element.innerHTML = '';
                         }
 
+                        let array = this.access(path);
                         let isNumber = typeof array === 'number';
-                        let itemName = item.getAttribute('var'); 
+                        let elementName = element.getAttribute('var'); 
+
                         let length = isNumber ? array : array.length;
-                        let gap = length - item._xcount;
-                        this.datas[arrayName + '.length'] = length;
+                        let gap = length - element._xcount;
 
                         if(gap > 0){
-                            for(let x = 0; (x < item._xcount + gap) && x < length; x++){
 
-                                this.datas[arrayName + '.' + x] = isNumber ? x : array[x];
-                                this.datas[arrayName + '.' + x + '.index'] = x;
+                            for(let x = 0; (x < element._xcount + gap) && x < length; x++){
 
-                                if(x >= item._xcount){
+                                if(x >= element._xcount){
+                                    if(!element._xjarList[x]){
+                                        let jar = xElement.clone(element._xmodel);
 
-                                    if(!item._xjarList[x]){
-                                        let jar = xElement.clone(item._xmodel);
-
-                                        this.replaceAttributes(jar, itemName, arrayName + '.' + x);
+                                        this.replaceAttributes(jar, elementName, arrayName + '.' + x);
                                         jar.childNodes.forEach(node => { node._xindex = x; });
                                         
                                         this.bindChilds(jar);
-                                        item._xjarList.push(jar);
+                                        element._xjarList.push(jar);
                                     }
-                                    this.cession(item._xjarList[x], item);
-
+                                    this.cession(element._xjarList[x], element);
                                 }
+
                             }
+
                         }
                         else if(gap < 0){
-                            for(let x = item._xcount - 1; x >= 0; x--){
-                                
-                                this.datas[arrayName + '.' + x] = isNumber ? x : array[x];
-                                this.datas[arrayName + '.' + x + '.index'] = x;
 
-                                if(x > (item._xcount - 1) + gap){
+                            for(let x = element._xcount - 1; x >= 0; x--){
 
-                                    while(item.childNodes.length){
-                                        let node = item.childNodes[item.childNodes.length-1];
+                                if(x > (element._xcount - 1) + gap){
+
+                                    while(element.childNodes.length){
+                                        let node = element.childNodes[element.childNodes.length-1];
                                         if(node._xindex !== x){ break; }
-                                        item._xjarList[x].prepend(node);
+                                        element._xjarList[x].prepend(node);
                                     }
 
                                 }
                             }
+
                         }
 
-                        item._xcount += gap;
+                        element._xcount += gap;
 
                     }
 
                 }
                 
-                console.log('fired', path.steps[0])
-                this.proxy.effect(path.steps[0], element, action, this._xdatas[path.steps[0]]);
+                this.proxy.effect(path[0], element, action, this._xdatas[path[0]]);
 
             }
 
