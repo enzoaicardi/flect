@@ -17,22 +17,6 @@ Allows passing a JSON object as data.
 <x-component datas-product='{"name": "Apple", "quantity": 3}'></x-component>
 ```
 
-### x-datas-(name)
-
-Allows you to pass an object or an array as data and make all of its properties dynamics.
-
-::: code-group
-```html [render]
-<x-component x-datas-product="myobject"></x-component>
-```
-```js [datas]
-datas['myobject'] = {
-    name: 'Bag',
-    price: 45
-}
-```
-:::
-
 ## Attributs d'éléments html
 
 Any attribute prefixed with `x-` that is not listed below will be automatically bound to the variable whose name matches its value.

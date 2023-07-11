@@ -45,7 +45,7 @@ define('input', function(datas, render){
 ```
 
 ::: info
-You may have noticed a little `/*html */` comment before the backticks, this comment is not required, but it helps to achieve syntax highlighting with visual-studio-code if you use the es6-string-html extension.
+You may have noticed a little `/*html */` comment before the backticks, this comment is not required, but it helps to achieve syntax highlighting with visual-studio-code if you use the [es6-string-html](https://marketplace.visualstudio.com/items?itemName=Tobermory.es6-string-html) extension.
 :::
 
 At this stage our component is operational but not dynamic. We can already try calling it in our HTML like this :

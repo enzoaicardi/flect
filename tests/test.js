@@ -2,12 +2,33 @@
 
 define('test', function(datas, render){
 
-    datas['array'] = [1, 2, 3, 4];
-
     setTimeout(() => {
-        datas['array'] = [9, 5, 6, 3];
+        datas['array'] = [1, 2, 3];
     }, 1000);
 
-    render(`<p x-text="array.1"></p>`)
+    render(`
+        <div x-for="array" var="item">
+            <p x-text="item"></p>
+        </div>
+    `)
+
+})
+
+
+define('input', function(datas, render){
+
+    console.log(datas['inputs'])
+    console.log(JSON.parse(JSON.stringify(this._xdatas)))
+
+    render(`
+        <p x-text="inputs"></p>
+        <div x-for="inputs" var="item">
+            <input x-type="type" x-value="item.value">
+        </div>
+    `)
+
+    console.log(JSON.parse(JSON.stringify(this._xdatas)))
+
+
 
 })

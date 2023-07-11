@@ -1,6 +1,6 @@
 # Bind datas to your component
 
-Linking data to a component can be done via attributes, just like for classic HTML elements the `x-` prefix refers to dynamic data. Thus it is possible to pass data dynamically through the components.
+Linking data to a component can be done via attributes, just like for classic HTML elements the `x-` prefix refers to dynamic data. It is possible to pass data dynamically through the components.
 
 The data entered in the attributes without the `x-` prefix are raw data, they can be retrieved directly from the component and manipulated as desired:
 
@@ -18,7 +18,7 @@ define('component', function(datas, render){
 ```
 :::
 
-The data entered in the attributes with the `x-` prefix are dynamic data that is passed to another component, so they can be used for communication between the components.
+The data entered in the attributes with the `x-` prefix are dynamic data that is passed to another component, so they can be used for dynamic communication between the components.
 
 ::: code-group
 ```html [index.html]
@@ -27,6 +27,7 @@ The data entered in the attributes with the `x-` prefix are dynamic data that is
 
 ```js [parent.js]
 define('parent', function(datas, render){
+    setTimeout(()=> datas['name'] = 'Jane Doe', 1000)
     render(/*html*/`
         <x-child x-name="name"></x-child>
     `)

@@ -43,12 +43,16 @@ export default class xElement extends HTMLElement{
     }
 
     access(path){
+
         let root = this._xdatas;
+
         for(let step of path){
             root = root[step];
             if(typeof root === 'undefined'){ break; }
         }
+
         return root;
+        
     }
 
     // setters
@@ -67,8 +71,7 @@ export default class xElement extends HTMLElement{
 
                 let name = attribute.name.substring(6);
                 let object = JSON.parse(attribute.value);
-
-                this.flat(name, object);
+                this._xdatas[name] = object;
 
             }
 
@@ -83,6 +86,10 @@ export default class xElement extends HTMLElement{
     setProxy(){
         this.proxy = proxyFactory();
         this.datas = new Proxy(this._xdatas, this.proxy);
+    }
+
+    joinPath(path){
+        return (path._xnot ? '!' : '') + path.join('.');
     }
 
     addRef(name, element){
@@ -142,32 +149,46 @@ export default class xElement extends HTMLElement{
     }
 
     replaceAttributes(root, oldName, newName){
+
         let allElements = root.querySelectorAll('*');
+
         for(let element of allElements){
+
             for(let attribute of element.attributes){
+
                 if(attribute.name[0] === 'x' && attribute.name[1] === '-'){
-                    if(attribute.value.startsWith(oldName + '.')){
-                        element.setAttribute(attribute.name, newName + attribute.value.substring(oldName.length));
+
+                    let path = this.getPath(attribute.value);
+
+                    if(path[0] === oldName){
+                        path[0] = newName;
+                        element.setAttribute(attribute.name, this.joinPath(path));
                     }
-                    else if(attribute.value === oldName){
-                        element.setAttribute(attribute.name, newName);
-                    }
+
                 }
+
             }
+
         }
+
     }
 
     bindElement(element){
+
         if(!element._xbinded){
+
             element.component = this;
             element._xbinded = true;
+
             if(element.tagName[0] === 'X' && element.tagName[1] === '-'){
                 this.bindDatas(element);
             }
             else {
                 this.bindAttributes(element);
             }
+
         }
+
     }
 
     bindElements(root){
@@ -176,10 +197,13 @@ export default class xElement extends HTMLElement{
     }
 
     bindChilds(root){
+        
         let allElements = root.querySelectorAll(':scope > *');
+
         for(let element of allElements){
             this.bindElements(element);
         }
+
     }
 
     bindDatas(element){
@@ -197,6 +221,7 @@ export default class xElement extends HTMLElement{
                 }
 
                 this.proxy.effect(path[0], element, action);
+                element._xdatas[name] = this.access(path);
 
             }
 
@@ -264,15 +289,14 @@ export default class xElement extends HTMLElement{
     
                 else if(name === 'if' || name === 'unless'){
 
+                    if(!element._xjar){
+                        element._xjar = document.createElement('div');
+                        this.bindChilds(element);
+                    }
+
                     action = ()=>{
 
                         let value = this.access(path);
-
-                        if(!element._xjar){
-                            element._xjar = document.createElement('div');
-                            this.bindChilds(element);
-                        }
-
                         let hasChild = element.childNodes.length;
                         
                         if(name === 'if'){
@@ -291,19 +315,21 @@ export default class xElement extends HTMLElement{
                 else if(name === 'for'){
 
                     const arrayName = attribute.value;
+                    const itemName = element.getAttribute('var');
+
+                    if(!element._xjarList){
+                        element._xjarList = [];
+                        element._xcount = 0;
+                        element._xmodel = element.innerHTML;
+                        element.innerHTML = '';
+                    }
 
                     action = ()=>{
 
-                        if(!element._xjarList){
-                            element._xjarList = [];
-                            element._xcount = 0;
-                            element._xmodel = element.innerHTML;
-                            element.innerHTML = '';
-                        }
-
                         let array = this.access(path);
+                        if(typeof array === 'undefined'){ return; }
+
                         let isNumber = typeof array === 'number';
-                        let elementName = element.getAttribute('var'); 
 
                         let length = isNumber ? array : array.length;
                         let gap = length - element._xcount;
@@ -316,7 +342,7 @@ export default class xElement extends HTMLElement{
                                     if(!element._xjarList[x]){
                                         let jar = xElement.clone(element._xmodel);
 
-                                        this.replaceAttributes(jar, elementName, arrayName + '.' + x);
+                                        this.replaceAttributes(jar, itemName, arrayName + '.' + x);
                                         jar.childNodes.forEach(node => { node._xindex = x; });
                                         
                                         this.bindChilds(jar);
@@ -373,10 +399,14 @@ export default class xElement extends HTMLElement{
     }
 
     cession(giver, reciever){
+
         while(giver.childNodes.length){
+
             let node = giver.childNodes[0];
             reciever.appendChild(node);
+
         }
+
     }
 
 }
