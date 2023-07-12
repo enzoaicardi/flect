@@ -1,4 +1,4 @@
-![logo](./logo.svg)
+![logo](https://raw.githubusercontent.com/enzoaicardi/flect/main/docs/assets/logo.svg)
 
 The 2kb fuly reactive component library.
 
