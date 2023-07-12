@@ -24,6 +24,34 @@ define('input', function(datas){
 })
 ```
 
+
+## this.iterable
+
+`this.iterable(name, iterableName)` makes a number, string or array iterable by adding details to it as it is explored. This method is only useful when you want to retrieve the index during an iteration (for example when iterating over a number) :
+
+- `item.key` return iteration index.
+- `item.value` return iteration value.
+- `item.parent` return the parent data.
+
+```js
+define('iterable', function(datas){
+
+    datas['array'] = [9, 8, 7, 6, 5, 4, 3, 2, 1]
+    this.iterable('array', 'iterable')
+
+    render(/*html*/`
+        <div x-for="iterable" var="item">
+            <p>
+                Key : <span x-text="item.key"></span> |
+                Value : <span x-text="item.value"></span> |
+                Parent : <span x-text="item.parent"></span>
+            </p>
+        </div>
+    `)
+
+})
+```
+
 ## this.custom
 
 It is an empty object which allows to store your own data/functions related to the component.

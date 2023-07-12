@@ -1,9 +1,13 @@
-import proxyFactory from './proxy.js';
+import { proxyDatas, proxyIterable } from './proxy.js';
 import scopedStyle from './style.js';
 
 export default class xElement extends HTMLElement{
 
     static domParser = new DOMParser();
+
+    static parse(html){
+        return xElement.domParser.parseFromString(html, 'text/html').body;
+    }
 
     constructor(){
         super();
@@ -80,7 +84,7 @@ export default class xElement extends HTMLElement{
     }
 
     setProxy(){
-        this.proxy = proxyFactory();
+        this.proxy = proxyDatas();
         this.datas = new Proxy(this._xdatas, this.proxy);
     }
 
@@ -96,31 +100,9 @@ export default class xElement extends HTMLElement{
     }
 
     iterable(dataName, iterableName){
-
         this.effect(dataName, () => {
-
-            this.datas[iterableName] = new Proxy(this.datas, {
-
-                get(target, key){
-                    if(key === '_xiterable'){ return true; }
-                    if(key === 'get'){ return target[dataName]; }
-                    return {
-                        get key(){
-                            return key;
-                        },
-                        get value(){
-                            return target[dataName][key];
-                        },
-                        get parent(){
-                            return target[dataName];
-                        }
-                    };
-                }
-                
-            });
-
+            this.datas[iterableName] = new Proxy(this.datas, proxyIterable(dataName));
         });
-
     }
 
     // builders
@@ -137,7 +119,7 @@ export default class xElement extends HTMLElement{
 
         if(!this.class.template){
             
-            this.class.template = xElement.domParser.parseFromString(html, 'text/html').body;
+            this.class.template = xElement.parse(html);
             
             if(!!this.class.style){
                 let selector = scopedStyle(this.class.style);
@@ -246,8 +228,7 @@ export default class xElement extends HTMLElement{
 
                 this.proxy.effect(path[0], element, action);
                 element._xdatas[name] = this.access(path);
-                console.log(this.access(path))
-
+                
             }
 
             else if(attribute.name === 'ref'){
@@ -345,8 +326,8 @@ export default class xElement extends HTMLElement{
                     if(!element._xjarList){
                         element._xjarList = [];
                         element._xcount = 0;
-                        element._xmodel = document.createElement('div');
-                        this.cession(element, element._xmodel);
+                        element._xmodel = xElement.parse(element.innerHTML);
+                        element.innerHTML = '';
                     }
 
                     action = ()=>{

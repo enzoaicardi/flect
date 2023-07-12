@@ -70,12 +70,20 @@ define('iterable', function(datas, render){
 
   render(`
     <div x-for="iterable" var="item">
-      <p>
-        Key : <span x-text="item.key">ITEM</span> |
-        Value : <span x-text="item.value">ITEM</span> |
-        Parent : <span x-text="item.parent">ITEM</span>
-      </p>
+      <x-item x-item="item"></x-item>
     </div>
+  `)
+
+})
+
+define('item', function(datas, render){
+
+  render(`
+    <p>
+      Key : <span x-text="item.key">ITEM</span> |
+      Value : <span x-text="item.value">ITEM</span> |
+      Parent : <span x-text="item.parent">ITEM</span>
+    </p>
   `)
 
 })

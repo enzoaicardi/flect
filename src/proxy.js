@@ -1,4 +1,4 @@
-export default function proxyFactory(){
+export function proxyDatas(){
 
     return {
 
@@ -57,3 +57,27 @@ export default function proxyFactory(){
     }
 
 };
+
+export function proxyIterable(dataName){
+
+    return {
+
+        get(target, key){
+            if(key === '_xiterable'){ return true; }
+            if(key === 'get'){ return target[dataName]; }
+            return {
+                get key(){
+                    return key;
+                },
+                get value(){
+                    return target[dataName][key];
+                },
+                get parent(){
+                    return target[dataName];
+                }
+            };
+        }
+
+    };
+
+}
