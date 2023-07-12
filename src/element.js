@@ -95,6 +95,34 @@ export default class xElement extends HTMLElement{
         this._xrefs[name].push(element);
     }
 
+    iterable(dataName, iterableName){
+
+        this.effect(dataName, () => {
+
+            this.datas[iterableName] = new Proxy(this.datas, {
+
+                get(target, key){
+                    if(key === '_xiterable'){ return true; }
+                    if(key === 'get'){ return target[dataName]; }
+                    return {
+                        get key(){
+                            return key;
+                        },
+                        get value(){
+                            return target[dataName][key];
+                        },
+                        get parent(){
+                            return target[dataName];
+                        }
+                    };
+                }
+                
+            });
+
+        });
+
+    }
+
     // builders
 
     build(){
@@ -325,6 +353,7 @@ export default class xElement extends HTMLElement{
 
                         let array = this.access(path);
                         if(typeof array === 'undefined'){ return; }
+                        if(array._xiterable){ array = array.get; }
 
                         let isNumber = typeof array === 'number';
 
@@ -333,37 +362,34 @@ export default class xElement extends HTMLElement{
 
                         if(gap > 0){
 
-                            for(let x = 0; (x < element._xcount + gap) && x < length; x++){
+                            for(let x = element._xcount; (x < element._xcount + gap) && x < length; x++){
 
-                                if(x >= element._xcount){
-                                    if(!element._xjarList[x]){
-                                        let jar = element._xmodel.cloneNode(true);
+                                if(!element._xjarList[x]){
+                                    let jar = element._xmodel.cloneNode(true);
 
+                                    if(itemName){
                                         this.replaceAttributes(jar, itemName, arrayName + '.' + x);
-                                        jar.childNodes.forEach(node => { node._xindex = x; });
-                                        
-                                        this.bindChilds(jar);
-                                        element._xjarList.push(jar);
                                     }
-                                    this.cession(element._xjarList[x], element);
+                                    jar.childNodes.forEach(node => { node._xindex = x; });
+                                    
+                                    this.bindChilds(jar);
+                                    element._xjarList.push(jar);
                                 }
+                                this.cession(element._xjarList[x], element);
 
                             }
 
                         }
                         else if(gap < 0){
 
-                            for(let x = element._xcount - 1; x >= 0; x--){
+                            for(let x = element._xcount - 1; (x > (element._xcount - 1) + gap) && x >= 0; x--){
 
-                                if(x > (element._xcount - 1) + gap){
-
-                                    while(element.childNodes.length){
-                                        let node = element.childNodes[element.childNodes.length-1];
-                                        if(node._xindex !== x){ break; }
-                                        element._xjarList[x].prepend(node);
-                                    }
-
+                                while(element.childNodes.length){
+                                    let node = element.childNodes[element.childNodes.length-1];
+                                    if(node._xindex !== x){ break; }
+                                    element._xjarList[x].prepend(node);
                                 }
+
                             }
 
                         }
