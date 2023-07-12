@@ -36,6 +36,12 @@ export default defineConfig({
           { text: 'Methods', link: '/resources/methods' },
           { text: 'Properties', link: '/resources/properties' }
         ]
+      },
+      {
+        text: 'Issues',
+        items: [
+          { text: 'Orphans', link: '/issues/orphans.md' }
+        ]
       }
     ],
 
