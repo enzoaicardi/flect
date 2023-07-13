@@ -219,15 +219,14 @@ export default class xElement extends HTMLElement{
 
                 let name = attribute.name.substring(2);
                 let path = this.getPath(attribute.value);
-                let action = ()=>{ element.datas[name] = this.access(path); }
+                let action = ()=>{ if(!!element.datas){ element.datas[name] = this.access(path); } }
 
                 if(!element._xdatas){
                     element._xdatas = {};
                 }
 
-                this.proxy.effect(path[0], element, action);
                 element._xdatas[name] = this.access(path);
-                
+                this.proxy.effect(path[0], element, action);
             }
 
             else if(attribute.name === 'ref'){
