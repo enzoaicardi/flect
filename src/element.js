@@ -100,9 +100,8 @@ export default class xElement extends HTMLElement{
     }
 
     iterable(dataName, iterableName){
-        this.effect(dataName, () => {
-            this.datas[iterableName] = new Proxy(this.datas, proxyIterable(dataName));
-        });
+        this._xdatas[iterableName] = new Proxy(this.datas, proxyIterable(dataName));
+        this.effect(dataName, () => { this.proxy.run(iterableName, this._xdatas[dataName]); });
     }
 
     // builders

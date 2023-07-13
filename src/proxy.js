@@ -36,12 +36,7 @@ export function proxyDatas(){
             else{ delete this.effects[dataName]; }
         },
 
-        set(target, dataName, value){
-
-            // update the value first
-            target[dataName] = value;
-
-            // explore related effects
+        run(dataName, value){
             if(this.effects[dataName]){
                 for(let [key, array] of this.effects[dataName]){
                     for(let action of array){
@@ -49,7 +44,17 @@ export function proxyDatas(){
                     }
                 }
             }
+        },
 
+        set(target, dataName, value){
+
+            // update the value first
+            target[dataName] = value;
+
+            // explore related effects
+            this.run(dataName, value);
+
+            // return success
             return true;
 
         }
