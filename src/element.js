@@ -219,10 +219,10 @@ export default class xElement extends HTMLElement{
 
                 let name = attribute.name.substring(2);
                 let path = this.getPath(attribute.value);
-                let action = ()=>{ if(!!element.datas){ element.datas[name] = this.access(path); } }
+                let action = ()=>{ element.datas[name] = this.access(path); }
 
                 if(!element._xdatas){
-                    element._xdatas = {};
+                    element.datas = element._xdatas = {};
                 }
 
                 element._xdatas[name] = this.access(path);
