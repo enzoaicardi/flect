@@ -39,7 +39,12 @@ export default class xElement extends HTMLElement{
     }
 
     getPath(str){
-        return str.split('.');
+        let path = str.split('.');
+        if(path[0][0] === '!'){
+            path._xnot = true;
+            path[0] = path[0].substring(1);
+        };
+        return path;
     }
 
     access(path){
@@ -51,7 +56,7 @@ export default class xElement extends HTMLElement{
             if(typeof root === 'undefined'){ break; }
         }
 
-        return root;
+        return path._xnot ? !root : root;
         
     }
 
@@ -285,13 +290,13 @@ export default class xElement extends HTMLElement{
                 }
     
                 else if(name === 'show'){
-                    action = ()=>{ 
+                    action = ()=>{
                         if(!this.access(path)){ element.style.display = 'none'; }
                         else{ element.style.removeProperty('display'); }
                     };
                 }
     
-                else if(name === 'if' || name === 'unless'){
+                else if(name === 'if'){
 
                     if(!element._xjar){
                         element._xjar = document.createElement('div');
@@ -306,10 +311,6 @@ export default class xElement extends HTMLElement{
                         if(name === 'if'){
                             if(!!value && !hasChild){ this.cession(element._xjar, element); }
                             else if(!value && hasChild){ this.cession(element, element._xjar); }
-                        }
-                        else if(name === 'unless'){
-                            if(!!value && hasChild){ this.cession(element, element._xjar); }
-                            else if(!value && !hasChild){ this.cession(element._xjar, element); }
                         }
 
                     }

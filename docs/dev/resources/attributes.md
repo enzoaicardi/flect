@@ -84,18 +84,14 @@ Conditionally displays the content of an HTML element depending on whether the `
 
 ::: code-group
 ```html [render]
-<div x-if="myvar">
-    <p>I'm visible</p>
+<div x-if="!myvar">
+    <p>I'm not visible</p>
 </div>
 ```
 ```js [datas]
 datas['myvar'] = true
 ```
 :::
-
-### x-unless
-
-Like `x-if` but reversed.
 
 ### x-for
 

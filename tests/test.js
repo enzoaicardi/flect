@@ -1,4 +1,30 @@
 
+define('negative', function(datas, render){
+
+  datas['products'] = [true, false, true];
+
+  setTimeout(() => {
+    datas['products'] = [false, true, true];
+  }, 2000);
+
+  render(`
+    <section x-for="products" var="item">
+      <div x-show="item">Vous avez des produits</div>
+      <article x-show="!item">Vous n'avez pas de produits</article>
+    </section>
+  `)
+
+})
+
+define('counter', function(datas, render){
+  datas['count'] = 0;
+  render(`
+    <button ref="button">
+      <p>Count is : <b x-text="count"></b></p>
+    </button>
+  `)
+  this.ref('button').addEventListener('click', e => datas['count']++);
+});
 
 define('test', function(datas, render){
 
