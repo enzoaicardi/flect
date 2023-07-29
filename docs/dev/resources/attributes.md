@@ -27,12 +27,10 @@ Replaces the textual content of the element.
 
 ::: code-group
 ```html [render]
-<div x-toggle="className" class="button">
-    <p>I'm visible</p>
-</div>
+<p x-text="text">I'm visible</p>
 ```
 ```js [datas]
-datas['className'] = 'hidden' || ''
+datas['text'] = 'Hello World!'
 ```
 :::
 

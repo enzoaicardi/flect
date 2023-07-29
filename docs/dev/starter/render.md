@@ -31,7 +31,12 @@ In this example we have defined the `type` and `placeholder` variables in our co
 
 Now we are going to add a new argument to our render function, it is `render`, `render(...)` acts as a function to render HTML elements relative to the component.
 
-```js
+There are two ways to render a component:
+- The first is to pass a character string as an argument. This string is then converted (once for all components) into HTML elements which are then data bound.
+- The second is to pass an array of root elements as an argument. These elements are then databound but not cached for future components, which can be useful for an [island architecture](https://www.patterns.dev/posts/islands-architecture).
+
+::: code-group
+```js [string.js]
 define('input', function(datas, render){
 
     datas['type'] = 'text';
@@ -43,9 +48,20 @@ define('input', function(datas, render){
 
 })
 ```
+```js [islands.js]
+define('input', function(datas, render){
+
+    datas['type'] = 'text';
+    datas['placeholder'] = 'Enter your name';
+
+    render(datas['body'])
+
+})
+```
+:::
 
 ::: info
-You may have noticed a little `/*html */` comment before the backticks, this comment is not required, but it helps to achieve syntax highlighting with visual-studio-code if you use the [es6-string-html](https://marketplace.visualstudio.com/items?itemName=Tobermory.es6-string-html) extension.
+You may have noticed a little `/* html */` comment before the backticks, this comment is not required, but it helps to achieve syntax highlighting with visual-studio-code if you use the [es6-string-html](https://marketplace.visualstudio.com/items?itemName=Tobermory.es6-string-html) extension.
 :::
 
 At this stage our component is operational but not dynamic. We can already try calling it in our HTML like this :

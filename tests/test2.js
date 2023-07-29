@@ -23,26 +23,7 @@ define('calendar', function(datas, render){
     // datas['events'] = [] // todo recupérer l'ensemble des evenements
     // datas['days'] = [] // todo pour chaque jour ajouter les evenements correspondants, sinon jour = objet vide
 
-    render(/* html */`
-    
-        <section class="x-calendar">
-
-            <header class="x-calendar-header">
-                <button onclick="this.component.custom.previousMonth()">&lt;</button>
-                <h2>
-                    <span x-text="monthName"></span>
-                    <span x-text="year"></span>
-                </h2>
-                <button onclick="this.component.custom.nextMonth()">&gt;</button>
-            </header>
-
-            <div class="x-calendar-grid" x-for="iterable" var="day">
-                <x-day x-year="year" x-month="month" x-index="day.key"></x-day>
-            </div>
-
-        </section>
-
-    `)
+    render(datas['body'])
 
     this.custom.nextMonth = function(){
         if(datas['month'] === 11) { datas['month'] = 0; datas['year']++; }
@@ -57,14 +38,14 @@ define('calendar', function(datas, render){
 });
 
 
-define('day', function(datas, render){
+define('day', function(datas, render, style){
 
     this.effect('index', value => datas['day'] = Number(value) + 1);
 
-    render(/*html*/`
-        <div class="x-day" x-text="day">
-            I'm a day
-        </div>
-    `);
+    style($ => `${$} { background-color: red; }`);
+    render(`
+    <div class="x-day" x-text="day">
+        I'm a day
+    </div>`);
 
 })

@@ -1,5 +1,5 @@
 import { proxyDatas, proxyIterable } from './proxy.js';
-import scopedStyle from './style.js';
+import { scopedStyle } from './style.js';
 
 export default class xElement extends HTMLElement{
 
@@ -11,13 +11,12 @@ export default class xElement extends HTMLElement{
 
     constructor(){
         super();
-        this._xelement = true;
         this._xrefs = {};
         this._xdatas = this._xdatas || {};
         this._xindex = this._xindex || false;
         this.custom = {};
 
-        if(!this.hasAttribute('noinit')){
+        if(!this.hasAttribute('x-noinit')){
             this.init();
         }
     }
@@ -70,7 +69,7 @@ export default class xElement extends HTMLElement{
 
         for(let attribute of this.attributes){
 
-            if(attribute.name[0] === 'x' && attribute.name[1] === '-'){ continue; }
+            if(this.isXAttribute(attribute)){ continue; }
 
             if(attribute.name.substring(0, 6) === 'datas-'){
 
@@ -121,34 +120,43 @@ export default class xElement extends HTMLElement{
             return;
         }
 
-        if(!this.class.template){
-            
-            this.class.template = xElement.parse(html);
-            
-            if(!!this.class.style){
-                let selector = scopedStyle(this.class.style);
-                let childs = this.class.template.querySelectorAll(':scope > *');
-                for(let element of childs){ element.setAttribute('style-ref', selector); }
+        if(typeof html === 'string'){
+
+            if(!this.class.template){
+                this.class.template = xElement.parse(html);
             }
+
+            this._xtemplate = this.class.template.cloneNode(true).childNodes;
 
         }
 
-        this._xtemplate = this.class.template.cloneNode(true);
-        this.bindChilds(this._xtemplate);
+        else{
+            this._xtemplate = this.class.template = html;
+        }
 
-        const rootElements = this._xtemplate.childNodes;
-        for(let node of rootElements){ node._xindex = this._xindex; }
+        for(let node of this._xtemplate){
 
-        this.replaceWith(...rootElements);
+            if(node.nodeType === 1) {
+                if(this.class.selector){
+                    node.setAttribute('style-ref', this.class.selector);
+                }
+                this.bindElements(node);
+            }
+
+            node._xindex = this._xindex;
+
+        }
+
+        this.replaceWith(...this._xtemplate);
 
     }
 
     buildStyle(styleRender){
-        if(!this.class.style && !!this.class.template){
-            throw `You should render style before DOM !`;
-        }
-        if(!this.class.style){
-            this.class.style = styleRender;
+        if(!this.class.selector){
+            if(!!this.class.template){
+                throw `You must use style() before render() in x-${this.class.name} !`;
+            }
+            this.class.selector = scopedStyle(styleRender);
         }
     }
 
@@ -158,29 +166,52 @@ export default class xElement extends HTMLElement{
         this.proxy.effect(dataName, this, action, this._xdatas[dataName]);
     }
 
-    replaceAttributes(root, oldName, newName){
+    rebindElements(root, oldData, newData){
+        this.rebindElement(root, oldData, newData);
 
-        let allElements = root.querySelectorAll('*');
+        if(!this.isXElement(root)){
+            this.rebindChilds(root, oldData, newData);
+        }
+    }
 
-        for(let element of allElements){
+    rebindChilds(root, oldData, newData){
+        let childElements = root.children;
 
-            for(let attribute of element.attributes){
+        for(let element of childElements){
+            this.rebindElements(element, oldData, newData);
+        }
+    }
 
-                if(attribute.name[0] === 'x' && attribute.name[1] === '-'){
+    rebindElement(root, oldData, newData){
 
-                    let path = this.getPath(attribute.value);
+        for(let attribute of root.attributes){
 
-                    if(path[0] === oldName){
-                        path[0] = newName;
-                        element.setAttribute(attribute.name, this.joinPath(path));
-                    }
+            if(this.isXAttribute(attribute)){
+                let path = this.getPath(attribute.value);
 
+                if(path[0] === oldData){
+                    path[0] = newData;
+                    root.setAttribute(attribute.name, this.joinPath(path));
                 }
-
             }
 
         }
 
+    }
+
+    bindElements(root){
+        this.bindElement(root);
+        if(!this.isXElement(root)){
+            this.bindChilds(root);
+        }
+    }
+
+    bindChilds(root){
+        let childElements = root.children;
+
+        for(let element of childElements){
+            this.bindElements(element);
+        }
     }
 
     bindElement(element){
@@ -190,7 +221,7 @@ export default class xElement extends HTMLElement{
             element.component = this;
             element._xbinded = true;
 
-            if(element.tagName[0] === 'X' && element.tagName[1] === '-'){
+            if(this.isXElement(element)){
                 this.bindDatas(element);
             }
             else {
@@ -201,26 +232,11 @@ export default class xElement extends HTMLElement{
 
     }
 
-    bindElements(root){
-        this.bindElement(root);
-        this.bindChilds(root);
-    }
-
-    bindChilds(root){
-        
-        let allElements = root.querySelectorAll(':scope > *');
-
-        for(let element of allElements){
-            this.bindElements(element);
-        }
-
-    }
-
     bindDatas(element){
 
         for(let attribute of element.attributes){
 
-            if(attribute.name[0] === 'x' && attribute.name[1] === '-'){
+            if(this.isXAttribute(attribute)){
 
                 let name = attribute.name.substring(2);
                 let path = this.getPath(attribute.value);
@@ -249,7 +265,7 @@ export default class xElement extends HTMLElement{
             let attribute = element.attributes[x];
             let remove = true;
 
-            if(attribute.name[0] === 'x' && attribute.name[1] === '-'){
+            if(this.isXAttribute(attribute)){
 
                 let name = attribute.name.substring(2);
                 let path = this.getPath(attribute.value);
@@ -348,7 +364,7 @@ export default class xElement extends HTMLElement{
                                     let jar = element._xmodel.cloneNode(true);
 
                                     if(itemName){
-                                        this.replaceAttributes(jar, itemName, arrayName + '.' + x);
+                                        this.rebindChilds(jar, itemName, arrayName + '.' + x);
                                     }
                                     jar.childNodes.forEach(node => { node._xindex = x; });
                                     
@@ -410,6 +426,16 @@ export default class xElement extends HTMLElement{
 
         }
 
+    }
+
+    // checks
+
+    isXElement(element){
+        return element.tagName[0] === 'X' && element.tagName[1] === '-';
+    }
+
+    isXAttribute(attribute){
+        return attribute.name[0] === 'x' && attribute.name[1] === '-';
     }
 
 }

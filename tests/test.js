@@ -50,14 +50,7 @@ define('price-condition', function(datas, render){
         datas['matchingProducts'] = datas['products'].filter(product => product.price <= value);
     })
     
-    render(`
-      <input ref="input" type="number" placeholder="Enter a maximum price">
-      <div>
-        <div x-for="matchingProducts" var="item">
-          <x-product x-item="item"></x-product>
-        </div>
-      </div>
-    `)
+    render(datas['body'])
     
     this.ref('input').addEventListener('keyup', e => {
       datas['maxPrice'] = Number(this.ref('input').value)

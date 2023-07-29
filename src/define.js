@@ -12,7 +12,7 @@ function define(name, render){
         static name = name;
         static render = render;
         static template = false;
-        static style = false;
+        static selector = false;
     };
 
     window[className].prototype.class = window[className];

@@ -32,10 +32,10 @@ export default defineConfig({
       {
         text: 'Ressources',
         items: [
+          { text: 'Datas', link: '/resources/datas' },
           { text: 'Attributes', link: '/resources/attributes' },
           { text: 'Methods', link: '/resources/methods' },
-          { text: 'Properties', link: '/resources/properties' },
-          { text: 'Datas', link: '/resources/datas' }
+          { text: 'Properties', link: '/resources/properties' }
         ]
       },
       {
