@@ -7,46 +7,20 @@
 </head>
 <body>
 
-
-    <!-- <x-test datas-array='[1, 4, 5]'></x-test> -->
-    <!-- <x-price-condition datas-products='[{"name": "Bag", "price": 42},{"name": "T-Shirt", "price": 25},{"name": "Shoes", "price": 14.5}]'>
-        <input ref="input" type="number" placeholder="Enter a maximum price">
-        <div>
-            <div x-for="matchingProducts" var="item">
-            <x-product x-item="item"></x-product>
-            </div>
-        </div>
-    </x-price-condition> -->
-    <!-- <x-iterable></x-iterable> -->
-
-    <x-calendar>
-
-        <section class="x-calendar">
-
-            <header class="x-calendar-header">
-                <button onclick="this.component.custom.previousMonth()">&lt;</button>
-                <h2>
-                    <span x-text="monthName"></span>
-                    <span x-text="year"></span>
-                </h2>
-                <button onclick="this.component.custom.nextMonth()">&gt;</button>
-            </header>
-
-            <div class="x-calendar-grid" x-for="iterable" var="day">
-                <x-day x-year="year" x-month="month" x-index="day.key">
-                    
-                </x-day>
-            </div>
-
-        </section>
-
-    </x-calendar>
-
-    <!-- <x-negative></x-negative> -->
+    <x-parent>
+        <x-for var="items" key="item">
+            <p>For ITEM</p>
+            <x-for var="item" key="el">
+                <x-if var="bool">
+                    <div x-text="el"></div>
+                </x-if>
+            </xfor>
+        </x-for>
+    </x-parent>
 
     <!-- <script src="../dist/flect.js" type="module"></script> -->
     <script src="../src/define.js" type="module"></script>
-    <script src="./test.js" type="module"></script>
-    <script src="./test2.js" type="module"></script>
+    <!-- <script src="./test.js" type="module"></script> -->
+    <script src="./concept.js" type="module"></script>
 </body>
 </html>

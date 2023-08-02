@@ -1,4 +1,8 @@
 
+define('sample', function(datas, render){
+  render(datas['body']);
+})
+
 define('negative', function(datas, render){
 
   datas['products'] = [true, false, true];

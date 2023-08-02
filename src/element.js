@@ -13,17 +13,13 @@ export default class xElement extends HTMLElement{
         super();
         this._xrefs = {};
         this._xdatas = this._xdatas || {};
-        this._xindex = this._xindex || false;
         this.custom = {};
-
-        if(!this.hasAttribute('x-noinit')){
-            this.init();
-        }
+        this.init();
     }
 
     init(){
         this.setProxy();
-        this.setStaticDatas();
+        this.setDatas();
         this.build();
     }
 
@@ -37,12 +33,15 @@ export default class xElement extends HTMLElement{
         return this._xrefs[name];
     }
 
-    getPath(str){
+    getPath(str, alter){
         let path = str.split('.');
         if(path[0][0] === '!'){
             path._xnot = true;
             path[0] = path[0].substring(1);
-        };
+        }
+        if(alter && alter[path[0]]){
+            path.splice(0, 1, ...alter[path[0]][0], alter[path[0]][1]);
+        }
         return path;
     }
 
@@ -61,9 +60,9 @@ export default class xElement extends HTMLElement{
 
     // setters
 
-    setStaticDatas(){
+    setDatas(){
 
-        this._xdatas.body = [].slice.call(this.childNodes);
+        this._xdatas.body = this.childNodes;
         this._xdatas.html = this.innerHTML;
         this._xdatas.text = this.textContent;
 
@@ -143,8 +142,6 @@ export default class xElement extends HTMLElement{
                 this.bindElements(node);
             }
 
-            node._xindex = this._xindex;
-
         }
 
         this.replaceWith(...this._xtemplate);
@@ -166,80 +163,172 @@ export default class xElement extends HTMLElement{
         this.proxy.effect(dataName, this, action, this._xdatas[dataName]);
     }
 
-    rebindElements(root, oldData, newData){
-        this.rebindElement(root, oldData, newData);
+    bindElements(root, options){
 
-        if(!this.isXElement(root)){
-            this.rebindChilds(root, oldData, newData);
+        if(!root._xbinded){
+
+            this.bindElement(root, options);
+
+            if(!this.isXElement(root)){
+                this.bindChilds(root, options);
+            }
+
         }
+
     }
 
-    rebindChilds(root, oldData, newData){
-        let childElements = root.children;
+    bindChilds(root, options){
 
-        for(let element of childElements){
-            this.rebindElements(element, oldData, newData);
+        if(this.isXElement(root)) { return; }
+
+        for(let element of [].slice.call(root.children)){
+            this.bindElements(element, options);
         }
+
     }
 
-    rebindElement(root, oldData, newData){
+    bindElement(element, options){
 
-        for(let attribute of root.attributes){
+        element.component = this;
+        element._xbinded = true;
 
-            if(this.isXAttribute(attribute)){
-                let path = this.getPath(attribute.value);
+        if(this.isXAction(element)){
+            this.bindAction(element, options);
+        }
+        else if(this.isXElement(element)){
+            this.bindDatas(element, options);
+        }
+        else {
+            this.bindAttributes(element, options);
+        }
 
-                if(path[0] === oldData){
-                    path[0] = newData;
-                    root.setAttribute(attribute.name, this.joinPath(path));
+    }
+
+    bindAction(element, options = {}){
+
+        let iterable = element.getAttribute('var');
+        let name = element.tagName.substring(2);
+        let path = this.getPath(iterable, options.replace);
+        let key = element.getAttribute('key');
+
+        let xbegin = document.createComment(`x-${name}-begin`);
+        let xend = document.createComment(`x-${name}-end`);
+
+        let action;
+        let content = element.innerHTML;
+        let jar = document.createElement('div');
+            jar.append(...element.childNodes);
+
+        element.replaceWith(xbegin, xend);
+
+        if(name === 'IF'){
+
+            this.bindChilds(jar, options);
+
+            action = ()=>{
+
+                let value = this.access(path);
+                let empty = xbegin.nextSibling === xend;
+                let next;
+
+                if(!!value && empty){
+                    while(jar.childNodes.length){
+                        xend.parentNode.insertBefore(jar.childNodes[0], xend);
+                    }
                 }
+                else if(!value && !empty){
+                    while((next = xbegin.nextSibling) !== xend){
+                        jar.append(next);
+                    }
+                }
+
             }
 
         }
 
-    }
+        else if(name === 'FOR'){
 
-    bindElements(root){
-        this.bindElement(root);
-        if(!this.isXElement(root)){
-            this.bindChilds(root);
-        }
-    }
+            let jarList = [];
+            let count = 0;
 
-    bindChilds(root){
-        let childElements = root.children;
+            action = ()=>{
 
-        for(let element of childElements){
-            this.bindElements(element);
-        }
-    }
+                let array = this.access(path);
+                if(typeof array === 'undefined'){ return; }
+                if(array._xiterable){ array = array.get; }
 
-    bindElement(element){
+                let isNumber = typeof array === 'number';
+                let length = isNumber ? array : array.length;
+                let gap = length - count;
 
-        if(!element._xbinded){
+                if(gap > 0){
 
-            element.component = this;
-            element._xbinded = true;
+                    for(let x = count; (x < count + gap) && x < length; x++){
 
-            if(this.isXElement(element)){
-                this.bindDatas(element);
+                        if(!jarList[x]){
+
+                            if(key){
+                                options.replace = options.replace || {};
+                                options.replace[key] = [path, x];
+                            }
+
+                            let jar = xElement.parse(content);
+                            this.bindChilds(jar, options);
+
+                            let identifier = document.createComment(`x-${name}-item`);
+                                identifier._xindex = x;
+                                identifier._xjar = jar;
+                                jar.prepend(identifier);
+
+                            jarList.push(jar);
+
+                        }
+
+                        while(jarList[x].childNodes.length){
+                            xend.parentNode.insertBefore(jarList[x].childNodes[0], xend);
+                        }
+
+                    }
+
+                }
+                else if(gap < 0){
+
+                    for(let x = count - 1; (x > (count - 1) + gap) && x >= 0; x--){
+
+                        let previous = xend.previousSibling;
+
+                        while((!previous._xjar || previous._xjar !== jarList[x]) && previous !== xbegin){
+                            previous = xend.previousSibling;
+                            jarList[x].prepend(previous);
+                        }
+
+                    }
+
+                }
+
+                count += gap;
+
             }
-            else {
-                this.bindAttributes(element);
-            }
 
         }
 
+        else {
+            return;
+        }
+
+        this.proxy.effect(path[0], element, action, this._xdatas[path[0]]);
+
     }
 
-    bindDatas(element){
+    bindDatas(element, options = {}){
 
         for(let attribute of element.attributes){
 
             if(this.isXAttribute(attribute)){
 
                 let name = attribute.name.substring(2);
-                let path = this.getPath(attribute.value);
+                let path = this.getPath(attribute.value, options.replace);
+
                 let action = ()=>{ element.datas[name] = this.access(path); }
 
                 if(!element._xdatas){
@@ -258,7 +347,7 @@ export default class xElement extends HTMLElement{
 
     }
 
-    bindAttributes(element){
+    bindAttributes(element, options = {}){
 
         for(let x=0, i=0; x<element.attributes.length; x++, i++){
 
@@ -268,7 +357,7 @@ export default class xElement extends HTMLElement{
             if(this.isXAttribute(attribute)){
 
                 let name = attribute.name.substring(2);
-                let path = this.getPath(attribute.value);
+                let path = this.getPath(attribute.value, options.replace);
 
                 let action = ()=>{ element.setAttribute(name, this.access(path)); };
 
@@ -311,90 +400,6 @@ export default class xElement extends HTMLElement{
                         else{ element.style.removeProperty('display'); }
                     };
                 }
-    
-                else if(name === 'if'){
-
-                    if(!element._xjar){
-                        element._xjar = document.createElement('div');
-                        this.bindChilds(element);
-                    }
-
-                    action = ()=>{
-
-                        let value = this.access(path);
-                        let hasChild = element.childNodes.length;
-                        
-                        if(name === 'if'){
-                            if(!!value && !hasChild){ this.cession(element._xjar, element); }
-                            else if(!value && hasChild){ this.cession(element, element._xjar); }
-                        }
-
-                    }
-
-                }
-
-                else if(name === 'for'){
-
-                    const arrayName = attribute.value;
-                    const itemName = element.getAttribute('var');
-
-                    if(!element._xjarList){
-                        element._xjarList = [];
-                        element._xcount = 0;
-                        element._xmodel = xElement.parse(element.innerHTML);
-                        element.innerHTML = '';
-                    }
-
-                    action = ()=>{
-
-                        let array = this.access(path);
-                        if(typeof array === 'undefined'){ return; }
-                        if(array._xiterable){ array = array.get; }
-
-                        let isNumber = typeof array === 'number';
-
-                        let length = isNumber ? array : array.length;
-                        let gap = length - element._xcount;
-
-                        if(gap > 0){
-
-                            for(let x = element._xcount; (x < element._xcount + gap) && x < length; x++){
-
-                                if(!element._xjarList[x]){
-                                    let jar = element._xmodel.cloneNode(true);
-
-                                    if(itemName){
-                                        this.rebindChilds(jar, itemName, arrayName + '.' + x);
-                                    }
-                                    jar.childNodes.forEach(node => { node._xindex = x; });
-                                    
-                                    this.bindChilds(jar);
-                                    element._xjarList.push(jar);
-                                }
-                                this.cession(element._xjarList[x], element);
-
-                            }
-
-                        }
-                        else if(gap < 0){
-
-                            for(let x = element._xcount - 1; (x > (element._xcount - 1) + gap) && x >= 0; x--){
-
-                                while(element.childNodes.length){
-                                    let node = element.childNodes[element.childNodes.length-1];
-                                    if(node._xindex !== x){ break; }
-                                    element._xjarList[x].prepend(node);
-                                }
-
-                            }
-
-                        }
-
-                        element._xcount += gap;
-
-                    }
-
-                }
                 
                 this.proxy.effect(path[0], element, action, this._xdatas[path[0]]);
 
@@ -417,18 +422,11 @@ export default class xElement extends HTMLElement{
 
     }
 
-    cession(giver, reciever){
-
-        while(giver.childNodes.length){
-
-            let node = giver.childNodes[0];
-            reciever.appendChild(node);
-
-        }
-
-    }
-
     // checks
+
+    isXAction(element){
+        return element.tagName === 'X-FOR' || element.tagName === 'X-IF';
+    }
 
     isXElement(element){
         return element.tagName[0] === 'X' && element.tagName[1] === '-';
