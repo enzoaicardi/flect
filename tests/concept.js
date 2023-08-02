@@ -16,7 +16,7 @@ class Parent extends HTMLElement{
 
 
 
-define('parent', function(datas, render){
+define('parent', function(datas, render, style){
     datas['items'] = [
         [0,1,2]
     ]

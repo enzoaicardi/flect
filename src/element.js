@@ -3,12 +3,6 @@ import { scopedStyle } from './style.js';
 
 export default class xElement extends HTMLElement{
 
-    static domParser = new DOMParser();
-
-    static parse(html){
-        return xElement.domParser.parseFromString(html, 'text/html').body;
-    }
-
     constructor(){
         super();
         this._xrefs = {};
@@ -151,7 +145,7 @@ export default class xElement extends HTMLElement{
     buildStyle(styleRender){
         if(!this.class.selector){
             if(!!this.class.template){
-                throw `You must use style() before render() in x-${this.class.name} !`;
+                throw `You must use style() before render() in x-${this.class.xname} !`;
             }
             this.class.selector = scopedStyle(styleRender);
         }
@@ -206,9 +200,8 @@ export default class xElement extends HTMLElement{
 
     bindAction(element, options = {}){
 
-        let iterable = element.getAttribute('var');
         let name = element.tagName.substring(2);
-        let path = this.getPath(iterable, options.replace);
+        let path = this.getPath(element.getAttribute('var'), options.replace);
         let key = element.getAttribute('key');
 
         let xbegin = document.createComment(`x-${name}-begin`);
@@ -436,6 +429,12 @@ export default class xElement extends HTMLElement{
         return attribute.name[0] === 'x' && attribute.name[1] === '-';
     }
 
+}
+
+xElement.domParser = new DOMParser();
+
+xElement.parse = (html)=>{
+    return xElement.domParser.parseFromString(html, 'text/html').body;
 }
 
 customElements.define('x-element-prototype-factory', xElement);

@@ -9,11 +9,12 @@ function define(name, render){
     
     window[className] = class extends xElement{
         constructor(){ super(); }
-        static name = name;
-        static render = render;
-        static template = false;
-        static selector = false;
     };
+
+    window[className].xname = name;
+    window[className].render = render;
+    window[className].template = false;
+    window[className].selector = false;
 
     window[className].prototype.class = window[className];
     customElements.define(`x-${name}`, window[className]);
