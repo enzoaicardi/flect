@@ -35,7 +35,7 @@ export default defineConfig({
           { text: 'Datas', link: '/resources/datas' },
           { text: 'Attributes', link: '/resources/attributes' },
           { text: 'Methods', link: '/resources/methods' },
-          { text: 'Properties', link: '/resources/properties' }
+          { text: 'Actions', link: '/resources/actions' }
         ]
       },
       {

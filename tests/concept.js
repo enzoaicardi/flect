@@ -17,31 +17,26 @@ class Parent extends HTMLElement{
 
 
 define('parent', function(datas, render, style){
-    datas['items'] = [
-        [0,1,2]
-    ]
+
+    datas['items'] = 6;
+    this.iterable('items', 'iterable');
+    
     datas['bool'] = true;
 
+    console.log(this.textContent)
     render(datas['body'])
 
-    setTimeout(() => {
-        datas['items'] = [
-            [0,1,2],
-            [3,1,2]
-        ]
-    }, 2000);
-    setTimeout(() => {
-        datas['items'] = [
-            [0,1,2],
-            [3,1,2],
-            [0,1,2],
-            [4,1,2],
-            [3,1,2],
-            [4,1,2],
-            [8,1,2]
-        ]
-    }, 4000);
+
     setTimeout(() => {
         datas['bool'] = false;
-    }, 6000);
+    }, 2000);
+    setTimeout(() => {
+        datas['bool'] = true;
+    }, 4000);
+
 })
+
+// define('kid', function(datas, render){
+//     render(datas['body'])
+//     console.log(datas['text']);
+// })

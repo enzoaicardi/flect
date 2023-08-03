@@ -40,5 +40,5 @@ Now if we look in the DOM inspector we will observe the following thing:
 The advantage here is that our attribute value is tied to the state of our component, so if we decide to change the value of `datas['type']` it will automatically affect the HTML element in the DOM. Combined with the data link this becomes much more powerful.
 
 ::: tip
-Adding the `x-` prefix in front of any attribute will bind its value to a piece of data, however there are special attributes that allow performing other actions like changing text, html content, displaying conditionally, doing a loop. You can [find them here](../resources/attributes).
+Adding the `x-` prefix in front of any attribute will bind its value to a piece of data, however there are special attributes that allow performing other actions like changing text, html content, etc... You can [find them here](../resources/attributes).
 :::

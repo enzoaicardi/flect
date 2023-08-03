@@ -65,3 +65,14 @@ this.render(/*html*/`
     <div onclick="this.component.custom.log('hello')"></div>
 `);
 ```
+
+## el.component
+
+Access to the component from every child element.
+
+```js
+render(/*html*/`
+    <div onclick="console.log(this.component)"></div>
+`)
+// <x-component></x-component>
+```

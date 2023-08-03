@@ -57,8 +57,6 @@ export default class xElement extends HTMLElement{
     setDatas(){
 
         this._xdatas.body = this.childNodes;
-        this._xdatas.html = this.innerHTML;
-        this._xdatas.text = this.textContent;
 
         for(let attribute of this.attributes){
 
@@ -269,7 +267,6 @@ export default class xElement extends HTMLElement{
                             this.bindChilds(jar, options);
 
                             let identifier = document.createComment(`x-${name}-item`);
-                                identifier._xindex = x;
                                 identifier._xjar = jar;
                                 jar.prepend(identifier);
 
@@ -342,7 +339,7 @@ export default class xElement extends HTMLElement{
 
     bindAttributes(element, options = {}){
 
-        for(let x=0, i=0; x<element.attributes.length; x++, i++){
+        for(let x=0; x<element.attributes.length; x++){
 
             let attribute = element.attributes[x];
             let remove = true;
@@ -362,21 +359,12 @@ export default class xElement extends HTMLElement{
                     action = ()=>{ element.innerHTML = this.access(path); };
                 }
 
-                else if(name === 'append'){
+                else if(name === 'append' || name === 'prepend'){
                     action = ()=>{
                         let value = this.access(path);
                         if(!value){ return; }
-                        if(value.length){ element.append(...value); }
-                        else{ element.append(value); }
-                    };
-                }
-
-                else if(name === 'prepend'){
-                    action = ()=>{
-                        let value = this.access(path);
-                        if(!value){ return; }
-                        if(value.length){ element.prepend(...value); }
-                        else{ element.prepend(value); }
+                        if(value.length){ element[name](...value); }
+                        else{ element[name](value); }
                     };
                 }
 
