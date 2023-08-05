@@ -8,12 +8,12 @@
 <body>
 
     <x-parent>
-        <x-for var="iterable" key="item">
-            <x-if var="bool">
-                <x-for var="iterable">
-                    <p>For ITEM <b x-text="item.key"></b></p>
-                </x-for>
-            </x-if>
+        <x-for var="items" key="item">    
+            <x-child ref="child" x-text="text" x-item="item">
+                <x-if var="item">
+                    <p x-text="text"></p>
+                </x-if>
+            </x-child>
         </x-for>
     </x-parent>
 

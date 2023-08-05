@@ -18,25 +18,20 @@ class Parent extends HTMLElement{
 
 define('parent', function(datas, render, style){
 
-    datas['items'] = 6;
-    this.iterable('items', 'iterable');
-    
-    datas['bool'] = true;
-
-    console.log(this.textContent)
+    datas['text'] = 'kind of text';
+    datas['items'] = [1,0,3]
     render(datas['body'])
 
-
     setTimeout(() => {
-        datas['bool'] = false;
-    }, 2000);
-    setTimeout(() => {
-        datas['bool'] = true;
-    }, 4000);
+        datas['text'] = 'other text'
+        console.log(this.ref('child'))
+    }, 1000);
 
 })
 
-// define('kid', function(datas, render){
-//     render(datas['body'])
-//     console.log(datas['text']);
-// })
+define('child', function(datas, render){
+
+    this.effect('text', value => console.log(this.component.datas['text']));
+    render(datas['body'])
+    
+})
