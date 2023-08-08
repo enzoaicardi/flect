@@ -39,7 +39,27 @@ export default class xElement extends HTMLElement{
         return path;
     }
 
-    access(path){
+    getPaths(value, alter){
+
+        let paths = {};
+        let matchs = value.match(this.class.xregex);
+
+        if(!matchs){
+            paths.default = this.getPath(value, alter);
+        }
+        else {
+            for(let match of matchs){
+                if(!paths[match]){
+                    paths[match] = this.getPath(match.substring(1, match.length-1), alter);
+                }
+            }
+        }
+
+        return paths;
+
+    }
+
+    getData(path){
 
         let root = this._xdatas;
 
@@ -50,6 +70,18 @@ export default class xElement extends HTMLElement{
 
         return path._xnot ? !root : root;
         
+    }
+
+    getValue(paths, value){
+
+        if(paths.default){
+            return this.getData(paths.default);
+        }
+
+        return value.replace(this.class.xregex, (match) => {
+            return this.getData(paths[match]);
+        });
+
     }
 
     // setters
@@ -152,7 +184,7 @@ export default class xElement extends HTMLElement{
     // binders
 
     effect(dataName, action){
-        this.proxy.effect(dataName, this, action, this._xdatas[dataName]);
+        this.proxy.effect(dataName, this, action, this._xdatas);
     }
 
     bindElements(root, options){
@@ -218,7 +250,7 @@ export default class xElement extends HTMLElement{
 
             action = ()=>{
 
-                let value = this.access(path);
+                let value = this.getData(path);
                 let empty = xbegin.nextSibling === xend;
                 let next;
 
@@ -244,7 +276,7 @@ export default class xElement extends HTMLElement{
 
             action = ()=>{
 
-                let array = this.access(path);
+                let array = this.getData(path);
                 if(typeof array === 'undefined'){ return; }
                 if(array._xiterable){ array = array.get; }
 
@@ -306,7 +338,7 @@ export default class xElement extends HTMLElement{
             return;
         }
 
-        this.proxy.effect(path[0], element, action, this._xdatas[path[0]]);
+        this.proxy.effect(path[0], element, action, {});
 
     }
 
@@ -317,16 +349,21 @@ export default class xElement extends HTMLElement{
             if(this.isXAttribute(attribute)){
 
                 let name = attribute.name.substring(2);
-                let path = this.getPath(attribute.value, options.replace);
+                let value = attribute.value;
+                let paths = this.getPaths(value, options.replace);
 
-                let action = ()=>{ element.datas[name] = this.access(path); }
+                let action = ()=>{ element.datas[name] = this.getValue(paths, value); }
 
                 if(!element._xdatas){
                     element.datas = element._xdatas = {};
                 }
 
-                element._xdatas[name] = this.access(path);
-                this.proxy.effect(path[0], element, action);
+                element._xdatas[name] = this.getValue(paths, value);
+
+                for(let key in paths){
+                    this.proxy.effect(paths[key][0], element, action);
+                }
+
             }
 
             else if(attribute.name === 'ref'){
@@ -347,42 +384,41 @@ export default class xElement extends HTMLElement{
             if(this.isXAttribute(attribute)){
 
                 let name = attribute.name.substring(2);
-                let path = this.getPath(attribute.value, options.replace);
+                let value = attribute.value;
+                let paths = this.getPaths(value, options.replace);
 
-                let action = ()=>{ element.setAttribute(name, this.access(path)); };
+                let action = ()=>{ element.setAttribute(name, this.getValue(paths, value)); };
 
                 if(name === 'text'){
-                    action = ()=>{ element.textContent = this.access(path); };
+                    action = ()=>{ element.textContent = this.getValue(paths, value); };
                 }
     
                 else if(name === 'html'){
-                    action = ()=>{ element.innerHTML = this.access(path); };
+                    action = ()=>{ element.innerHTML = this.getValue(paths, value); };
                 }
 
                 else if(name === 'append' || name === 'prepend'){
                     action = ()=>{
-                        let value = this.access(path);
+                        let value = this.getData(paths.default);
                         if(!value){ return; }
                         if(value.length){ element[name](...value); }
                         else{ element[name](value); }
                     };
                 }
-
-                else if(name === 'toggle'){
-                    action = ()=>{
-                        let value = this.access(path);
-                        element.classList.toggle(value, value);
-                    };
-                }
     
                 else if(name === 'show'){
                     action = ()=>{
-                        if(!this.access(path)){ element.style.display = 'none'; }
+                        if(!this.getData(paths.default)){ element.style.display = 'none'; }
                         else{ element.style.removeProperty('display'); }
                     };
                 }
                 
-                this.proxy.effect(path[0], element, action, this._xdatas[path[0]]);
+                let once = {};
+
+                for(let key in paths){
+                    this.proxy.effect(paths[key][0], element, action, once);
+                    if(once){ once = false; }
+                }
 
             }
 

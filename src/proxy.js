@@ -25,8 +25,9 @@ export function proxyDatas(){
             this.effects[dataName].get(key).push(action);
 
             // apply change
-            if(typeof defaultValue !== 'undefined'){
-                action(defaultValue, key);
+            console.log('default value is', defaultValue)
+            if(defaultValue){
+                action(defaultValue[dataName], key);
             }
 
         },
