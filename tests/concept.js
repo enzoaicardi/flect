@@ -36,7 +36,15 @@ define('parent', function(datas, render, style){
 
 define('child', function(datas, render){
 
+    datas.number = 10;
+    this.iterable('number', 'array');
+    this.filter('inc', value => Number(value) + 10)
+
     // this.effect('text', value => console.log(datas['text']));
     render(datas['body'])
+
+    setTimeout(() => {
+        datas.number = 5;
+    }, 1000);
     
 })

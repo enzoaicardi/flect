@@ -1,18 +1,13 @@
-let xStyleIndex = 0;
+let scopedIndex = 0;
 let scopedStyleSheet;
-
-function scopedName(){
-    let scopedName = 'x' + (xStyleIndex++);    
-    return scopedName;
-}
 
 export function scopedStyle(styleRender){
 
-    let name = scopedName();
+    let name = 'x' + (scopedIndex++);
 
     if(!scopedStyleSheet){
         scopedStyleSheet = document.createElement('style');
-        scopedStyleSheet.id = 'x-scoped-stylesheet';
+        scopedStyleSheet.id = 'x-stylesheet';
         document.head.appendChild(scopedStyleSheet);
     }
 

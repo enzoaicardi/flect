@@ -9,38 +9,30 @@ export function proxyDatas(){
         }*/
         effects: {},
 
-        effect(dataName, key, action, defaultValue){
+        effect(dataName, key, action){
+
+            let effects = this.effects;
 
             // setup the default dataName Map
-            if(!this.effects[dataName]){
-                this.effects[dataName] = new Map();
+            if(!effects[dataName]){
+                effects[dataName] = new Map();
             }
 
             // setup the default key Array
-            if(!this.effects[dataName].get(key)){
-                this.effects[dataName].set(key, []);
+            if(!effects[dataName].get(key)){
+                effects[dataName].set(key, []);
             }
 
             // push the current binded action
-            this.effects[dataName].get(key).push(action);
+            effects[dataName].get(key).push(action);
 
-            // apply change
-            console.log('default value is', defaultValue)
-            if(defaultValue){
-                action(defaultValue[dataName], key);
-            }
-
-        },
-
-        clear(dataName, key){
-            if(key){ this.effects[dataName].delete(key); }
-            else{ delete this.effects[dataName]; }
         },
 
         run(dataName, value){
             if(this.effects[dataName]){
                 for(let [key, array] of this.effects[dataName]){
                     for(let action of array){
+                        // console.log('run action on ->', key, 'for value =', value);
                         action(value, key);
                     }
                 }
@@ -59,6 +51,13 @@ export function proxyDatas(){
             return true;
 
         }
+
+        /*
+        clear(dataName, key){
+            if(key){ this.effects[dataName].delete(key); }
+            else{ delete this.effects[dataName]; }
+        },
+        */
 
     }
 

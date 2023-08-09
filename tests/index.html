@@ -7,7 +7,7 @@
 </head>
 <body>
 
-    <x-parent>
+    <!-- <x-parent>
         <x-for var="items" key="item">    
             <x-child ref="child" x-text="text" x-item="item">
                 <x-if var="item">
@@ -15,11 +15,13 @@
                 </x-if>
             </x-child>
         </x-for>
-    </x-parent>
+    </x-parent> -->
 
-    <!-- <x-child ref="child" text="text" other="other" again="again">
-        <p x-text="My life is {text} {other} {again} !!!"></p>
-    </x-child> -->
+    <x-child ref="child" text="text" other="other" again="again">
+        <x-for var="array" key="item">
+            <p x-text="My life is {item.key|inc} {other} !!!"></p>
+        </x-for>
+    </x-child>
 
     <!-- <script src="../dist/flect.js" type="module"></script> -->
     <script src="../src/define.js" type="module"></script>

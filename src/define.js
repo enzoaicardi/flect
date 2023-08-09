@@ -15,7 +15,6 @@ function define(name, render){
     window[className].render = render;
     window[className].template = false;
     window[className].selector = false;
-    window[className].xregex = /\{[a-zA-Z0-9_.$!?-]+\}/g;
 
     window[className].prototype.class = window[className];
     customElements.define(`x-${name}`, window[className]);
