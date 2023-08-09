@@ -12,6 +12,14 @@ Attributes do not contain javascript expressions, this implies that the followin
 - Functions and parameters
 - Etc...
 
+## Match binding
+
+It is also possible to specify a string containing one or more datas inside braces: `x-text="My name is {name}"`. Note that the return value will then always be a string (which is not suitable for [actions](./actions.md) or [specific attributes](./attributes.md) like `x-show`, `x-append`, etc...).
+
+## The filters
+
+It is possible to specify [filters](./methods.md#thisfilter) (if they have been defined beforehand) in order to modify the return value: `x-text="name|capitalize"`.
+
 ## The depth
 
 Each property of your data is readable from the attributes. For the array `datas.array = ['john', 'jane', 'jack']` you can get `jane` like this: `x-text="array.1"`.

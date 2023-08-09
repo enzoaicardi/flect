@@ -3,30 +3,27 @@ define('test-array', function(datas, render){
 
   datas['array'] = [1,2,3,5,6,7,8];
 
+  this.filter('quantity', value => value > 8 ? 'a lot' : 'not that much')
+
   render(`
-    <div x-for="array" var="item">
-      <x-say x-data="item"></x-say>
-    </div>
+    <x-for var="array" key="item">
+      <p x-text="Item value is {item} it's {item|quantity}"></p>
+    </x-for>
   `)
 
   setTimeout(() => {
     datas['array'] = [3,4,5]
   }, 1000);
-  // setTimeout(() => {
-  //   datas['array'] = [3,4,5,6]
-  // }, 3000);
-  // setTimeout(() => {
-  //   datas['array'] = [90,800]
-  // }, 4000);
-  // setTimeout(() => {
-  //   datas['array'] = [3,6,8,9,90,800]
-  // }, 5000);
+  setTimeout(() => {
+    datas['array'] = [3,4,5,6]
+  }, 3000);
+  setTimeout(() => {
+    datas['array'] = [90,800]
+  }, 4000);
+  setTimeout(() => {
+    datas['array'] = [3,6,8,9,90,800]
+  }, 5000);
 })
-
-define('say', function(datas, render){
-  render(`<p x-text="data">DATA</p>`)
-})
-
 
 const dayNames = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"]
 const monthNames = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"]

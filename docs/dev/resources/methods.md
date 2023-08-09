@@ -24,6 +24,26 @@ define('input', function(datas){
 })
 ```
 
+## this.filter
+
+`this.filter(name, function)` add a filter that can be used (with a `|` separator) in dynamic expressions :
+
+```js
+define('filter', function(datas, render){
+
+    datas['index'] = 0;
+
+    this.filter('increment', value => value++);
+
+    this.render(/*html*/`
+        <div x-id="index|increment">
+            <p x-text="The actual index is {index|increment}"></p>
+        </div>
+    `);
+
+})
+```
+
 
 ## this.iterable
 

@@ -18,7 +18,7 @@ define('component', function(datas, render){
 ```
 :::
 
-The data entered in the attributes with the `x-` prefix are dynamic data that is passed to another component, so they can be used for dynamic communication between the components.
+The data entered in the attributes with the `x-` prefix are dynamic data that is passed to another component, so they can be used for one-sided dynamic communication between the components.
 
 ::: code-group
 ```html [index.html]

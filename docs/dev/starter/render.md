@@ -84,7 +84,7 @@ As you just noticed the `x-input` custom component is no longer part of the DOM 
 
 Now we are going to add a last argument to our render function, it is `style`, `style(...)` acts as a function which takes as its only argument a function that returns a string.
 
-This function has a single parameter corresponding to the sector of the component, which makes it possible to set up more predictable styles.
+This function has a single parameter corresponding to the selector of the component, which makes it possible to set up more predictable styles.
 
 ```js
 define('input', function(datas, render, style){
