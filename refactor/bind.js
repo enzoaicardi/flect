@@ -78,26 +78,44 @@ export function bindAction(element){
 
             if(gap > 0){
 
-                for(let x = count; (x < count + gap) && x < length; x++){
-                    
-                    if(!list[x]){
+                // setTimeout(()=>{
+                // Promise.resolve().then(()=>{
 
-                        let jar = this.cloneNode()
-                            ctx.copyNode(this, jar)
-                            list.push(jar)
+                    // let promise = Promise.resolve()
 
-                        let index = xcomment.cloneNode()
-                            index.xparent = jar
-                            jar.prepend(index)
+                    for(let x = count; (x < count + gap) && x < length; x++){
+                        
+                        // promise.then(()=>{
+                        // setTimeout(() => {
+                            
+                            if(!list[x]){
+
+                                let jar = this.cloneNode()
+                                    ctx.copyNode(this, jar)
+                                    list.push(jar)
+
+                                let index = xcomment.cloneNode()
+                                    index.xparent = jar
+                                    jar.prepend(index)
+
+                            }
+
+                            for(let node of [...list[x].childNodes]){
+                                before(xend, node)
+                            }
+
+                        // }, 0);
+                        // })
 
                     }
 
-                    for(let node of [...list[x].childNodes]){
-                        before(xend, node)
-                    }
+                    // TODO il faut un compteur de référence, celui-là n'est pas fiable lors des updates asynchrones
+                    // promise.then(()=>{
+                        count += gap
+                    // })
 
-                }
-
+                // })
+                // }, 0)
             }
 
             else if(gap < 0){
@@ -115,7 +133,7 @@ export function bindAction(element){
 
             }
 
-            count += gap
+            // count += gap
 
         }
 
