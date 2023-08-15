@@ -1,0 +1,1 @@
+export let xregex = /\{[a-zA-Z0-9_.$!?|-]+\}/g
