@@ -1,4 +1,4 @@
-import { XElement } from "./element/xelement.js"
+import { XElement } from "./element/xelement.js";
 
 let registry = {}
 

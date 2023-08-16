@@ -1,6 +1,6 @@
-import { proxyDatas } from "../proxy/proxy-datas.js"
-import { xparse } from "../utils/parser.js"
-import { bindmapCreate } from "../visitor/bindmap.js"
+import { proxyDatas } from "../proxy/datas.js";
+import { xparse } from "../utils/parser.js";
+import { createBindmap } from "../visitor/bindmap.js";
 
 export class XElement extends HTMLElement{
 
@@ -66,7 +66,7 @@ export class XElement extends HTMLElement{
     setupRender(){
 
         let node = xparse(this.render())
-        console.log(bindmapCreate(node))
+        console.log(createBindmap(node))
 
         return;
 

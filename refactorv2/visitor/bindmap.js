@@ -1,31 +1,65 @@
-import { isXAttribute } from "../utils/tests.js"
+import { getAction } from "../bind/action.js";
+import { createPattern } from "../pattern/pattern.js";
+import { isXAction, isXAttribute, isXElement } from "../utils/tests.js";
 
-export function bindmapCreate(node, map){
+export function createBindmap(node, matches = {}){
 
     let bindmap;
-    let pending = map || {attributes: {}, bindmap: {}}
+    // avoid over-usage of if statement
+    let pending = {type: node.tagName, datas: {}, bindmap: {}, matches: matches}
 
     for(let attribute of node.attributes){
 
         let name = attribute.name
+        let value = attribute.value
 
         if(isXAttribute(name)){
-            bindmap = pending
-            bindmap.attributes[name] = attribute.value
-            // TODO -> créer le mirroir d'effet
+
+            let pattern = createPattern(value)
+                pattern.attribute = name.substring(2)
+
+            let action = getAction(name)
+            let datas = pattern.datas
+
+            bindmap || (bindmap = pending)
+            
+            for(let key in datas){
+
+                let dataName = datas[key].steps[0]
+
+                bindmap.datas[dataName] || (bindmap.datas[dataName] = [])
+                bindmap.datas[dataName].push([action, pattern])
+
+            }
+
         }
 
     }
 
-    let children = node.children
+    if(isXAction(node)){
 
-    for(let x = 0; x < children.length; x++){
+        let key = node.getAttribute('key')
 
-        let result = bindmapCreate(children[x])
+        if(key){
+            matches = {...matches}
+            matches[key] = node.getAttribute('var')
+        }
+        
+    }
 
-        if(result){
-            bindmap = pending
-            bindmap.bindmap[x] = result
+    if(!isXElement(node) || isXAction(node)){
+    
+        let children = node.children
+
+        for(let x = 0; x < children.length; x++){
+
+            let result = createBindmap(children[x], matches)
+
+            if(result){
+                bindmap || (bindmap = pending)
+                bindmap.bindmap[x] = result
+            }
+
         }
 
     }
@@ -33,3 +67,34 @@ export function bindmapCreate(node, map){
     return bindmap
 
 }
+
+/*
+x-text="Hello {client.name} i'm {user.name}"
+x-class="button {icon} {inverted}"
+
+bindmap = {
+    index: 0,
+    matches: {
+        item: ()=>'dataName.'+this.index
+    },
+    datas: {
+        dataName: [[action, pattern], [action, pattern]]
+        otherData: [[action, pattern], [action, pattern]]
+    },
+    bindmap: {...}
+}
+
+effects = {
+    dataName: [
+        element: [[action, access], ...]
+    ]
+}
+
+alter on access function
+getData(path, alter){
+    forloop{
+        if(matches[path]) path === match
+        path next
+    }
+}
+*/
