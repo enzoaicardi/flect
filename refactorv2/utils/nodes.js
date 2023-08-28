@@ -1,1 +1,1 @@
-export let xcomment = document.createComment('');
+export let xcomment = document.createComment('')

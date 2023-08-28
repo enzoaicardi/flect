@@ -69,32 +69,24 @@ export function createBindmap(node, matches = {}){
 }
 
 /*
-x-text="Hello {client.name} i'm {user.name}"
-x-class="button {icon} {inverted}"
+    x-text="Hello {client.name} i'm {user.name}"
+    x-class="button {icon} {inverted}"
 
-bindmap = {
-    index: 0,
-    matches: {
-        item: ()=>'dataName.'+this.index
-    },
-    datas: {
-        dataName: [[action, pattern], [action, pattern]]
-        otherData: [[action, pattern], [action, pattern]]
-    },
-    bindmap: {...}
-}
-
-effects = {
-    dataName: [
-        element: [[action, access], ...]
-    ]
-}
-
-alter on access function
-getData(path, alter){
-    forloop{
-        if(matches[path]) path === match
-        path next
+    bindmap = {
+        index: 0,
+        matches: {
+            item: ()=>'dataName.'+this.index
+        },
+        datas: {
+            dataName: [[action, pattern], [action, pattern]]
+            otherData: [[action, pattern], [action, pattern]]
+        },
+        bindmap: {...}
     }
-}
+
+    effects = {
+        dataName: [
+            element: [[action, access], ...]
+        ]
+    }
 */

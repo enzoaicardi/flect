@@ -15,3 +15,11 @@ export function createPath(str){
     return path
 
 }
+
+/*
+    path = {
+        steps: ['birth', 'date'],
+        filters: ['toDate'],
+        not: false
+    }
+*/

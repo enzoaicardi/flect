@@ -1,9 +1,9 @@
-import { xregex } from "../../refactor/assets.js";
+import { xregex } from "../utils/regex.js";
 import { createPath } from "./path.js";
 
 export function createPattern(str){
 
-    let pattern = {datas: {}, base: str}
+    let pattern = {datas: {}, base: str, attribute: ''}
     let datasMatches = str.match(xregex);
 
     if(!datasMatches){
@@ -12,11 +12,21 @@ export function createPattern(str){
 
     else{
         for(let match of datasMatches){
-            match = match.substring(1, match.length-1)
-            pattern.datas[match] = createPath(match)
+            pattern.datas[match] = createPath(match.substring(1, match.length-1))
         }
     }
 
     return pattern
 
 }
+
+/*
+    pattern = {
+        attribute: "text",
+        base: "My name is {user.name}",
+        datas: {
+            "{user.name}": path,
+            "birth.date|toDate": path
+        }
+    }
+*/
