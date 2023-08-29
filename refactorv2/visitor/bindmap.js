@@ -1,4 +1,4 @@
-import { getAction } from "../bind/action.js";
+import { getAction } from "../utils/action.js";
 import { createPattern } from "../pattern/pattern.js";
 import { isXAction, isXAttribute, isXElement } from "../utils/tests.js";
 

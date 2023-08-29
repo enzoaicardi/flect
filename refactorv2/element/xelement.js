@@ -7,15 +7,20 @@ export class XElement extends HTMLElement{
 
     constructor(){
         super()
+    }
+
+    connectedCallback(){
 
         // _xdatas is empty object if not previously defined
-        this._xdatas || (this._xdatas = {})
+        this._xdatas = this.datas || {}
+        // if some datas are passed with x-attributes we add them to _xdatas
+        !this._cdatas || (Object.assign(this._xdatas, this._cdatas))
 
         // setup datas from attribute
         this.setupDatas()
 
         // setup the data proxy
-        // this.setupProxy()
+        this.setupProxy()
 
         // run init function from sub-class
         this.init(this.datas)
@@ -26,6 +31,8 @@ export class XElement extends HTMLElement{
         // setup DOM render
         this.setupRender()
 
+        // setup DOM bindind
+        
     }
 
     filters = {}
@@ -35,6 +42,8 @@ export class XElement extends HTMLElement{
         // fallback
         // prevent errors if init is not defined on sub-class
     }
+
+    // setup
 
     setupDatas(){
 
@@ -60,8 +69,14 @@ export class XElement extends HTMLElement{
     }
 
     setupProxy(){
-        this.proxy = proxyDatas()
+
+        this.proxy = proxyDatas(this)
         this.datas = new Proxy(this._xdatas, this.datas)
+
+        for(let key in this.effects){
+            this.proxy.effect(key, this, [this.effects[key]])
+        }
+
     }
 
     setupStyle(){
@@ -70,39 +85,49 @@ export class XElement extends HTMLElement{
 
     setupRender(){
 
-        let node = xparse(this.render())
-        console.log(createBindmap(node))
-
-        return;
-
         let definition = this._xclass
 
-        if(definition.template){
+        if(!definition.template){
 
-        }
-        else{
+            let dom = this.render()
 
-            let result = this.render()
-
-            if(typeof result === 'string'){
-                definition.template = xparse(result)
-                result = definition.template.cloneNode(true)
+            if(typeof dom === 'string'){
+                definition.template = xparse(dom)
             }
             else{
-
+                this.template = dom
             }
+
+            definition.bindmap = createBindmap(definition.template)
+
         }
-        // check if render exist
-        // if exist render template
 
-        // else, check render type
-        // -> string convert to template + save + saveMAP
-        // -> dom elements = use but don't save
+        this.template || (this.template = definition.template.cloneNode(true))
 
-        // if string ->
-        // CreateMap + bindeffects visitor
-        // Clone + clone binding to proxy
+        this.bindElement(this.template, definition.bindmap)
+
     }
+
+    // binding
+
+    bindElement(element, bindmap){
+
+        for(let index in bindmap){
+
+            let node = element.childNodes[index]
+            let datas = bindmap[index].datas
+
+            for(let key in datas){
+                this.proxy.effect(key, element, ...datas[key])
+            }
+
+            this.bindElement(node, bindmap[index].bindmap)
+
+        }
+
+    }
+
+    // accessers
 
     getValue(pattern){
 

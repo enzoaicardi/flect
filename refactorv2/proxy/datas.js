@@ -1,5 +1,5 @@
 
-export function proxyDatas(){
+export function proxyDatas(ctx){
 
     return {
 
@@ -12,9 +12,10 @@ export function proxyDatas(){
         }
         */
 
+        ctx: ctx,
         effects: {},
 
-        effect(dataName, caller, action){
+        effect(dataName, caller, ...actions){
 
             let effects = this.effects
 
@@ -29,7 +30,7 @@ export function proxyDatas(){
             }
 
             // push the current binded action
-            effects[dataName].get(caller).push(action)
+            effects[dataName].get(caller).push(...actions)
 
         },
 
@@ -44,10 +45,10 @@ export function proxyDatas(){
                 for(let [caller, actions] of effects[dataName]){
 
                     // run every action from every caller
-                    for(let action of actions){
+                    for(let [action, pattern] of actions){
 
                         // console.log('run action on ->', caller, 'for value =', value);
-                        action.call(caller, value)
+                        action.call(ctx, value, caller, pattern)
 
                     }
 
