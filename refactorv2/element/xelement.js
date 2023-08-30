@@ -98,13 +98,14 @@ export class XElement extends HTMLElement{
                 this.template = dom
             }
 
-            definition.bindmap = createBindmap(definition.template)
+            definition.bindmap = createBindmap(definition.template).bindmap
 
         }
 
         this.template || (this.template = definition.template.cloneNode(true))
 
         this.bindElement(this.template, definition.bindmap)
+        console.log(this.proxy.mapping)
 
     }
 
@@ -114,11 +115,11 @@ export class XElement extends HTMLElement{
 
         for(let index in bindmap){
 
-            let node = element.childNodes[index]
+            let node = element.children[index]
             let datas = bindmap[index].datas
 
             for(let key in datas){
-                this.proxy.effect(key, element, ...datas[key])
+                this.proxy.effect(key, node, ...datas[key])
             }
 
             this.bindElement(node, bindmap[index].bindmap)
