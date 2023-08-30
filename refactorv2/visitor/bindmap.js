@@ -6,7 +6,7 @@ export function createBindmap(node, matches = {}){
 
     let bindmap;
     // avoid over-usage of if statement
-    let pending = {type: node.tagName, datas: {}, bindmap: {}, matches: matches}
+    let pending = {type: node.tagName, datas: {}, children: {}, matches: matches}
 
     for(let attribute of node.attributes){
 
@@ -31,6 +31,8 @@ export function createBindmap(node, matches = {}){
                 bindmap.datas[dataName].push([action, pattern])
 
             }
+
+            node.removeAttribute(name)
 
         }
 
@@ -57,7 +59,7 @@ export function createBindmap(node, matches = {}){
 
             if(result){
                 bindmap || (bindmap = pending)
-                bindmap.bindmap[x] = result
+                bindmap.children[x] = result
             }
 
         }

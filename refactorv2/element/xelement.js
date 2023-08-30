@@ -71,7 +71,7 @@ export class XElement extends HTMLElement{
     setupProxy(){
 
         this.proxy = proxyDatas(this)
-        this.datas = new Proxy(this._xdatas, this.datas)
+        this.datas = new Proxy(this._xdatas, this.proxy)
 
         for(let key in this.effects){
             this.proxy.effect(key, this, [this.effects[key]])
@@ -98,14 +98,16 @@ export class XElement extends HTMLElement{
                 this.template = dom
             }
 
-            definition.bindmap = createBindmap(definition.template).bindmap
+            definition.bindmap = createBindmap(definition.template)
 
         }
 
         this.template || (this.template = definition.template.cloneNode(true))
 
-        this.bindElement(this.template, definition.bindmap)
-        console.log(this.proxy.mapping)
+        !definition.bindmap || (this.bindElement(this.template, definition.bindmap))
+        // console.log(this.proxy.mapping)
+
+        this.replaceWith(...this.template.childNodes)
 
     }
 
@@ -113,16 +115,18 @@ export class XElement extends HTMLElement{
 
     bindElement(element, bindmap){
 
-        for(let index in bindmap){
+        let maps = bindmap.children
+
+        for(let index in maps){
 
             let node = element.children[index]
-            let datas = bindmap[index].datas
+            let datas = maps[index].datas
 
             for(let key in datas){
                 this.proxy.effect(key, node, ...datas[key])
             }
 
-            this.bindElement(node, bindmap[index].bindmap)
+            this.bindElement(node, maps[index])
 
         }
 
