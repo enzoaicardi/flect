@@ -1,7 +1,7 @@
-import { xregex } from "../utils/regex.js";
-import { proxyDatas } from "../proxy/datas.js";
 import { xparse } from "../utils/parser.js";
+import { proxyDatas } from "../proxy/datas.js";
 import { createBindmap } from "../visitor/bindmap.js";
+import { getValueFromPath, getValueFromPattern } from "../pattern/accesser.js";
 
 export class XElement extends HTMLElement{
 
@@ -105,8 +105,8 @@ export class XElement extends HTMLElement{
         this.template || (this.template = definition.template.cloneNode(true))
 
         !definition.bindmap || (this.bindElement(this.template, definition.bindmap))
-        // console.log(this.proxy.mapping)
-
+        
+        console.log(definition.bindmap)
         this.replaceWith(...this.template.childNodes)
 
     }
@@ -118,6 +118,10 @@ export class XElement extends HTMLElement{
         let maps = bindmap.children
 
         for(let index in maps){
+
+            // todo remplacer les matchs ?
+            // si key de datas = match alors remplace par value ?
+            // non on accede a la valeur puis on accede à la nouvelle valeur en merge
 
             let node = element.children[index]
             let datas = maps[index].datas
@@ -132,39 +136,14 @@ export class XElement extends HTMLElement{
 
     }
 
+    bindAction(){
+        // todo a voir que faire
+    }
+
     // accessers
 
-    getValue(pattern){
+    getValue = getValueFromPattern
 
-        // if the base is equal to a data name
-        if(pattern.datas[pattern.base]){
-            return this.getData(pattern.datas[pattern.base])
-        }
-
-        // replace all groups by their match
-        return pattern.base.replace(xregex, (group) => {
-            return this.getData(pattern.datas[group])
-        });
-
-    }
-
-    getData(path){
-
-        let datas = this._xdatas
-
-        // loop over steps but stop if value is falsy
-        for(let x = 0; x < path.steps.length && !!datas; x++){
-            datas = datas[path.steps[x]]
-        }
-
-        path.not || (datas = !datas)
-
-        for(let x = 0; x < path.filters.length; x++){
-            datas = this.filters[path.filters[x]]
-        }
-
-        return datas
-
-    }
+    getData = getValueFromPath
 
 }

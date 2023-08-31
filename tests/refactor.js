@@ -24,11 +24,11 @@ Flect.define('input', class extends Flect.x {
     }
 
     render(){
-        return `
-            <div x-text="item" x-class="{item.type} {icon|toSvg}">
-                <x-for var="products" key="item">
+        return /*html*/`
+            <div x-text="item" x-class="{icon|toArray.2|toSvg} {item.type}">
+                <!-- <x-for var="products" key="item">
                     <p x-text="item"></p>
-                </x-for>
+                </x-for> -->
             </div>
         `
     }

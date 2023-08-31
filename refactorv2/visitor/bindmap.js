@@ -1,6 +1,8 @@
-import { getAction } from "../utils/action.js";
+import { isXAction, isXAttribute, isXElement } from "../utils/test.js";
+import { getAttributeAction } from "../action/attribute.js";
+import { getNodeAction } from "../action/node.js";
 import { createPattern } from "../pattern/pattern.js";
-import { isXAction, isXAttribute, isXElement } from "../utils/tests.js";
+import { createPath } from "../pattern/path.js";
 
 export function createBindmap(node, matches = {}){
 
@@ -8,45 +10,60 @@ export function createBindmap(node, matches = {}){
     // avoid over-usage of if statement
     let pending = {type: node.tagName, datas: {}, children: {}, matches: matches}
 
-    for(let attribute of node.attributes){
-
-        let name = attribute.name
-        let value = attribute.value
-
-        if(isXAttribute(name)){
-
-            let pattern = createPattern(value)
-                pattern.attribute = name.substring(2)
-
-            let action = getAction(name)
-            let datas = pattern.datas
-
-            bindmap || (bindmap = pending)
-            
-            for(let key in datas){
-
-                let dataName = datas[key].steps[0]
-
-                bindmap.datas[dataName] || (bindmap.datas[dataName] = [])
-                bindmap.datas[dataName].push([action, pattern])
-
-            }
-
-            node.removeAttribute(name)
-
-        }
-
-    }
-
     if(isXAction(node)){
 
         let key = node.getAttribute('key')
+        let val = node.getAttribute('var')
 
-        if(key){
+        if(key && val){
+
+            let path = createPath(val)
+            let action = getNodeAction(node.tagName)
+
             matches = {...matches}
-            matches[key] = node.getAttribute('var')
+            matches[key] = path
+            
+            bindmap = pending
+            bindmap.datas[path.steps[0][0]] = [action, path]
+
         }
         
+    }
+
+    else {
+
+        for(let x = 0; x < node.attributes.length; x++){
+
+            let attribute = node.attributes[x]
+            let name = attribute.name
+            let value = attribute.value
+    
+            if(isXAttribute(name)){
+    
+                let pattern = createPattern(value)
+                    pattern.attribute = name.substring(2)
+    
+                let action = getAttributeAction(name)
+                let datas = pattern.datas
+    
+                bindmap || (bindmap = pending)
+                
+                for(let key in datas){
+    
+                    let dataName = datas[key].steps[0][0]
+    
+                    bindmap.datas[dataName] || (bindmap.datas[dataName] = [])
+                    bindmap.datas[dataName].push([action, pattern])
+    
+                }
+    
+                node.removeAttribute(name)
+                x--
+    
+            }
+    
+        }
+
     }
 
     if(!isXElement(node) || isXAction(node)){

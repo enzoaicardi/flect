@@ -1,5 +1,5 @@
 
-export function getAction(name){
+export function getAttributeAction(name){
 
     switch (name){
         case 'x-text': return updateTextAction
@@ -11,7 +11,7 @@ export function getAction(name){
 }
 
 /**
- * context - this represent the component class instance
+ * this - represent the component class instance
  * @param {*} _ the value of the variable
  * @param {HTMLElement} element the affected element
  * @param {Pattern} pattern

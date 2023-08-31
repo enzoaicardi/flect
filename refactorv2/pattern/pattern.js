@@ -3,7 +3,7 @@ import { createPath } from "./path.js";
 
 export function createPattern(str){
 
-    let pattern = {datas: {}, base: str, attribute: ''}
+    let pattern = {datas: {}, base: str}
     let datasMatches = str.match(xregex);
 
     if(!datasMatches){

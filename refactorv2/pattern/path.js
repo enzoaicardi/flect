@@ -1,25 +1,16 @@
 
 export function createPath(str){
 
-    let path = {}
-
-    let sections = str.split('|')
-    let steps = sections[0].split('.')
-    
-    path.filters = sections.slice(1)
-    path.not = steps[0][0] === '!'
-    path.steps = steps
-
-    if(path.not){ steps[0] = steps[0].substring(1) }
-
-    return path
+    return {
+        not: str[0] === '!',
+        steps: (str[0] === '!' ? str.substring(1) : str).split('.').map((el) => { return el.split('|') })
+    }
 
 }
 
 /*
     path = {
-        steps: ['birth', 'date'],
-        filters: ['toDate'],
+        steps: [['birth'], ['date', 'dateFormat']],
         not: false
     }
 */
