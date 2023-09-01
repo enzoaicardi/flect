@@ -106,7 +106,9 @@ export class XElement extends HTMLElement{
 
         !definition.bindmap || (this.bindElement(this.template, definition.bindmap))
         
+        // todo remove console
         console.log(definition.bindmap)
+
         this.replaceWith(...this.template.childNodes)
 
     }
@@ -123,21 +125,20 @@ export class XElement extends HTMLElement{
             // si key de datas = match alors remplace par value ?
             // non on accede a la valeur puis on accede à la nouvelle valeur en merge
 
+            let map = maps[index]
             let node = element.children[index]
-            let datas = maps[index].datas
+            let datas = map.datas
 
             for(let key in datas){
                 this.proxy.effect(key, node, ...datas[key])
             }
 
-            this.bindElement(node, maps[index])
+            // todo bind element doit s'arreter avant boucle for
+            // car c'est elle qui bind les clones
+            this.bindElement(node, map)
 
         }
 
-    }
-
-    bindAction(){
-        // todo a voir que faire
     }
 
     // accessers

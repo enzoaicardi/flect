@@ -12,13 +12,13 @@ export function getValueFromPattern(pattern, object){
 
 }
 
-export function getValueFromPath(path, object = this._xdatas, merge = 0){
+export function getValueFromPath(path, object = this._xdatas){
 
     // loop over steps but stop if value is falsy
     for(let x = 0; x < path.steps.length && !!object; x++){
 
         let step = path.steps[x]
-        (x < merge--) || (object = object[step[0]])
+            object = object[step[0]]
 
         for(let i = 1; i < step.length; i++){
 

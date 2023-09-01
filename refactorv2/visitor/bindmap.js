@@ -8,7 +8,7 @@ export function createBindmap(node, matches = {}){
 
     let bindmap;
     // avoid over-usage of if statement
-    let pending = {type: node.tagName, datas: {}, children: {}, matches: matches}
+    let pending = {type: node.tagName, datas: {}, children: {}, dynamic: {}}
 
     if(isXAction(node)){
 
@@ -17,18 +17,31 @@ export function createBindmap(node, matches = {}){
 
         if(key && val){
 
-            let path = createPath(val)
+            let path = createPath(val, matches)
             let action = getNodeAction(node.tagName)
 
-            matches = {...matches}
-            matches[key] = path
+            // peut-etre pas besoin en cas de remplacement a la volée
+            // on merge les chemins directement -> on ajoute un index dynamique pour la
+            // boucle for -> cet index est une etape dont on peut changer à la volée la
+            // valeur
+            // matches = Object.assign({}, matches)
+            let ref = pending.dynamic[key] = []
+            matches[key] = {path, ref}
             
             bindmap = pending
+            bindmap.action = node.tagName
             bindmap.datas[path.steps[0][0]] = [action, path]
 
         }
         
     }
+
+    /*
+        matches = {
+            item: {path: Path, ref: first_bindmap.dynamic}
+            item: {path: Path, ref: second_bindmap.dynamic}
+        }
+    */
 
     else {
 
@@ -40,7 +53,7 @@ export function createBindmap(node, matches = {}){
     
             if(isXAttribute(name)){
     
-                let pattern = createPattern(value)
+                let pattern = createPattern(value, matches)
                     pattern.attribute = name.substring(2)
     
                 let action = getAttributeAction(name)
@@ -91,16 +104,15 @@ export function createBindmap(node, matches = {}){
     x-text="Hello {client.name} i'm {user.name}"
     x-class="button {icon} {inverted}"
 
-    bindmap = {
-        index: 0,
-        matches: {
-            item: ()=>'dataName.'+this.index
-        },
+    bindmap = index: {
         datas: {
             dataName: [[action, pattern], [action, pattern]]
             otherData: [[action, pattern], [action, pattern]]
         },
-        bindmap: {...}
+        children: {...Bindmap},
+        dynamic: {
+            item: [...['item' ~ reference step to path]]
+        }
     }
 
     effects = {
