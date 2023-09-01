@@ -8,12 +8,9 @@ export function createPath(str, matches = {}){
 
     let match = matches[first(path)]
         match && (match.ref.push(mergePaths(match.path, path)))
-    // todo ne peut pas fonctionner, il faut ajouter la référence a une liste
-    // la liste doit être accessible depuis le modificateur (donc la bindmap en question)
-    // qui doit pouvoir modifier à la volée les références
-    // a voir si c'est necessaire de passer par des clones ou pas (preférer sans)
-    // path.dynamic = matches[first(path)] && (mergePaths(matches[first(path)], path))
-    console.log(str, match)
+
+    // todo remove console
+    // console.log('path > ', str, match?.ref)
 
     return path
 

@@ -20,17 +20,15 @@ export function createBindmap(node, matches = {}){
             let path = createPath(val, matches)
             let action = getNodeAction(node.tagName)
 
-            // peut-etre pas besoin en cas de remplacement a la volée
-            // on merge les chemins directement -> on ajoute un index dynamique pour la
-            // boucle for -> cet index est une etape dont on peut changer à la volée la
-            // valeur
-            // matches = Object.assign({}, matches)
             let ref = pending.dynamic[key] = []
             matches[key] = {path, ref}
             
             bindmap = pending
             bindmap.action = node.tagName
             bindmap.datas[path.steps[0][0]] = [action, path]
+
+            // todo remove console
+            console.log('X-FOR', val, bindmap.dynamic)
 
         }
         
