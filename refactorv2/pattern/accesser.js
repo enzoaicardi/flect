@@ -1,13 +1,20 @@
+/* xElement {
+    getValue = getValueFromPattern
+    getData = getValueFromPath
+} */
+
+import { xregex } from "../utils/regex.js";
+
 export function getValueFromPattern(pattern, object){
 
     // if the base is equal to a data name
     if(pattern.datas[pattern.base]){
-        return getValueFromPath(pattern.datas[pattern.base], object)
+        return this.getData(pattern.datas[pattern.base], object)
     }
 
     // replace all groups by their match
     return pattern.base.replace(xregex, (group) => {
-        return getValueFromPath(pattern.datas[group], object)
+        return this.getData(pattern.datas[group], object)
     });
 
 }

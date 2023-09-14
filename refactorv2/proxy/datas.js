@@ -16,7 +16,7 @@ export function proxyDatas(ctx){
         effects: {},
         mapping: new Map(),
 
-        effect(dataName, caller, ...actions){
+        effect(dataName, caller, actions){
 
             let effects = this.effects
             let mapping = this.mapping

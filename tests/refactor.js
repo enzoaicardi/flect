@@ -5,39 +5,45 @@ Flect.define('input', class extends Flect.x {
 
     init(datas){
         // console.log(this._xdatas)
-    }
-
-    datas = {
-        name: 'Jeanne'
+        setTimeout(() => {
+            this.datas.name = 'Pierre Farget'
+        }, 1000);
     }
 
     filters = {
-
-        toNumber: (value)=>{
-            Number(value)
-        }
-
+        split: (value)=>value.split(' ')
     }
 
     effects = {
-        name: (value)=>this.datas.name = 6
+        name: (value)=>this.datas.count = value.length
+    }
+
+    datas = {
+        name: 'Jeanne Pharr'
     }
 
     render(){
         return /*html*/`
-            <!--<div x-text="item" x-class="{icon|toArray.2|toSvg} {item.type}">-->
-                <x-for var="products" key="item">
-                    <x-for var="item.prices" key="price">
-                        <p x-text="price.a"></p>
-                        <p x-text="price.b"></p>
-                    </x-for>
-                    <x-for var="item.cacas" key="price">
-                        <p x-text="price.c"></p>
-                        <p x-text="price.d"></p>
-                    </x-for>
-                </x-for>
-            <!--</div>-->
+        <x-for var="products">
+            <div x-text="name|split.0">not binded</div>
+            <div x-text="count">not binded</div>
+        </x-for>
         `
     }
 
 })
+
+/*
+
+<x-for var="products" key="item">
+    <x-for var="item.prices" key="price">
+        <p x-text="price.a"></p>
+        <p x-text="price.b"></p>
+    </x-for>
+    <x-for var="item.cacas" key="price">
+        <p x-text="price.c"></p>
+        <p x-text="price.d"></p>
+    </x-for>
+</x-for>
+
+*/

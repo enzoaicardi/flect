@@ -1,10 +1,11 @@
 import terser from '@rollup/plugin-terser';
 
 export default {
-	input: 'src/define.js',
+	input: 'refactorv2/define.js',
 	output: {
 		file: 'dist/flect.js',
-		format: 'iife'
+		format: 'iife',
+		name: 'Flect'
 	},
     plugins: [terser({
 		mangle: {

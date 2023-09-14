@@ -1,5 +1,6 @@
 import { xparse } from "../utils/parser.js";
 import { proxyDatas } from "../proxy/datas.js";
+import { bindElement } from "../visitor/bind.js";
 import { createBindmap } from "../visitor/bindmap.js";
 import { getValueFromPath, getValueFromPattern } from "../pattern/accesser.js";
 
@@ -8,6 +9,9 @@ export class XElement extends HTMLElement{
     constructor(){
         super()
     }
+
+    filters = {}
+    effects = {}
 
     connectedCallback(){
 
@@ -30,13 +34,8 @@ export class XElement extends HTMLElement{
 
         // setup DOM render
         this.setupRender()
-
-        // setup DOM bindind
         
     }
-
-    filters = {}
-    effects = {}
 
     init(){
         // fallback
@@ -74,7 +73,8 @@ export class XElement extends HTMLElement{
         this.datas = new Proxy(this._xdatas, this.proxy)
 
         for(let key in this.effects){
-            this.proxy.effect(key, this, [this.effects[key]])
+            this.proxy.effect(key, this, [[this.effects[key]]])
+            this.effects[key](this._xdatas[key])
         }
 
     }
@@ -86,60 +86,34 @@ export class XElement extends HTMLElement{
     setupRender(){
 
         let definition = this._xclass
+        let template
 
         if(!definition.template){
 
-            let dom = this.render()
+            let render = this.render()
 
-            if(typeof dom === 'string'){
-                definition.template = xparse(dom)
-            }
-            else{
-                this.template = dom
-            }
+            if(typeof render !== 'string') template = render
+            else definition.template = xparse(render)
 
-            definition.bindmap = createBindmap(definition.template)
+            definition.bindmap = this.bindMap(definition.template || render)
 
         }
 
-        this.template || (this.template = definition.template.cloneNode(true))
-
-        !definition.bindmap || (this.bindElement(this.template, definition.bindmap))
+        template || (template = definition.template.cloneNode(true))
+        !definition.bindmap || (this.bindElement(template, definition.bindmap))
         
         // todo remove console
         console.log(definition.bindmap)
 
-        this.replaceWith(...this.template.childNodes)
+        this.replaceWith(...template.childNodes)
 
     }
 
     // binding
 
-    bindElement(element, bindmap){
+    bindMap = createBindmap
 
-        let maps = bindmap.children
-
-        for(let index in maps){
-
-            // todo remplacer les matchs ?
-            // si key de datas = match alors remplace par value ?
-            // non on accede a la valeur puis on accede à la nouvelle valeur en merge
-
-            let map = maps[index]
-            let node = element.children[index]
-            let datas = map.datas
-
-            for(let key in datas){
-                this.proxy.effect(key, node, ...datas[key])
-            }
-
-            // todo bind element doit s'arreter avant boucle for
-            // car c'est elle qui bind les clones
-            this.bindElement(node, map)
-
-        }
-
-    }
+    bindElement = bindElement
 
     // accessers
 

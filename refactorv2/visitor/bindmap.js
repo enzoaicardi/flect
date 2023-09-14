@@ -15,22 +15,25 @@ export function createBindmap(node, matches = {}){
         let key = node.getAttribute('key')
         let val = node.getAttribute('var')
 
-        if(key && val){
+        if(val){
 
             let path = createPath(val, matches)
             let action = getNodeAction(node.tagName)
 
-            let ref = pending.dynamic[key] = []
-            matches[key] = {path, ref}
+            if(key){
+                let ref = pending.dynamic[key] = []
+                matches[key] = {path, ref}
+            }
             
             bindmap = pending
             bindmap.action = node.tagName
-            bindmap.datas[path.steps[0][0]] = [action, path]
+            bindmap.datas[path.steps[0][0]] = [[action, path]]
 
             // todo remove console
-            console.log('X-FOR', val, bindmap.dynamic)
+            // console.log('X-FOR', val, bindmap.dynamic)
 
         }
+
         
     }
 
@@ -77,7 +80,7 @@ export function createBindmap(node, matches = {}){
 
     }
 
-    if(!isXElement(node) || isXAction(node)){
+    if(!isXElement(node) || isXAction(node) || node === this){
     
         let children = node.children
 

@@ -1,0 +1,11 @@
+- [x] define
+- [x] datas proxy
+- [x] filters
+- [x] effects
+- [x] render childnodes
+- [ ] data binding sur composant imbriqué
+- [ ] x-for loop
+- [ ] x-if statement
+- [ ] unbind + clonebind en changeant les entrées dynamiques
+
+- [x] < 5kb.min
