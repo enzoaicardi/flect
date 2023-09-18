@@ -5,21 +5,11 @@ Flect.define('input', class extends Flect.x {
 
     init(datas){
         // console.log(this._xdatas)
+
         setTimeout(() => {
             this.datas.name = 'Pierre Farget'
         }, 1000);
-    }
-
-    filters = {
-        split: (value)=>value.split(' ')
-    }
-
-    effects = {
-        name: (value)=>this.datas.count = value.length
-    }
-
-    datas = {
-        name: 'Jeanne Pharr'
+    
     }
 
     render(){
@@ -29,6 +19,10 @@ Flect.define('input', class extends Flect.x {
             <div x-text="count">not binded</div>
         </x-for>
         `
+    }
+
+    style(x){
+        return ``
     }
 
 })

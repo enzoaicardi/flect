@@ -8,10 +8,20 @@ export class XElement extends HTMLElement{
 
     constructor(){
         super()
+
+        // binding
+        this.bindMap = createBindmap
+        this.bindElement = bindElement
+
+        // accessers
+        this.getValue = getValueFromPattern
+        this.getData = getValueFromPath
+
     }
 
-    filters = {}
-    effects = {}
+    // TODO remplacer ces declarations par des declarations dans le constructeur
+    // filters = {};
+    // effects = {};
 
     connectedCallback(){
 
@@ -108,17 +118,5 @@ export class XElement extends HTMLElement{
         this.replaceWith(...template.childNodes)
 
     }
-
-    // binding
-
-    bindMap = createBindmap
-
-    bindElement = bindElement
-
-    // accessers
-
-    getValue = getValueFromPattern
-
-    getData = getValueFromPath
 
 }
