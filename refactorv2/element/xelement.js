@@ -3,6 +3,7 @@ import { proxyDatas } from "../proxy/datas.js";
 import { bindElement } from "../visitor/bind.js";
 import { createBindmap } from "../visitor/bindmap.js";
 import { getValueFromPath, getValueFromPattern } from "../pattern/accesser.js";
+import { createSelector, createStylerules } from "./style.js";
 
 export class XElement extends HTMLElement{
 
@@ -40,7 +41,7 @@ export class XElement extends HTMLElement{
         this.setupProxy()
 
         // setup stylesheet
-        this.setupStyle()
+        this.styles && (this._xclass.selector || (this.setupStyle()))
 
         // setup DOM render
         this.setupRender()
@@ -93,6 +94,7 @@ export class XElement extends HTMLElement{
     setupProxy(){
 
         this.proxy = proxyDatas(this)
+
         // transform datas into proxy of _xdatas
         this.datas = new Proxy(this._xdatas, this.proxy)
 
@@ -104,7 +106,12 @@ export class XElement extends HTMLElement{
     }
 
     setupStyle(){
-        // TODO
+
+        let definition = this._xclass
+            definition.selector = createSelector()
+
+        createStylerules(this.styles(definition.selector))
+
     }
 
     setupRender(){

@@ -28,9 +28,9 @@ Flect.define('input', class extends Flect.x {
         `
     }
 
-    style(x){
-        return ``
-    }
+    // styles(x){
+    //     return ``
+    // }
 
 })
 
