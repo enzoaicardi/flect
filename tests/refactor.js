@@ -3,21 +3,28 @@ import * as Flect from '../refactorv2/define.js';
 
 Flect.define('input', class extends Flect.x {
 
-    init(datas){
-        // console.log(this._xdatas)
+    init(){
+        this.datas.name = 'Fallback'
 
         setTimeout(() => {
             this.datas.name = 'Pierre Farget'
         }, 1000);
+
+        this.filters = {
+            split: value => value.split(' '),
+            count: value => value.length
+        }
+
+        this.effects = {
+            name: value => this.datas.count = value.length
+        }
     
     }
 
     render(){
         return /*html*/`
-        <x-for var="products">
-            <div x-text="name|split.0">not binded</div>
+            <div x-text="Fisrt name : {name|split.0} / Last name : {name|split.1}">not binded</div>
             <div x-text="count">not binded</div>
-        </x-for>
         `
     }
 

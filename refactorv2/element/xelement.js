@@ -9,6 +9,12 @@ export class XElement extends HTMLElement{
     constructor(){
         super()
 
+        // defaults values
+        this.datas = {}
+        this.filters = {}
+        this.effects = {}
+        this._xrefs = {}
+
         // binding
         this.bindMap = createBindmap
         this.bindElement = bindElement
@@ -19,25 +25,19 @@ export class XElement extends HTMLElement{
 
     }
 
-    // TODO remplacer ces declarations par des declarations dans le constructeur
-    // filters = {};
-    // effects = {};
-
     connectedCallback(){
-
-        // _xdatas is empty object if not previously defined
-        this._xdatas = this.datas || {}
-        // if some datas are passed with x-attributes we add them to _xdatas
-        !this._cdatas || (Object.assign(this._xdatas, this._cdatas))
-
-        // setup datas from attribute
-        this.setupDatas()
-
-        // setup the data proxy
-        this.setupProxy()
 
         // run init function from sub-class
         this.init(this.datas)
+
+        // setup datas from non-x-attributes
+        this.setupDatas()
+
+        // setup _xdatas = datas and assign datas from x-attributes
+        this._xdatas = this.xAttrDatas ? Object.assign(this.datas, this.xAttrDatas) : this.datas
+
+        // setup the data proxy
+        this.setupProxy()
 
         // setup stylesheet
         this.setupStyle()
@@ -48,15 +48,28 @@ export class XElement extends HTMLElement{
     }
 
     init(){
-        // fallback
-        // prevent errors if init is not defined on sub-class
+        // fallback -> prevent error if init is empty
+        /*
+            Define fallback datas via datas[...] = ...
+            Define effects via this.effects = {...}
+            Define filters via this.filters = {...}
+        */
+    }
+
+    refs(name, callback){
+        // add callback to reference
+        // the callback will be executed when a ref is binded
+        // TODO gérer le comportement de unbind disconnectedCallback avec les références
+        let refs = this._xrefs
+        refs[name] || (refs[name] = [])
+        refs[name].push(callback)
     }
 
     // setup
 
     setupDatas(){
 
-        let datas = this._xdatas
+        let datas = this.datas
             datas.body = this.childNodes
 
         for(let attribute of this.attributes){
@@ -80,6 +93,7 @@ export class XElement extends HTMLElement{
     setupProxy(){
 
         this.proxy = proxyDatas(this)
+        // transform datas into proxy of _xdatas
         this.datas = new Proxy(this._xdatas, this.proxy)
 
         for(let key in this.effects){
