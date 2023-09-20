@@ -3,9 +3,13 @@ export function isXAction(element){
 }
 
 export function isXElement(element){
-    return element.tagName[0] === 'X' && element.tagName[1] === '-'
+    return element.tagName[0] === 'X' && element.tagName[1] === '-' && !isXAction(element)
 }
 
 export function isXAttribute(name){
     return name[0] === 'x' && name[1] === '-'
+}
+
+export function isXOnce(name){
+    return name === 'x-ref' || name === 'x-scoped'
 }

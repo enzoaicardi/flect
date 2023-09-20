@@ -21,12 +21,12 @@ export function getNodeAction(name){
 // probleme il faut cloner le path sinon on modifie le patterne
 // -> product -> item -> product.index.name
 // ou alors simplement récupérer la valeur et s'en servir comme base pour le chemin
-export function updateIfAction(_, element, path){
+function updateIfAction(_, element, path){
     // this.getData(path)
     console.log('run x-if action !')
 }
 
-export function updateForAction(_, element, path){
+function updateForAction(_, element, path){
     console.log('run x-for action !')
     // on boucle sur la variable
     // -> on créer / clone les elements

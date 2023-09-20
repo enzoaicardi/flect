@@ -20,6 +20,10 @@ export function createPattern(str, matches){
 
 }
 
+export function createEmptyPattern(){
+    return {datas:{'':false}}
+}
+
 /*
     pattern = {
         attribute: "text",

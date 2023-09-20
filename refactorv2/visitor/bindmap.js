@@ -1,7 +1,8 @@
-import { isXAction, isXAttribute, isXElement } from "../utils/test.js";
+import { isXAction, isXAttribute, isXElement, isXOnce } from "../utils/test.js";
 import { getAttributeAction } from "../action/attribute.js";
+import { getDataAction } from "../action/data.js";
 import { getNodeAction } from "../action/node.js";
-import { createPattern } from "../pattern/pattern.js";
+import { createEmptyPattern, createPattern } from "../pattern/pattern.js";
 import { createPath } from "../pattern/path.js";
 
 export function createBindmap(node, matches = {}){
@@ -25,7 +26,7 @@ export function createBindmap(node, matches = {}){
                 matches[key] = {path, ref}
             }
             
-            bindmap = pending
+            bindmap || (bindmap = pending)
             bindmap.action = node.tagName
             bindmap.datas[path.steps[0][0]] = [[action, path]]
 
@@ -54,17 +55,25 @@ export function createBindmap(node, matches = {}){
     
             if(isXAttribute(name)){
     
-                let pattern = createPattern(value, matches)
-                    pattern.attribute = name.substring(2)
-    
-                let action = getAttributeAction(name)
-                let datas = pattern.datas
-    
+                // TODO gérer les attributs speciaux (x-scoped et x-ref)
+                // peut être modifier pour une empty data ? '' -> ne déclenche jamais
+                // et gère l'unbind dans le même temps ?
+
                 bindmap || (bindmap = pending)
+
+                let pattern = createEmptyPattern()
+                let action = !isXElement(node) || node === this ? (getAttributeAction(name)) : (getDataAction(name))
+                
+                if(!isXOnce(name)){
+                    pattern = createPattern(value, matches)
+                    pattern.attribute = name.substring(2)
+                }
+    
+                let datas = pattern.datas
                 
                 for(let key in datas){
     
-                    let dataName = datas[key].steps[0][0]
+                    let dataName = datas[key] && datas[key].steps[0][0]
     
                     bindmap.datas[dataName] || (bindmap.datas[dataName] = [])
                     bindmap.datas[dataName].push([action, pattern])
@@ -80,7 +89,7 @@ export function createBindmap(node, matches = {}){
 
     }
 
-    if(!isXElement(node) || isXAction(node) || node === this){
+    if(!isXElement(node) || node === this){
     
         let children = node.children
 

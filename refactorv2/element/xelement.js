@@ -3,7 +3,7 @@ import { proxyDatas } from "../proxy/datas.js";
 import { bindElement } from "../visitor/bind.js";
 import { createBindmap } from "../visitor/bindmap.js";
 import { getValueFromPath, getValueFromPattern } from "../pattern/accesser.js";
-import { createSelector, createStylerules } from "./style.js";
+import { createStylerules } from "./style.js";
 
 export class XElement extends HTMLElement{
 
@@ -11,6 +11,7 @@ export class XElement extends HTMLElement{
         super()
 
         // defaults values
+        this._xdatas = this.datas
         this.datas = {}
         this.filters = {}
         this.effects = {}
@@ -35,7 +36,7 @@ export class XElement extends HTMLElement{
         this.setupDatas()
 
         // setup _xdatas = datas and assign datas from x-attributes
-        this._xdatas = this.xAttrDatas ? Object.assign(this.datas, this.xAttrDatas) : this.datas
+        this._xdatas = this._xdatas ? Object.assign(this.datas, this._xdatas) : this.datas
 
         // setup the data proxy
         this.setupProxy()
@@ -108,9 +109,7 @@ export class XElement extends HTMLElement{
     setupStyle(){
 
         let definition = this._xclass
-            definition.selector = createSelector()
-
-        createStylerules(this.styles(definition.selector))
+            definition.selector = createStylerules(this.styles)
 
     }
 
@@ -119,6 +118,7 @@ export class XElement extends HTMLElement{
         let definition = this._xclass
         let template
 
+        // create definition template if it's empty
         if(!definition.template){
 
             let render = this.render()
@@ -126,16 +126,21 @@ export class XElement extends HTMLElement{
             if(typeof render !== 'string') template = render
             else definition.template = xparse(render)
 
+            // create and store bindmap (overwrite if render not <string>)
             definition.bindmap = this.bindMap(definition.template || render)
 
         }
 
+        // get template from clone
         template || (template = definition.template.cloneNode(true))
+
+        // bind elements if needed
         !definition.bindmap || (this.bindElement(template, definition.bindmap))
         
         // todo remove console
-        console.log(definition.bindmap)
+        // console.log(definition.bindmap)
 
+        // replace main customelement tag by it's childNodes
         this.replaceWith(...template.childNodes)
 
     }

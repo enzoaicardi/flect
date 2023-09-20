@@ -1,17 +1,19 @@
 let styleRefIndex = 0
 let styleSheet = false
 
-export function createSelector(){
-    return `[style-ref="${styleRefIndex++}"]`
-}
+export let STYLE_ATTRIBUTE = 'style-ref'
 
-export function createStylerules(content){
+export function createStylerules(render){
+
+    let selector = 'x' + (styleRefIndex++)
 
     if(!styleSheet){
         styleSheet = document.createElement('style')
         document.head.appendChild(styleSheet)
     }
 
-    styleSheet.textContent += content;
+    styleSheet.textContent += render(`[${STYLE_ATTRIBUTE}="${selector}"]`);
+
+    return selector
 
 }

@@ -3,6 +3,7 @@
 - [x] filters
 - [x] effects
 - [x] render childnodes
+- [-] styles scopés (todo apply refs sur elements parents)
 - [ ] data binding sur composant imbriqué
 - [ ] x-for loop
 - [ ] x-if statement
