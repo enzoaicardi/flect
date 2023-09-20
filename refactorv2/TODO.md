@@ -8,5 +8,7 @@
 - [ ] x-for loop
 - [ ] x-if statement
 - [ ] unbind + clonebind en changeant les entrées dynamiques
+- [ ] tests de changement de propriété + filtres vs lit plain js
+- [ ] tests de boucles for
 
 - [x] < 5kb.min

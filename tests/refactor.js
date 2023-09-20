@@ -33,7 +33,7 @@ Flect.define('div', class extends Flect.x{
     render(){
         return /*html*/`
         <div x-scoped>
-            <div x-ref="button" x-text="My name is {name}">not binded</div>
+            <div x-ref="button">My name is <b x-text="name"></b></div>
         </div>
         `
     }
