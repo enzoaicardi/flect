@@ -1,7 +1,7 @@
+import { STYLE_ATTRIBUTE } from "../utils/vars.js"
+
 let styleRefIndex = 0
 let styleSheet = false
-
-export let STYLE_ATTRIBUTE = 'style-ref'
 
 export function createStylerules(render){
 

@@ -3,13 +3,17 @@ export function isXAction(element){
 }
 
 export function isXElement(element){
-    return element.tagName[0] === 'X' && element.tagName[1] === '-' && !isXAction(element)
+    return element.tagName.indexOf('X-') === 0 && !isXAction(element)
 }
 
 export function isXAttribute(name){
-    return name[0] === 'x' && name[1] === '-'
+    return name.indexOf('x-') === 0
 }
 
-export function isXOnce(name){
-    return name === 'x-ref' || name === 'x-scoped'
+export function isXEventAttribute(name){
+    return name.indexOf('x-on:') === 0
+}
+
+export function isXScopedAttribute(name){
+    return name === 'x-scoped'
 }

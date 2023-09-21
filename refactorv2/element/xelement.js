@@ -18,7 +18,7 @@ export class XElement extends HTMLElement{
         this._xrefs = {}
 
         // binding
-        this.bindMap = createBindmap
+        this.createBindmap = createBindmap
         this.bindElement = bindElement
 
         // accessers
@@ -127,7 +127,7 @@ export class XElement extends HTMLElement{
             else definition.template = xparse(render)
 
             // create and store bindmap (overwrite if render not <string>)
-            definition.bindmap = this.bindMap(definition.template || render)
+            definition.bindmap = this.createBindmap(definition.template || render)
 
         }
 
@@ -138,7 +138,7 @@ export class XElement extends HTMLElement{
         !definition.bindmap || (this.bindElement(template, definition.bindmap))
         
         // todo remove console
-        // console.log(definition.bindmap)
+        console.log(definition.bindmap)
 
         // replace main customelement tag by it's childNodes
         this.replaceWith(...template.childNodes)

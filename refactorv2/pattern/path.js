@@ -7,10 +7,10 @@ export function createPath(str, matches = {}){
     }
 
     let match = matches[first(path)]
-        match && (match.ref.push(mergePaths(match.path, path)))
+        match && (match.references.push(mergePaths(match.path, path)))
 
     // todo remove console
-    // console.log('path > ', str, match?.ref)
+    // console.log('path > ', str, match?.references)
 
     return path
 
@@ -20,7 +20,7 @@ export function createPath(str, matches = {}){
     path = {
         not: false,
         steps: [['birth'], ['date', 'dateFormat']],
-        dynamic: false
+        references: false
     }
 */
 
@@ -33,8 +33,8 @@ export function mergePaths(source, target){
     item ~> products
     source: [['products']]
     target: [['item'], ['name']]
-    merged: [['products'], ['item' ~ dynamic index], ['name']]
-    dynamic: ['item' ~ dynamic index]
+    merged: [['products'], ['item' ~ references index], ['name']]
+    references: ['item' ~ references index]
 */
 
 function first(path, index = 0){

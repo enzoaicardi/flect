@@ -30,12 +30,26 @@ Flect.define('input', class extends Flect.x {
 })
 
 Flect.define('div', class extends Flect.x{
+
+    init(){
+        
+    }
+
     render(){
         return /*html*/`
-        <div x-scoped>
-            <div x-ref="button">My name is <b x-text="name"></b></div>
+        <x-for var="products" key="item">
+        <div x-scoped x-on:click="red" x-on:mouseenter="green">
+            <div x-ref="button" x-style="item">My name is <b x-text="name"></b></div>
         </div>
+        </x-for>
         `
+    }
+
+    red(event){
+        event.currentTarget.style.background = 'red'
+    }
+    green(event){
+        event.currentTarget.style.background = 'green'
     }
 
     styles(x){

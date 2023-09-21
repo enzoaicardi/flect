@@ -6,21 +6,25 @@ export function bindElement(element, bindmap){
 
         let map = maps[index]
         let node = element.children[index]
-        let datas = map.datas
+        let effects = map.effects
 
-        for(let key in datas){
+        for(let key in effects){
 
-            this.proxy.effect(key, node, datas[key])
+            this.proxy.effect(key, node, effects[key])
 
             // run action the first time to hydrate component
-            for(let [action, pattern] of datas[key]){
+            for(let [action, pattern] of effects[key]){
                 action.call(this, null, node, pattern)
             }
 
         }
 
+        for(let action of map.onces){
+            action.call(this, node, map)
+        }
+
         // bind childs only if node is not action node
-        map.action || (this.bindElement(node, map))
+        map.break || (this.bindElement(node, map))
 
     }
 

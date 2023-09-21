@@ -1,4 +1,4 @@
-import { STYLE_ATTRIBUTE } from "../element/style.js"
+import { STYLE_ATTRIBUTE } from "../utils/vars.js"
 
 export function getAttributeAction(name){
 
@@ -7,10 +7,19 @@ export function getAttributeAction(name){
         case 'x-html': return updateHtmlAction
         case 'x-show': return updateDisplayAction
         case 'x-ref': return updateRefAction
-        case 'x-scoped': return setScopedAction
         default: return updateAttributeAction
     }
 
+}
+
+export function addScopedAction(element){
+    element.setAttribute(STYLE_ATTRIBUTE, this._xclass.selector)
+}
+
+export function addListenersAction(element, bindmap){
+    for(let event of bindmap.handler.events){
+        element.addEventListener(event, bindmap.handler)
+    }
 }
 
 /**
@@ -44,16 +53,17 @@ function updateDisplayAction(_, element, pattern){
 
 function updateRefAction(_, element, pattern){
 
+    // mauvaise gestion des references, les references doivent etre liées a une data du meme nom
+    // on doit avoir un proxy pour les références
+    // les references doivent pouvoir etre des composants
+    // TODO - gérer en plus les évenements avec eventHandler natif ? et attribut x-on:... ?
+    // sinon comment avoir la référence du composant parent ?
     let actions = this._xrefs[pattern.base] || []
     
     for(let action of actions){
         action(element)
     }
 
-}
-
-function setScopedAction(_, element){
-    !this._xclass.selector || (element.setAttribute(STYLE_ATTRIBUTE, this._xclass.selector))
 }
 
 function updateAttributeAction(_, element, pattern){

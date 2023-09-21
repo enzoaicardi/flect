@@ -1,15 +1,23 @@
-import { isXAction, isXAttribute, isXElement, isXOnce } from "../utils/test.js";
-import { getAttributeAction } from "../action/attribute.js";
+import { isXAction, isXAttribute, isXElement, isXEventAttribute, isXScopedAttribute } from "../utils/test.js";
+import { addListenersAction, addScopedAction, getAttributeAction } from "../action/attribute.js";
 import { getDataAction } from "../action/data.js";
 import { getNodeAction } from "../action/node.js";
-import { createEmptyPattern, createPattern } from "../pattern/pattern.js";
+import { createPattern } from "../pattern/pattern.js";
 import { createPath } from "../pattern/path.js";
+import { HANDLER_PREFIX } from "../utils/vars.js";
 
 export function createBindmap(node, matches = {}){
 
     let bindmap;
+
     // avoid over-usage of if statement
-    let pending = {type: node.tagName, datas: {}, children: {}, dynamic: {}}
+    let pending = {
+        type: node.tagName,
+        effects: {},
+        onces: [],
+        children: {/* bindmaps */},
+        references: {}
+    }
 
     if(isXAction(node)){
 
@@ -22,16 +30,17 @@ export function createBindmap(node, matches = {}){
             let action = getNodeAction(node.tagName)
 
             if(key){
-                let ref = pending.dynamic[key] = []
-                matches[key] = {path, ref}
+                let references = pending.references[key] = []
+                matches[key] = {path, references}
+                console.log(matches)
             }
             
             bindmap || (bindmap = pending)
-            bindmap.action = node.tagName
-            bindmap.datas[path.steps[0][0]] = [[action, path]]
+            bindmap.break = node.tagName
+            bindmap.effects[path.steps[0][0]] = [[action, path]]
 
             // todo remove console
-            // console.log('X-FOR', val, bindmap.dynamic)
+            // console.log('X-FOR', val, bindmap.references)
 
         }
 
@@ -40,8 +49,8 @@ export function createBindmap(node, matches = {}){
 
     /*
         matches = {
-            item: {path: Path, ref: first_bindmap.dynamic}
-            item: {path: Path, ref: second_bindmap.dynamic}
+            item: {path: Path, ref: first_bindmap.references}
+            item: {path: Path, ref: second_bindmap.references}
         }
     */
 
@@ -52,37 +61,60 @@ export function createBindmap(node, matches = {}){
             let attribute = node.attributes[x]
             let name = attribute.name
             let value = attribute.value
-    
-            if(isXAttribute(name)){
-    
-                // TODO gérer les attributs speciaux (x-scoped et x-ref)
-                // peut être modifier pour une empty data ? '' -> ne déclenche jamais
-                // et gère l'unbind dans le même temps ?
 
+            if(isXAttribute(name)){
+                
                 bindmap || (bindmap = pending)
 
-                let pattern = createEmptyPattern()
-                let action = !isXElement(node) || node === this ? (getAttributeAction(name)) : (getDataAction(name))
-                
-                if(!isXOnce(name)){
-                    pattern = createPattern(value, matches)
-                    pattern.attribute = name.substring(2)
+                if(isXEventAttribute(name)){
+
+                    let event = name.substring(5)
+
+                    // to keep tracking events we use the magic method handleEvent
+                    // that save memory and prevent double binding
+                    bindmap.handler || (bindmap.handler = {
+                        events: [],
+                        handleEvent: (event)=>{
+                            bindmap.handler[HANDLER_PREFIX + event.type].call(this, event)
+                        }
+                    })
+
+                    bindmap.handler.events.push(event)
+                    bindmap.handler[HANDLER_PREFIX + event] = this[value]
+                    bindmap.onces.push(addListenersAction)
+
                 }
-    
-                let datas = pattern.datas
-                
-                for(let key in datas){
-    
-                    let dataName = datas[key] && datas[key].steps[0][0]
-    
-                    bindmap.datas[dataName] || (bindmap.datas[dataName] = [])
-                    bindmap.datas[dataName].push([action, pattern])
-    
+
+                else if(isXScopedAttribute(name)){
+
+                    // push only if component allow scoped style
+                    !this._xclass.selector || (bindmap.onces.push(addScopedAction))
+
                 }
-    
+        
+                else{
+
+                    // choose between attribute and datas actions
+                    let action = !isXElement(node) || node === this ? (getAttributeAction(name)) : (getDataAction(name))
+                    
+                    let pattern = createPattern(value, matches)
+                        pattern.attribute = name.substring(2)
+                    
+                    for(let key in pattern.datas){
+        
+                        // get the parent data name
+                        let dataName = pattern.datas[key].steps[0][0]
+        
+                        bindmap.effects[dataName] || (bindmap.effects[dataName] = [])
+                        bindmap.effects[dataName].push([action, pattern])
+        
+                    }
+                            
+                }
+                
                 node.removeAttribute(name)
                 x--
-    
+            
             }
     
         }
@@ -95,7 +127,7 @@ export function createBindmap(node, matches = {}){
 
         for(let x = 0; x < children.length; x++){
 
-            let result = createBindmap(children[x], matches)
+            let result = this.createBindmap(children[x], matches)
 
             if(result){
                 bindmap || (bindmap = pending)
@@ -115,12 +147,12 @@ export function createBindmap(node, matches = {}){
     x-class="button {icon} {inverted}"
 
     bindmap = index: {
-        datas: {
+        effects: {
             dataName: [[action, pattern], [action, pattern]]
             otherData: [[action, pattern], [action, pattern]]
         },
         children: {...Bindmap},
-        dynamic: {
+        references: {
             item: [...['item' ~ reference step to path]]
         }
     }
