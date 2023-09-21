@@ -42,8 +42,9 @@ Flect.define('div', class extends Flect.x{
 
     render(){
         return /*html*/`
-        <div x-scoped x-on:click="red" x-on:mouseenter="green">
-            <div x-ref="button">My name is <b x-text="name"></b></div>
+        <div x-scoped>
+            <div x-ref="button" x-on:click="red" x-on:mouseenter="green">My name is <b x-text="name"></b></div>
+            <div x-ref="button" x-on:click="green" x-on:mouseenter="red">My name is <b x-text="name"></b></div>
         </div>
         `
     }
