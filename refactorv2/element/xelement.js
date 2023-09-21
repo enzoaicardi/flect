@@ -59,12 +59,16 @@ export class XElement extends HTMLElement{
     }
 
     refs(name, callback){
-        // add callback to reference
-        // the callback will be executed when a ref is binded
+        
         // TODO gérer le comportement de unbind disconnectedCallback avec les références
+        // add callback to callstack
         let refs = this._xrefs
         refs[name] || (refs[name] = [])
         refs[name].push(callback)
+
+        // apply changes to references
+        this.datas[name] = callback
+
     }
 
     // setup

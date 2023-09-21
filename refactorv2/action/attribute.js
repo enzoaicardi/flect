@@ -51,17 +51,19 @@ function updateDisplayAction(_, element, pattern){
 
 }
 
-function updateRefAction(_, element, pattern){
+function updateRefAction(value, element, pattern){
 
-    // mauvaise gestion des references, les references doivent etre liées a une data du meme nom
-    // on doit avoir un proxy pour les références
-    // les references doivent pouvoir etre des composants
-    // TODO - gérer en plus les évenements avec eventHandler natif ? et attribut x-on:... ?
-    // sinon comment avoir la référence du composant parent ?
-    let actions = this._xrefs[pattern.base] || []
-    
-    for(let action of actions){
-        action(element)
+    // if there is no value it's because the element wasn't binded before
+    // so we execute all the callstack stored at this._xrefs
+    if(!value){
+        for(let action of this._xrefs[pattern.base]){
+            action(element)
+        }
+    }
+    // else we only execute the new action value
+    else{
+        let action = this._xdatas[pattern.base]
+        !action || (action(element))
     }
 
 }

@@ -32,16 +32,19 @@ Flect.define('input', class extends Flect.x {
 Flect.define('div', class extends Flect.x{
 
     init(){
-        
+        this.refs('button', el => el.style.padding = '10px')
+        this.refs('button', el => el.style.background = 'lime')
+        this.refs('button', el => el.style.border = '10px solid yellow')
+        setTimeout(() => {
+            this.refs('button', el => el.style.padding = '20px')
+        }, 1000);
     }
 
     render(){
         return /*html*/`
-        <x-for var="products" key="item">
         <div x-scoped x-on:click="red" x-on:mouseenter="green">
-            <div x-ref="button" x-style="item">My name is <b x-text="name"></b></div>
+            <div x-ref="button">My name is <b x-text="name"></b></div>
         </div>
-        </x-for>
         `
     }
 
