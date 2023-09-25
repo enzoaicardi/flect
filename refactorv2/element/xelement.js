@@ -30,7 +30,7 @@ export class XElement extends HTMLElement{
     connectedCallback(){
 
         // run init function from sub-class
-        this.init(this.datas)
+        this.init()
 
         // setup datas from non-x-attributes
         this.setupDatas()
@@ -49,6 +49,26 @@ export class XElement extends HTMLElement{
         
     }
 
+    /* disconnectedCallback(){
+        // we don't use it because the element is imediately disconnected
+        // after being initiated 
+    } */
+
+    disconnectXElement(){
+
+        // run disconnect function from sub-class
+        this.disconnect()
+
+        // delete all instance properties
+        delete this.datas
+        delete this.proxy
+        delete this._xdatas
+        delete this._xrefs
+        delete this.filters
+        delete this.effects
+
+    }
+
     init(){
         // fallback -> prevent error if init is empty
         /*
@@ -58,9 +78,16 @@ export class XElement extends HTMLElement{
         */
     }
 
+    disconnect(){
+        // fallback -> prevent error if disconnect is empty
+        /*
+            Remove all persistent states when disconnected
+            Example : clearInterval(my_persistent_interval)
+        */
+    }
+
     refs(name, callback){
         
-        // TODO gérer le comportement de unbind disconnectedCallback avec les références
         // add callback to callstack
         let refs = this._xrefs
         refs[name] || (refs[name] = [])

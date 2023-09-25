@@ -19,8 +19,7 @@ export function createPath(str, matches = {}){
 /*
     path = {
         not: false,
-        steps: [['birth'], ['date', 'dateFormat']],
-        references: false
+        steps: [['birth'], ['date', 'dateFormat']]
     }
 */
 

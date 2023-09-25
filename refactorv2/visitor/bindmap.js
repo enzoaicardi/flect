@@ -1,6 +1,6 @@
 import { isXAction, isXAttribute, isXElement, isXEventAttribute, isXScopedAttribute } from "../utils/test.js";
 import { addListenersAction, addScopedAction, getAttributeAction } from "../action/attribute.js";
-import { getDataAction } from "../action/data.js";
+import { updateDataAction } from "../action/data.js";
 import { getNodeAction } from "../action/node.js";
 import { createPattern } from "../pattern/pattern.js";
 import { createPath } from "../pattern/path.js";
@@ -31,13 +31,17 @@ export function createBindmap(node, matches = {}){
 
             if(key){
                 let references = pending.references[key] = []
+                    pending.match = key
                 matches[key] = {path, references}
-                console.log(matches)
             }
             
             bindmap || (bindmap = pending)
             bindmap.break = node.tagName
+            bindmap.content = node.childNodes
             bindmap.effects[path.steps[0][0]] = [[action, path]]
+
+            // remove node from DOM
+            node.remove()
 
             // todo remove console
             // console.log('X-FOR', val, bindmap.references)
@@ -49,8 +53,8 @@ export function createBindmap(node, matches = {}){
 
     /*
         matches = {
-            item: {path: Path, ref: first_bindmap.references}
-            item: {path: Path, ref: second_bindmap.references}
+            item: {path: Path, references: first_bindmap.references}
+            item: {path: Path, references: second_bindmap.references}
         }
     */
 
@@ -95,7 +99,7 @@ export function createBindmap(node, matches = {}){
                 else{
 
                     // choose between attribute and datas actions
-                    let action = !isXElement(node) || node === this ? (getAttributeAction(name)) : (getDataAction(name))
+                    let action = !isXElement(node) || node === this ? (getAttributeAction(name)) : (updateDataAction(name))
                     
                     let pattern = createPattern(value, matches)
                         pattern.attribute = name.substring(2)

@@ -5,6 +5,7 @@ Flect.define('input', class extends Flect.x {
 
     init(){
         this.datas.name = 'Fallback'
+        this.datas.list = [3,2,1]
 
         setTimeout(() => {
             this.datas.name = 'Pierre Farget'
@@ -23,7 +24,9 @@ Flect.define('input', class extends Flect.x {
 
     render(){
         return /*html*/`
-        <x-div x-name="name"></x-div>
+        <x-for var="list" key="listItem">
+            <p x-text="listItem"></p>
+        </x-for>
         `
     }
 

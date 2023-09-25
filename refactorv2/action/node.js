@@ -26,8 +26,36 @@ function updateIfAction(_, element, path){
     console.log('run x-if action !')
 }
 
-function updateForAction(_, element, path){
-    console.log('run x-for action !')
+function updateForAction(_, element, path, bindmap){
+
+    let count = 0
+    let value = this.getData(path)
+    let length = typeof value === 'number' ? value : value.length
+    let gap = length - count
+
+    console.log('element count =', count, 'value is =', value, 'gap is =', gap)
+
+    if(gap > 0){
+
+        for(let x = count; (x < count + gap) && x < length; x++){
+            // add element
+            console.log('+ add element')
+        }
+
+    }
+
+    else if(gap < 0){
+
+        for(let x = count - 1; (x > (count - 1) + gap) && x >= 0; x--){
+            // remove element
+            console.log('- remove element')
+        }
+
+    }
+
+    console.log('x-for -> var =', value)
+    console.log('x-for -> key =', bindmap.match)
+
     // on boucle sur la variable
     // -> on créer / clone les elements
     // -> on bind / unbind les elements
