@@ -5,39 +5,39 @@
 
 import { xregex } from "../utils/regex.js";
 
-export function getValueFromPattern(pattern, object){
+export function getValueFromPattern(pattern){
 
     // if the base is equal to a data name
     if(pattern.datas[pattern.base]){
-        return this.getData(pattern.datas[pattern.base], object)
+        return this.getData(pattern.datas[pattern.base])
     }
 
     // replace all groups by their match
     return pattern.base.replace(xregex, (group) => {
-        return this.getData(pattern.datas[group], object)
+        return this.getData(pattern.datas[group])
     });
 
 }
 
-export function getValueFromPath(path, object = this._xdatas){
+export function getValueFromPath(path){
 
-    // TODO se débarraser des filtres en acceptant les datas comme fn
-    // peut faciliter la mise en place des x-ref -> gérer automatiquement ?
+    let data = this._xdatas
 
     // loop over steps but stop if value is falsy
-    for(let x = 0; x < path.steps.length && !!object; x++){
+    for(let x = 0; x < path.steps.length && !!data; x++){
 
+        // set the new step
         let step = path.steps[x]
-            object = object[step[0]]
+            data = data[step[0]]
 
+        // apply filters if exists
         for(let i = 1; i < step.length; i++){
-
-            object = this.filters[step[i]](object)
-
+            data = this.filters[step[i]](data)
         }
 
     }
 
-    return path.not ? !object : object
+    // return path value
+    return path.not ? !data : data
 
 }

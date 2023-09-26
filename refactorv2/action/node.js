@@ -1,3 +1,5 @@
+import { xcomment } from "../utils/node.js"
+
 export function getNodeAction(name){
 
     switch (name){
@@ -15,46 +17,69 @@ export function getNodeAction(name){
  * @param {Path} path
  */
 
-// todo voir si patterne pas mieux ?
-// car on recupère les matchs dedans et on peut changer a la volée
-// todo faire methode mergepath (path1, path2) -> faire un push = meilleure idée ?
-// probleme il faut cloner le path sinon on modifie le patterne
-// -> product -> item -> product.index.name
-// ou alors simplement récupérer la valeur et s'en servir comme base pour le chemin
 function updateIfAction(_, element, path){
     // this.getData(path)
-    console.log('run x-if action !')
+    // console.log('run x-if transformer !')
 }
 
-function updateForAction(_, element, path, bindmap){
+function updateForAction(_, element, path){
 
-    let count = 0
+    // defaults values
+    element.unbindmap || (element.unbindmap = {})
+
+    // retrieve bindmap
+    let map = path.bindmap
+
+    // forloop setup
+    let count = element.count || (element.count = 0)
     let value = this.getData(path)
     let length = typeof value === 'number' ? value : value.length
     let gap = length - count
 
-    console.log('element count =', count, 'value is =', value, 'gap is =', gap)
-
     if(gap > 0){
 
         for(let x = count; (x < count + gap) && x < length; x++){
-            // add element
+
+            let clone = map.rootElement.cloneNode(true)
+            let child;
+            // TODO modifier le patterne pendant le binding
+            console.log(map)
+
+            // get unbindmap
+            element.unbindmap[x] = this.bindElement(clone, map, true)
+
+            // insert childs before boundary
+            while(child = clone.firstChild){
+                child._xindex = x
+                element.parentNode.insertBefore(child, element)
+            }
+
             console.log('+ add element')
         }
 
     }
 
+    // TODO revoir toutes les boucles for sur elements pour firstElementChild
+
     else if(gap < 0){
 
         for(let x = count - 1; (x > (count - 1) + gap) && x >= 0; x--){
-            // remove element
+
+            let sibling;
+
+            while((sibling = element.previousSibling) && sibling._xindex === x){
+                sibling.remove()
+            }
+
+            // clear memory
+            this.unbindElements(element.unbindmap[x])
+
             console.log('- remove element')
         }
 
     }
 
-    console.log('x-for -> var =', value)
-    console.log('x-for -> key =', bindmap.match)
+    element.count += gap
 
     // on boucle sur la variable
     // -> on créer / clone les elements

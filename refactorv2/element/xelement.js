@@ -2,8 +2,9 @@ import { xparse } from "../utils/parser.js";
 import { proxyDatas } from "../proxy/datas.js";
 import { bindElement } from "../visitor/bind.js";
 import { createBindmap } from "../visitor/bindmap.js";
-import { getValueFromPath, getValueFromPattern } from "../pattern/accesser.js";
+import { unbindElements } from "../visitor/unbind.js";
 import { createStylerules } from "./style.js";
+import { getValueFromPath, getValueFromPattern } from "../pattern/accesser.js";
 
 export class XElement extends HTMLElement{
 
@@ -19,6 +20,7 @@ export class XElement extends HTMLElement{
 
         // binding
         this.createBindmap = createBindmap
+        this.unbindElements = unbindElements
         this.bindElement = bindElement
 
         // accessers
@@ -169,7 +171,7 @@ export class XElement extends HTMLElement{
         !definition.bindmap || (this.bindElement(template, definition.bindmap))
         
         // todo remove console
-        console.log(definition.bindmap)
+        // console.log(definition.bindmap)
 
         // replace main customelement tag by it's childNodes
         this.replaceWith(...template.childNodes)

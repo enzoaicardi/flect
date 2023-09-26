@@ -1,10 +1,11 @@
-import { isXAction, isXAttribute, isXElement, isXEventAttribute, isXScopedAttribute } from "../utils/test.js";
+import { isXTransformer, isXAttribute, isXElement, isXEventAttribute, isXScopedAttribute } from "../utils/test.js";
 import { addListenersAction, addScopedAction, getAttributeAction } from "../action/attribute.js";
 import { updateDataAction } from "../action/data.js";
 import { getNodeAction } from "../action/node.js";
 import { createPattern } from "../pattern/pattern.js";
 import { createPath } from "../pattern/path.js";
 import { HANDLER_PREFIX } from "../utils/vars.js";
+import { xcomment } from "../utils/node.js";
 
 export function createBindmap(node, matches = {}){
 
@@ -19,44 +20,49 @@ export function createBindmap(node, matches = {}){
         references: {}
     }
 
-    if(isXAction(node)){
+    if(isXTransformer(node)){
 
         let key = node.getAttribute('key')
         let val = node.getAttribute('var')
 
+        // without value we dont trigger binding
         if(val){
 
             let path = createPath(val, matches)
             let action = getNodeAction(node.tagName)
 
+            // if there is a key we update the match array
             if(key){
+
                 let references = pending.references[key] = []
                     pending.match = key
                 matches[key] = {path, references}
+
+                /*
+                    matches = {
+                        item: {path: Path, references: first_bindmap.references}
+                        item: {path: Path, references: second_bindmap.references}
+                    }
+                */
             }
             
+            // bindmap update for binding
             bindmap || (bindmap = pending)
             bindmap.break = node.tagName
-            bindmap.content = node.childNodes
+            bindmap.rootElement = node
             bindmap.effects[path.steps[0][0]] = [[action, path]]
 
-            // remove node from DOM
-            node.remove()
-
-            // todo remove console
-            // console.log('X-FOR', val, bindmap.references)
+            // path update for transformers
+            path.bindmap = bindmap
 
         }
 
+        // here we can directly replace the node because
+        // children are stored inside bindmap.rootElement and
+        // must be used by the tranformer action
+        node.replaceWith(xcomment.cloneNode())
         
     }
-
-    /*
-        matches = {
-            item: {path: Path, references: first_bindmap.references}
-            item: {path: Path, references: second_bindmap.references}
-        }
-    */
 
     else {
 
@@ -116,6 +122,7 @@ export function createBindmap(node, matches = {}){
                             
                 }
                 
+                // clearing attributes
                 node.removeAttribute(name)
                 x--
             
@@ -127,16 +134,27 @@ export function createBindmap(node, matches = {}){
 
     if(!isXElement(node) || node === this){
     
-        let children = node.children
+        let child = node.firstChild
+        let index = 0
 
-        for(let x = 0; x < children.length; x++){
+        if(child){
 
-            let result = this.createBindmap(children[x], matches)
+            do {
 
-            if(result){
-                bindmap || (bindmap = pending)
-                bindmap.children[x] = result
-            }
+                if(child.nodeType === 1 || child.nodeType === 8){
+
+                    let result = this.createBindmap(child, matches)
+
+                    if(result){
+                        bindmap || (bindmap = pending)
+                        bindmap.children[index] = result
+                    }
+
+                }
+                 
+                index++
+
+            } while (child = child.nextSibling)
 
         }
 

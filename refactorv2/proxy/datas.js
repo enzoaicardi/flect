@@ -40,6 +40,8 @@ export function proxyDatas(ctx){
 
         },
 
+        // TODO remove clone if unused
+        // TODO globalcontext passing parent to xelement
         clone(element, clone){
             for(let dataName of this.mapping.get(element)){
                 this.effects[dataName].set(clone, this.effects[dataName].get(element))
@@ -49,6 +51,7 @@ export function proxyDatas(ctx){
         remove(element){
             for(let dataName of this.mapping.get(element)){
                 this.effects[dataName].delete(element)
+                this.mapping.delete(element)
             }
         },
 

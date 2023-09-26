@@ -9,11 +9,17 @@ Flect.define('input', class extends Flect.x {
 
         setTimeout(() => {
             this.datas.name = 'Pierre Farget'
+            this.datas.list = [3]
         }, 1000);
+
+        setTimeout(() => {
+            this.datas.list = [3,2,1,0,1,2,3]
+            this.datas.name = 'Pierre Michel'
+        }, 2000);
 
         this.filters = {
             split: value => value.split(' '),
-            count: value => value.length
+            count: value => value ? value.length : 'no value'
         }
 
         this.effects = {
@@ -25,7 +31,7 @@ Flect.define('input', class extends Flect.x {
     render(){
         return /*html*/`
         <x-for var="list" key="listItem">
-            <p x-text="listItem"></p>
+            <p x-text="listItem">am a clone</p>
         </x-for>
         `
     }
@@ -60,7 +66,7 @@ Flect.define('div', class extends Flect.x{
     }
 
     styles(x){
-        return `${x} {border: 1px solid red;}`
+        return /*css*/`${x} {border: 1px solid red;}`
     }
 })
 
@@ -78,3 +84,7 @@ Flect.define('div', class extends Flect.x{
 </x-for>
 
 */
+
+let globalContext = {
+
+}
