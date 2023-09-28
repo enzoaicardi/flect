@@ -29,17 +29,17 @@ export function addListenersAction(element, bindmap){
  * @param {Pattern} pattern
  */
 function updateTextAction(_, element, pattern){
-    element.textContent = this.getValue(pattern)
+    element.textContent = this.getValue(pattern, element)
 }
 
 function updateHtmlAction(_, element, pattern){
-    element.innerHTML = this.getValue(pattern)
+    element.innerHTML = this.getValue(pattern, element)
 }
 
 function updateDisplayAction(_, element, pattern){
 
     let initial = element.style.display
-    let value = this.getValue(pattern)
+    let value = this.getValue(pattern, element)
 
     if(value) {
         element.style.display = 'none'
@@ -69,5 +69,5 @@ function updateRefAction(value, element, pattern){
 }
 
 function updateAttributeAction(_, element, pattern){
-    element.setAttribute(pattern.attribute, this.getValue(pattern))
+    element.setAttribute(pattern.attribute, this.getValue(pattern, element))
 }

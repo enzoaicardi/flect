@@ -6,11 +6,11 @@
 - [x] styles scopés (todo apply refs sur elements parents)
 - [x] data binding sur composant imbriqué
 
-- [ ] x-for loop
+- [x] x-for loop
 - [ ] x-if statement
 
 - [x] clear on delete element
-- [ ] unbind + clonebind en changeant les entrées dynamiques
+- [x] unbind
 
 - [ ] tests de changement de propriété + filtres vs lit plain js
 - [ ] tests de boucles for

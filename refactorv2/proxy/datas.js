@@ -40,14 +40,6 @@ export function proxyDatas(ctx){
 
         },
 
-        // TODO remove clone if unused
-        // TODO globalcontext passing parent to xelement
-        clone(element, clone){
-            for(let dataName of this.mapping.get(element)){
-                this.effects[dataName].set(clone, this.effects[dataName].get(element))
-            }
-        },
-
         remove(element){
             for(let dataName of this.mapping.get(element)){
                 this.effects[dataName].delete(element)
@@ -68,6 +60,7 @@ export function proxyDatas(ctx){
                     // run every action from every caller
                     for(let [action, pattern] of actions){
 
+                        // dev => check effect
                         // console.log('run action on ->', caller, 'for value =', value);
                         action.call(ctx, value, caller, pattern)
 
