@@ -16,8 +16,7 @@ export function createBindmap(node, matches = {}){
         type: node.tagName,
         effects: {},
         onces: [],
-        children: {/* bindmaps */},
-        references: {}
+        children: {/* bindmaps */}
     }
 
     if(isXTransformer(node)){
@@ -31,26 +30,21 @@ export function createBindmap(node, matches = {}){
             let path = createPath(val, matches)
             let action = getNodeAction(node.tagName)
 
-            // if there is a key we update the match array
-            if(key){
+            // if there is a key we update the matches
+            !key || (matches[key] = path)
 
-                let references = pending.references[key] = []
-                    pending.match = key
-                matches[key] = {path, references}
-
-                /*
-                    matches = {
-                        item: {path: Path, references: first_bindmap.references}
-                        item: {path: Path, references: second_bindmap.references}
-                    }
-                */
+            /*
+            matches = {
+                dataName: Path,
+                dataName: Path
             }
+            */
             
             // bindmap update for binding
             bindmap || (bindmap = pending)
-            bindmap.break = node.tagName
+            bindmap.break = true
             bindmap.rootElement = node
-            bindmap.effects[path.steps[0][0]] = [[action, path]]
+            bindmap.effects[path.dataName] = [[action, path]]
 
             // path update for transformers
             path.bindmap = bindmap
@@ -105,7 +99,7 @@ export function createBindmap(node, matches = {}){
                 else{
 
                     // choose between attribute and datas actions
-                    let action = !isXElement(node) || node === this ? (getAttributeAction(name)) : (updateDataAction(name))
+                    let action = !isXElement(node) || node === this ? (getAttributeAction(name)) : updateDataAction
                     
                     let pattern = createPattern(value, matches)
                         pattern.attribute = name.substring(2)
@@ -113,7 +107,7 @@ export function createBindmap(node, matches = {}){
                     for(let key in pattern.datas){
         
                         // get the parent data name
-                        let dataName = pattern.datas[key].steps[0][0]
+                        let dataName = pattern.datas[key].dataName
         
                         bindmap.effects[dataName] || (bindmap.effects[dataName] = [])
                         bindmap.effects[dataName].push([action, pattern])
@@ -146,7 +140,7 @@ export function createBindmap(node, matches = {}){
                     let result = this.createBindmap(child, matches)
 
                     if(result){
-                        bindmap || (bindmap = pending)
+                        bindmap || ((bindmap = pending) && (bindmap.static = true))
                         bindmap.children[index] = result
                     }
 

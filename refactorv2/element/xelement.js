@@ -170,7 +170,7 @@ export class XElement extends HTMLElement{
         // bind elements if needed
         !definition.bindmap || (this.bindElement(template, definition.bindmap))
         
-        // todo remove console
+        // dev => check the global bindmap
         // console.log(definition.bindmap)
 
         // replace main customelement tag by it's childNodes

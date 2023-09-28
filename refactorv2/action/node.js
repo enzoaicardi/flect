@@ -25,14 +25,16 @@ function updateIfAction(_, element, path){
 function updateForAction(_, element, path){
 
     // defaults values
-    element.unbindmap || (element.unbindmap = {})
+    element._xmatches || (element._xmatches = [])
+    element._xbinded || (element._xbinded = {})
+    element._xcount || (element._xcount = 0)
 
     // retrieve bindmap
     let map = path.bindmap
 
     // forloop setup
-    let count = element.count || (element.count = 0)
-    let value = this.getData(path)
+    let count = element._xcount
+    let value = this.getData(path, element)
     let length = typeof value === 'number' ? value : value.length
     let gap = length - count
 
@@ -40,58 +42,50 @@ function updateForAction(_, element, path){
 
         for(let x = count; (x < count + gap) && x < length; x++){
 
+            // clone rootElement <x-for>
             let clone = map.rootElement.cloneNode(true)
-            let child;
-            // TODO modifier le patterne pendant le binding
-            console.log(map)
 
-            // get unbindmap
-            element.unbindmap[x] = this.bindElement(clone, map, true)
+            // create boundary <!----> and add reference to rootElement
+            let child = xcomment.cloneNode()
+                child.rootElement = map.rootElement
+            
+            // setup matches
+            clone._xmatches = new Map(element._xmatches)
+            clone._xmatches.set(path, x)
 
-            // insert childs before boundary
-            while(child = clone.firstChild){
-                child._xindex = x
+            // get _xbinded
+            element._xbinded[x] = this.bindElement(clone, map)
+
+            // insert childs and boundary
+            do{
                 element.parentNode.insertBefore(child, element)
-            }
+            } while(child = clone.firstChild)
 
-            console.log('+ add element')
         }
 
     }
-
-    // TODO revoir toutes les boucles for sur elements pour firstElementChild
 
     else if(gap < 0){
 
         for(let x = count - 1; (x > (count - 1) + gap) && x >= 0; x--){
 
-            let sibling;
+            let sibling = {}
 
-            while((sibling = element.previousSibling) && sibling._xindex === x){
+            // remove corresponding element from dom
+            while((!sibling.rootElement || sibling.rootElement !== map.rootElement) && (sibling = element.previousSibling)){
                 sibling.remove()
             }
 
-            // clear memory
-            this.unbindElements(element.unbindmap[x])
+            // remove element effects from proxy
+            this.unbindElements(element._xbinded[x])
 
-            console.log('- remove element')
         }
-
+        
+        // dev => check if proxy is cleared
+        // console.log('- remove elements', this.proxy.effects, this.proxy.mapping)
+    
     }
 
-    element.count += gap
+    element._xcount += gap
 
-    // on boucle sur la variable
-    // -> on créer / clone les elements
-    // -> on bind / unbind les elements
-    // ----> lors du bind possible de devoir cloner les paths dans les patternes
-    // ----> BINDELEMENT ou PROXY CLONE ? que choisir ?
-    // ----> et remplacer enfin les valeurs dynamiques
-
-    // comment se passe le unbind sur les sous-boucles ?
-    // normalement pas de soucis car boucles = unbind aussi
-    // mais pour bien tout unbind il faut que le unbind soit plus profond ->
-    // -> donc ne pas s'arreter a x-action, et si rencontre un x-element ?
-    // ----> doit utiliser sa methode .unbind() pour unbind tout ses enfants ?
-    // ----> la .unbind() methode devrait plutot supprimer le proxy temporairement
 }

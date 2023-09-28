@@ -6,11 +6,12 @@ export function createPath(str, matches = {}){
         steps: (str[0] === '!' ? str.substring(1) : str).split('.').map((el) => { return el.split('|') })
     }
 
+    // check for matching property
     let match = matches[first(path)]
-        match && (match.references.push(mergePaths(match.path, path)))
 
-    // todo remove console
-    // console.log('path > ', str, match?.references)
+    // update dataName and reference
+    path.dataName = first(match || path)
+    path.steps[0].reference = match
 
     return path
 
@@ -19,23 +20,11 @@ export function createPath(str, matches = {}){
 /*
     path = {
         not: false,
-        steps: [['birth'], ['date', 'dateFormat']]
+        steps: [['birth' ~ reference], ['date', 'dateFormat']],
+        dataName: 'user'
     }
 */
 
-export function mergePaths(source, target){
-    target.steps.unshift(...source.steps)
-    return target.steps[source.steps.length]
-}
-
-/*
-    item ~> products
-    source: [['products']]
-    target: [['item'], ['name']]
-    merged: [['products'], ['item' ~ references index], ['name']]
-    references: ['item' ~ references index]
-*/
-
-function first(path, index = 0){
-    return path.steps[index][0]
+function first(path){
+    return path.dataName || path.steps[0][0]
 }

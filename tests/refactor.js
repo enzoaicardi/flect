@@ -4,38 +4,69 @@ import * as Flect from '../refactorv2/define.js';
 Flect.define('input', class extends Flect.x {
 
     init(){
-        this.datas.name = 'Fallback'
-        this.datas.list = [3,2,1]
+        // this.datas.name = 'Fallback'
+        this.datas.list = [[3],[2]]
+        // this.datas.this = this
 
         setTimeout(() => {
-            this.datas.name = 'Pierre Farget'
-            this.datas.list = [3]
+            // this.datas.name = 'Pierre Farget'
+            this.datas.list = [[1]]
         }, 1000);
-
         setTimeout(() => {
-            this.datas.list = [3,2,1,0,1,2,3]
-            this.datas.name = 'Pierre Michel'
+            // this.datas.name = 'Pierre Farget'
+            this.datas.list = [[25],[7,3,4]]
         }, 2000);
+
+        // setTimeout(() => {
+        //     this.datas.list = [3,2,1,0,1,2,3]
+        //     this.datas.name = 'Pierre Michel'
+        // }, 2000);
+
+        // setTimeout(() => {
+        //     this.datas.list = [3,2]
+        //     this.datas.name = 'Jean Michel'
+        // }, 3000);
 
         this.filters = {
             split: value => value.split(' '),
-            count: value => value ? value.length : 'no value'
+            addOne: value => value+1,
+            // count: value => value ? value.length : 'no value'
         }
 
         this.effects = {
-            name: value => this.datas.count = value.length
+            // name: value => this.datas.count = value.length
         }
     
     }
 
     render(){
         return /*html*/`
-        <x-for var="list" key="listItem">
-            <p x-text="listItem">am a clone</p>
+        <x-for var="list" key="array">
+            <p><b>Array start -</b></p>
+            <x-for var="array" key="item">
+                <x-text x-item="item"></x-text>
+            </x-for>
         </x-for>
         `
     }
 
+})
+
+Flect.define('text', class extends Flect.x{
+
+    init(){
+        this.filters = {
+            split: value => value.split(' '),
+            addOne: value => value+1,
+            // count: value => value ? value.length : 'no value'
+        }
+    }
+
+    render(){
+        return /*html*/`
+        <p x-text="{item} + 1 = {item|addOne}"></p>
+        `
+    }
 })
 
 Flect.define('div', class extends Flect.x{
@@ -46,7 +77,7 @@ Flect.define('div', class extends Flect.x{
         this.refs('button', el => el.style.border = '10px solid yellow')
         setTimeout(() => {
             this.refs('button', el => el.style.padding = '20px')
-        }, 1000);
+        }, 500);
     }
 
     render(){
