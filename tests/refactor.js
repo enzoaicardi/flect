@@ -25,11 +25,14 @@ Flect.define('input', class extends Flect.x {
         // setTimeout(() => {
         //     this.datas.list = [3,2]
         //     this.datas.name = 'Jean Michel'
-        // }, 3000);
+        // }, 3000);^
+
+        let index = 0
 
         this.filters = {
             split: value => value.split(' '),
-            addOne: value => value+1,
+            getIndex: value => index++,
+            resetIndex: value => index = 0,
             // count: value => value ? value.length : 'no value'
         }
 
@@ -42,9 +45,12 @@ Flect.define('input', class extends Flect.x {
     render(){
         return /*html*/`
         <x-for var="list" key="array">
-            <p><b>Array start -</b></p>
+            <p x-index="|resetIndex"><b>Array start -</b></p>
             <x-for var="array" key="item">
-                <x-text x-item="item"></x-text>
+                <div>
+                    <x-text x-item="item" x-index="|getIndex"></x-text>
+                    <button>Original number : <p x-text="item"></p></button>
+                </div>
             </x-for>
         </x-for>
         `
@@ -64,7 +70,7 @@ Flect.define('text', class extends Flect.x{
 
     render(){
         return /*html*/`
-        <p x-text="{item} + 1 = {item|addOne}"></p>
+        <p x-text="{item} + 1 = {item|addOne} | index: {index}"></p>
         `
     }
 })
