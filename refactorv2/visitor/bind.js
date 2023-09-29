@@ -47,8 +47,8 @@ export function bindElement(element, bindmap){
 }
 
 /**
- * matches = Map({
- *  PATH: 5
- *  OTHER_PATH: 2
+ * element._xmatches = Map({
+ *  Path: index,
+ *  Path: index
  * })
  */

@@ -10,7 +10,7 @@ export default {
     plugins: [terser({
 		mangle: {
 		  properties: {
-			reserved: ['ref', 'refs', 'effect', 'filter', 'iterable', 'datas', 'component', 'custom', 'body'],
+			reserved: ['refs', 'effects', 'filters', 'datas', 'component', 'init', 'disconnect'],
 		  },
 		},
 	})]

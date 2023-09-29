@@ -1,7 +1,7 @@
 import { isXTransformer, isXAttribute, isXElement, isXEventAttribute, isXScopedAttribute } from "../utils/test.js";
 import { addListenersAction, addScopedAction, getAttributeAction } from "../action/attribute.js";
 import { updateDataAction } from "../action/data.js";
-import { getNodeAction } from "../action/node.js";
+import { getNodeAction } from "../action/transformer.js";
 import { createPattern } from "../pattern/pattern.js";
 import { createPath } from "../pattern/path.js";
 import { HANDLER_PREFIX } from "../utils/vars.js";

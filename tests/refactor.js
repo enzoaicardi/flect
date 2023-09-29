@@ -5,16 +5,18 @@ Flect.define('input', class extends Flect.x {
 
     init(){
         // this.datas.name = 'Fallback'
-        this.datas.list = [[3],[2]]
+        this.datas.list = [0,1,1]
+        this.datas.bool = true
         // this.datas.this = this
 
         setTimeout(() => {
             // this.datas.name = 'Pierre Farget'
-            this.datas.list = [[1]]
+            this.datas.list = [1,1,1]
+            this.datas.bool = false
         }, 1000);
         setTimeout(() => {
             // this.datas.name = 'Pierre Farget'
-            this.datas.list = [[25],[7,3,4]]
+            this.datas.list = [0,0]
         }, 2000);
 
         // setTimeout(() => {
@@ -44,15 +46,12 @@ Flect.define('input', class extends Flect.x {
 
     render(){
         return /*html*/`
-        <x-for var="list" key="array">
-            <p x-index="|resetIndex"><b>Array start -</b></p>
-            <x-for var="array" key="item">
-                <div>
-                    <x-text x-item="item" x-index="|getIndex"></x-text>
-                    <button>Original number : <p x-text="item"></p></button>
-                </div>
+        <x-if var="bool">
+            <x-for var="list" key="item">
+                <p><b>ARRAY --- </b><b x-text="item"></b></p>
+                <p>Text conditionnal</p>
             </x-for>
-        </x-for>
+        </x-if>
         `
     }
 
