@@ -11,6 +11,8 @@
 - [ ] recupération des index dans une boucle for (iterable ? ou passage d'une variable d'index ?)
 - [n] gérer for..in boucle for ? NON car trop complexe car ordre pas respecté -> map / object - entries puis loop
 
+- [x] régler l'utilisation de la mémoire
+
 - [x] clear on delete element
 - [x] unbind
 
