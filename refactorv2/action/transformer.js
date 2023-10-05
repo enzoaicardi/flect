@@ -1,4 +1,3 @@
-import { xcomment } from "../utils/node.js"
 
 export function getNodeAction(name){
 
@@ -81,27 +80,26 @@ function transformerAppend(element, map, index, path){
         clone._xmatches = path ? new Map(element._xmatches) : element._xmatches
         !path || (clone._xmatches.set(path, index))
 
-    // create boundary <!----> and add reference to rootElement
-    let child = xcomment.cloneNode()
-        child.rootElement = map.rootElement
+    // add rootElement reference to boundary
+    clone.firstChild.rootElement = map.rootElement
+    // TODO : STOCKER LES ELEMENTS SOUS FORME DE TABLEAU POUR REMOVE
 
-    // get _xbinded
+    // bind fragment and add boundary
     element._xbinded[index] = this.bindElement(clone, map)
 
-    // insert childs and boundary
-    do{
-        element.parentNode.insertBefore(child, element)
-    } while(child = clone.firstChild)
+    // get _xbinded
+    element.parentNode.insertBefore(clone, element)
 
 }
 
 function transformerRemove(element, map, index){
 
     let sibling = {}
+    let parent = element.parentNode
 
     // remove corresponding element from dom
     while((!sibling.rootElement || sibling.rootElement !== map.rootElement) && (sibling = element.previousSibling)){
-        sibling.remove()
+        parent.removeChild(sibling)
     }
 
     // remove element effects from proxy

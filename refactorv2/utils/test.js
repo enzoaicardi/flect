@@ -3,7 +3,7 @@ export function isXTransformer(element){
 }
 
 export function isXElement(element){
-    return element.tagName.indexOf('X-') === 0 && !isXTransformer(element)
+    return element.nodeType === 1 && element.tagName.indexOf('X-') === 0 && !isXTransformer(element)
 }
 
 export function isXAttribute(name){

@@ -174,7 +174,7 @@ export class XElement extends HTMLElement{
         // console.log(definition.bindmap)
 
         // replace main customelement tag by it's childNodes
-        this.replaceWith(...template.childNodes)
+        this.replaceWith(template)
 
     }
 

@@ -1,5 +1,9 @@
+import { fragment } from "./node.js"
+
 export let xparser = new DOMParser()
 
 export function xparse(html){
-    return xparser.parseFromString(html, 'text/html').body
+    let template = fragment.cloneNode()
+        template.append(...xparser.parseFromString(html, 'text/html').body.childNodes)
+    return template
 }
