@@ -1,6 +1,6 @@
 import { xparse } from "../utils/parser.js";
 import { proxyDatas } from "../proxy/datas.js";
-import { bindElement } from "../visitor/bind.js";
+import { bindElements } from "../visitor/bind.js";
 import { createBindmap } from "../visitor/bindmap.js";
 import { unbindElements } from "../visitor/unbind.js";
 import { createStylerules } from "./style.js";
@@ -21,7 +21,7 @@ export class XElement extends HTMLElement{
         // binding
         this.createBindmap = createBindmap
         this.unbindElements = unbindElements
-        this.bindElement = bindElement
+        this.bindElements = bindElements
 
         // accessers
         this.getValue = getValueFromPattern
@@ -168,7 +168,7 @@ export class XElement extends HTMLElement{
         template || (template = definition.template.cloneNode(true))
 
         // bind elements if needed
-        !definition.bindmap || (this.bindElement(template, definition.bindmap))
+        !definition.bindmap || (this.bindElements(template, definition.bindmap))
         
         // dev => check the global bindmap
         // console.log(definition.bindmap)

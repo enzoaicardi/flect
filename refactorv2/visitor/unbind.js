@@ -5,7 +5,7 @@ export function unbindElements(array){
     for(let element of array){
 
         // unbind x-elements (remove proxy)
-        !element.tagName || !isXElement(element) || (element.disconnectXElement())
+        element.nodeType !== 1 || !isXElement(element) || (element.disconnectXElement())
         
         // unbind x-transformer elements (remove sub-elements from proxy)
         if(element._xbinded){

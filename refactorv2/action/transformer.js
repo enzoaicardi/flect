@@ -58,9 +58,9 @@ function updateForAction(_, element, path){
     }
 
     else if(gap < 0){
-        for(let x = count - 1; (x > (count - 1) + gap) && x >= 0; x--){
-            transformerRemove.call(this, element, map, x)
-        }
+        transformerRemove.call(this, element, element._xcount + gap, element._xcount)
+        // for(let x = count - 1; (x > (count - 1) + gap) && x >= 0; x--){
+        // }
     }
 
     element._xcount += gap
@@ -69,6 +69,7 @@ function updateForAction(_, element, path){
 
 function setTransformerDefaults(element){
     element._xmatches || (element._xmatches = [])
+    element._xbounds || (element._xbounds = {})
     element._xbinded || (element._xbinded = {})
     element._xcount || (element._xcount = 0)
 }
@@ -81,29 +82,35 @@ function transformerAppend(element, map, index, path){
         !path || (clone._xmatches.set(path, index))
 
     // add rootElement reference to boundary
-    clone.firstChild.rootElement = map.rootElement
+    element._xbounds[index] = clone.firstChild
+    // clone.firstChild.rootElement = map.rootElement
     // TODO : STOCKER LES ELEMENTS SOUS FORME DE TABLEAU POUR REMOVE
+    // MARCHE PAS CAR PEUT VARIER EN PROFONDEUR
 
-    // bind fragment and add boundary
-    element._xbinded[index] = this.bindElement(clone, map)
+    // bind fragment
+    element._xbinded[index] = this.bindElements(clone, map)
 
     // get _xbinded
     element.parentNode.insertBefore(clone, element)
 
 }
 
-function transformerRemove(element, map, index){
+function transformerRemove(element, index, length){
 
-    let sibling = {}
+    let sibling
     let parent = element.parentNode
+    let boundary = element._xbounds[index]
 
-    // remove corresponding element from dom
-    while((!sibling.rootElement || sibling.rootElement !== map.rootElement) && (sibling = element.previousSibling)){
+    while((sibling = boundary.nextSibling) !== element){
         parent.removeChild(sibling)
     }
+    // while((!sibling.rootElement || sibling.rootElement !== map.rootElement) && (sibling = element.previousSibling)){
+    //     parent.removeChild(sibling)
+    // }
 
     // remove element effects from proxy
-    this.unbindElements(element._xbinded[index])
+    // this.unbindElements(element._xbinded[index])
+    // delete element._xbinded[index]
 
     // dev => check if proxy is cleared
     // console.log('- remove elements', this.proxy.effects, this.proxy.mapping)

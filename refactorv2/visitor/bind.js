@@ -1,4 +1,4 @@
-export function bindElement(element, bindmap){
+export function bindElements(element, bindmap){
 
     let maps = bindmap.children
     let array = []
@@ -7,41 +7,45 @@ export function bindElement(element, bindmap){
 
         // shortcuts
         let map = maps[index]
-        let effects = map.effects
-
-        // setup node defaults
         let node = element.childNodes[index]
-            node.component = this
-
-        // binded trace
-        map.static || (array.push(node))
 
         // matches trace
         !element._xmatches || (node._xmatches = element._xmatches)
 
-        // add effects to proxy
-        for(let key in effects){
+        // if map is not static
+        if(!map.static){
+        
+            node.component = this
+            let effects = map.effects
 
-            this.proxy.effect(key, node, effects[key])
+            // binded trace
+            array.push(node)
 
-            // run action the first time to hydrate component
-            for(let [action, pattern] of effects[key]){
-                action.call(this, null, node, pattern)
+            // add effects to proxy
+            for(let key in effects){
+
+                this.proxy.effect(key, node, effects[key])
+
+                // run action the first time to hydrate component
+                for(let [action, pattern] of effects[key]){
+                    action.call(this, null, node, pattern)
+                }
+
+            }
+
+            // call once actions
+            for(let action of map.onces){
+                action.call(this, node, map)
             }
 
         }
 
-        // call once actions
-        for(let action of map.onces){
-            action.call(this, node, map)
-        }
-
         // bind childs only if node is not transformer node
-        map.break || (array.push(...this.bindElement(node, map)))
+        map.break || (array.push(...this.bindElements(node, map)))
 
     }
 
-    // return an unbindArray
+    // return an bindedArray
     return array
 
 }

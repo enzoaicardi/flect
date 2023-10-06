@@ -14,6 +14,9 @@ export function createBindmap(node, matches = {}){
     // check if it's a bindable node
     if(node.nodeType !== 1 && node.nodeType !== 11) return;
 
+    // tests
+    const ISXELEMENT = node.nodeType === 1 && node !== this && isXElement(node)
+
     // avoid over-usage of if statement
     let pending = {
         effects: {},
@@ -29,7 +32,6 @@ export function createBindmap(node, matches = {}){
         // if node is a transormer (x-for, x-if, etc...)
         if(isXTransformer(node)){
 
-            pending.type = node.tagName
             let key = node.getAttribute('key')
             let val = node.getAttribute('var')
 
@@ -113,7 +115,7 @@ export function createBindmap(node, matches = {}){
                     else{
 
                         // choose between attribute and datas actions
-                        let action = !isXElement(node) || node === this ? (getAttributeAction(name)) : updateDataAction
+                        let action = !ISXELEMENT ? (getAttributeAction(name)) : updateDataAction
                         
                         let pattern = createPattern(value, matches)
                             pattern.attribute = name.substring(2)
@@ -143,7 +145,7 @@ export function createBindmap(node, matches = {}){
     }
 
     // create children bindmaps
-    if((!isXElement(node) || node === this) && node.firstChild){
+    if(!ISXELEMENT && node.firstChild){
     
         let child = node.firstChild
         let index = 0
