@@ -14,7 +14,7 @@ export function unbindElements(array){
             }
         }
 
-        this.proxy.remove(element)
+        this.proxy.removeEffects(element)
 
     }
 

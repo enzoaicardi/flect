@@ -52,22 +52,22 @@ export function createBindmap(node, matches = {}){
                 */
 
                 // here we can directly replace the node because
-                // children are stored inside bindmap.rootElement and
+                // children are stored inside bindmap.xroot and
                 // must be used by the tranformer action
                 node.replaceWith(xcomment.cloneNode())
                 
                 // bindmap update for binding
                 bindmap || (bindmap = pending)
                 bindmap.break = true
-                bindmap.rootElement = fragment.cloneNode()
+                bindmap.xroot = fragment.cloneNode()
                 bindmap.effects[path.dataName] = [[action, path]]
 
                 // path update for transformers
                 path.bindmap = bindmap
 
                 // fragment update
-                bindmap.rootElement.append(xcomment.cloneNode(), ...node.childNodes)
-                node = bindmap.rootElement
+                bindmap.xroot.append(xcomment.cloneNode(), ...node.childNodes)
+                node = bindmap.xroot
 
             }
             

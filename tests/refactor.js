@@ -1,17 +1,57 @@
 
-import * as Flect from '../refactorv2/define.js';
+// import * as Flect from '../refactorv2/define.js';
 
 window.ctx = Flect.context()
 
 Flect.define('input', class extends Flect.x {
 
     init(){
+        console.log('element')
         // this.datas.name = 'Fallback'
         this.datas.list = [0,1,1]
         this.datas.bool = true
 
+        let mycontext = ctx.use(this)
+        // this.datas.this = this
+        
+        setTimeout(() => {
+
+            if(document.body.children.length > 9){
+                Flect.disconnect(this)
+            }
+
+            // this.datas.name = 'Pierre Farget'
+            mycontext.bool = false
+
+        }, 1000);
+        
+        setTimeout(() => {
+            // this.datas.name = 'Pierre Farget'
+            mycontext.bool = true
+            mycontext.list = ["blabla","bloblo"]
+        }, 2000);
+
+        // setTimeout(() => {
+        //     this.datas.list = [3,2,1,0,1,2,3]
+        //     this.datas.name = 'Pierre Michel'
+        // }, 2000);
+
+        // setTimeout(() => {
+        //     this.datas.list = [3,2]
+        //     this.datas.name = 'Jean Michel'
+        // }, 3000);^
+
+        let index = 0
+
         this.filters = {
-            split: value => value.split(' ')
+            split: value => value.split(' '),
+            getIndex: value => index++,
+            resetIndex: value => index = 0,
+            // count: value => value ? value.length : 'no value'
+        }
+
+        this.effects = {
+            // name: value => this.datas.count = value.length
         }
     
     }
@@ -20,7 +60,8 @@ Flect.define('input', class extends Flect.x {
         return /*html*/`
         <x-if var="bool">
             <x-for var="list" key="item">
-                <x-text x-item="item"></x-text>
+                <p><b>ARRAY --- </b><b x-text="item"></b></p>
+                <p>Text conditionnal</p>
             </x-for>
         </x-if>
         `
@@ -40,7 +81,7 @@ Flect.define('text', class extends Flect.x{
 
     render(){
         return /*html*/`
-        <p x-text="{item} + 1 = {item|addOne} | index: {item}"></p>
+        <p x-text="{item} + 1 = {item|addOne} | index: {index}"></p>
         `
     }
 })

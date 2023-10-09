@@ -4,7 +4,7 @@ import { bindElements } from "../visitor/bind.js";
 import { createBindmap } from "../visitor/bindmap.js";
 import { unbindElements } from "../visitor/unbind.js";
 import { createStylerules } from "./style.js";
-import { getValueFromPath, getValueFromPattern } from "../pattern/accesser.js";
+import { getPathValue, getPatternValue } from "../pattern/accesser.js";
 
 export class XElement extends HTMLElement{
 
@@ -25,8 +25,8 @@ export class XElement extends HTMLElement{
         this.bindElements = bindElements
 
         // accessers
-        this.getValue = getValueFromPattern
-        this.getData = getValueFromPath
+        this.getPatternValue = getPatternValue
+        this.getPathValue = getPathValue
 
     }
 
@@ -71,7 +71,7 @@ export class XElement extends HTMLElement{
         delete this.effects
 
         // clear contexts
-        for(let [context, x] of this.contexts){ context.disconnect(this) }
+        for(let [context] of this.contexts){ context.disconnect(this) }
         delete this.contexts
 
     }
@@ -138,7 +138,7 @@ export class XElement extends HTMLElement{
         this.datas = new Proxy(this._xdatas, this.proxy)
 
         for(let key in this.effects){
-            this.proxy.effect(key, this, [[this.effects[key]]])
+            this.proxy.addEffect(key, this, [[this.effects[key]]])
             this.effects[key](this._xdatas[key])
         }
 

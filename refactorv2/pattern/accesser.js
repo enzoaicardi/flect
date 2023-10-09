@@ -1,25 +1,25 @@
 /* xElement {
-    getValue = getValueFromPattern
-    getData = getValueFromPath
+    getValue = getPatternValue
+    getData = getPathValue
 } */
 
 import { xregex } from "../utils/regex.js";
 
-export function getValueFromPattern(pattern, element){
+export function getPatternValue(pattern, element){
 
     // if the base is equal to a data name
     if(pattern.datas[pattern.base]){
-        return this.getData(pattern.datas[pattern.base], element)
+        return this.getPathValue(pattern.datas[pattern.base], element)
     }
 
     // replace all groups by their match
     return pattern.base.replace(xregex, (group) => {
-        return this.getData(pattern.datas[group], element)
+        return this.getPathValue(pattern.datas[group], element)
     });
 
 }
 
-export function getValueFromPath(path, element){
+export function getPathValue(path, element){
 
     let data = this._xdatas
 
@@ -29,7 +29,7 @@ export function getValueFromPath(path, element){
         // set the new step
         let step = path.steps[x]
             data = step.reference ? 
-                    this.getData(step.reference, element)[element._xmatches.get(step.reference)] : 
+                    this.getPathValue(step.reference, element)[element._xmatches.get(step.reference)] : 
                     data[step[0]]
 
         // apply filters if exists

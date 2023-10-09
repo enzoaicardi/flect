@@ -13,13 +13,13 @@ export function proxyDatas(ctx){
         */
 
         ctx: ctx,
-        effects: {},
-        mapping: new Map(),
+        _effects: {},
+        _mapping: new Map(),
 
-        effect(dataName, caller, actions){
+        addEffect(dataName, caller, actions){
 
-            let effects = this.effects
-            let mapping = this.mapping
+            let effects = this._effects
+            let mapping = this._mapping
 
             // setup the default dataName object
             if(!effects[dataName]){
@@ -40,16 +40,16 @@ export function proxyDatas(ctx){
 
         },
 
-        remove(element){
-            for(let dataName of this.mapping.get(element)){
-                this.effects[dataName].delete(element)
-                this.mapping.delete(element)
+        removeEffects(element){
+            for(let dataName of this._mapping.get(element)){
+                this._effects[dataName].delete(element)
+                this._mapping.delete(element)
             }
         },
 
         run(dataName, value){
 
-            let effects = this.effects
+            let effects = this._effects
 
             // if effect exist for that data
             if(effects[dataName]){

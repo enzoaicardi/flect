@@ -1,5 +1,3 @@
-import { xcomment } from "../utils/node.js"
-
 export function getNodeAction(name){
 
     switch (name){
@@ -25,7 +23,7 @@ function updateIfAction(_, element, path){
     // shortcuts
     let map = path.bindmap
     let count = element._xcount
-    let value = this.getData(path, element)
+    let value = this.getPathValue(path, element)
 
     if(!!value && !count){
         transformerAppend.call(this, element, map, 0)
@@ -46,7 +44,7 @@ function updateForAction(_, element, path){
     // shortcuts
     let map = path.bindmap
     let count = element._xcount
-    let value = this.getData(path, element)
+    let value = this.getPathValue(path, element)
 
     // forloop setup
     let length = typeof value === 'number' ? value : value.length
@@ -78,14 +76,14 @@ function setTransformerDefaults(element){
 
 function transformerAppend(element, map, index, path){
 
-    // clone rootElement and setup matches
-    let clone = map.rootElement.cloneNode(true)
+    // clone xroot and setup matches
+    let clone = map.xroot.cloneNode(true)
         clone._xmatches = path ? new Map(element._xmatches) : element._xmatches
         !path || (clone._xmatches.set(path, index))
 
-    // add rootElement reference to boundary
-    clone.firstChild.rootElement = map.rootElement
-    // TODO : voir si pas mieux de ne pas passer par le rootelement property
+    // add xroot reference to boundary
+    clone.firstChild.xroot = map.xroot
+    // TODO : voir si pas mieux de ne pas passer par le xroot property
 
     // bind fragment
     element._xbinded[index] = this.bindElements(clone, map)
@@ -100,7 +98,7 @@ function transformerRemove(element, map, index){
     let sibling = {}
     let parent = element.parentNode
 
-    while((!sibling.rootElement || sibling.rootElement !== map.rootElement) && (sibling = element.previousSibling)){
+    while((!sibling.xroot || sibling.xroot !== map.xroot) && (sibling = element.previousSibling)){
         parent.removeChild(sibling)
     }
 

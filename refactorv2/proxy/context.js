@@ -6,18 +6,20 @@ export function proxyContext(){
         datas: false,
 
         // ctx are xElements
-        ctxMap: new Map(),
+        _mapping: new Map(),
 
         // add xElement to context list
         use(ctx){
-            this.ctxMap.set(ctx, 0)
-            ctx.contexts.set(this, 0)
+            if(ctx){
+                this._mapping.set(ctx, 0)
+                ctx.contexts.set(this, 0)
+            }
             return this.datas
         },
 
         // remove xElement from context list
         disconnect(ctx){
-            this.ctxMap.delete(ctx)
+            this._mapping.delete(ctx)
             ctx.contexts.delete(this)
         },
 
@@ -25,12 +27,9 @@ export function proxyContext(){
 
             // update the value first
             target[dataName] = value
-
-            // shortcut
-            let ctxMap = this.ctxMap
             
             // update relateds datas proxys
-            for(let [ctx, x] of ctxMap){
+            for(let [ctx] of this._mapping){
                 ctx && ctx.datas && (ctx.datas[dataName] = value)
             }
 

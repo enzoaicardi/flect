@@ -24,7 +24,7 @@ export function bindElements(element, bindmap){
             // add effects to proxy
             for(let key in effects){
 
-                this.proxy.effect(key, node, effects[key])
+                this.proxy.addEffect(key, node, effects[key])
 
                 // run action the first time to hydrate component
                 for(let [action, pattern] of effects[key]){
