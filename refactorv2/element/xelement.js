@@ -17,6 +17,7 @@ export class XElement extends HTMLElement{
         this.filters = {}
         this.effects = {}
         this._xrefs = {}
+        this.contexts = new Map()
 
         // binding
         this.createBindmap = createBindmap
@@ -53,7 +54,7 @@ export class XElement extends HTMLElement{
 
     /* disconnectedCallback(){
         // we don't use it because the element is imediately disconnected
-        // after being initiated 
+        // after being initialized 
     } */
 
     disconnectXElement(){
@@ -69,12 +70,16 @@ export class XElement extends HTMLElement{
         delete this.filters
         delete this.effects
 
+        // clear contexts
+        for(let [context, x] of this.contexts){ context.disconnect(this) }
+        delete this.contexts
+
     }
 
     init(){
         // fallback -> prevent error if init is empty
         /*
-            Define fallback datas via datas[...] = ...
+            Define fallback datas via this.datas... = ...
             Define effects via this.effects = {...}
             Define filters via this.filters = {...}
         */

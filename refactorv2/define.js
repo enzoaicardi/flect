@@ -1,9 +1,13 @@
 import { XElement } from "./element/xelement.js";
+import { proxyContext } from "./proxy/context.js";
 
 let registry = {}
 
 // export XElement as Flect.x
-export let x = XElement
+export { XElement as x }
+
+// export context as Flect.context
+export { proxyContext as context }
 
 // export define as Flect.define
 export function define(name, definition){
@@ -17,4 +21,8 @@ export function define(name, definition){
     definition.prototype._xclass = definition
     customElements.define('x-' + name, definition)
 
+}
+
+export function disconnect(element){
+    element.disconnectXElement()
 }
