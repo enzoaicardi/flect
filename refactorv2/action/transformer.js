@@ -95,16 +95,16 @@ function transformerAppend(element, map, index, path){
 
 function transformerRemove(element, map, index){
 
+    // remove element effects from proxy
+    this.unbindElements(element._xbinded[index])
+    delete element._xbinded[index]
+
     let sibling = {}
     let parent = element.parentNode
 
     while((!sibling.xroot || sibling.xroot !== map.xroot) && (sibling = element.previousSibling)){
         parent.removeChild(sibling)
     }
-
-    // remove element effects from proxy
-    this.unbindElements(element._xbinded[index])
-    delete element._xbinded[index]
 
     // dev => check if proxy is cleared
     // console.log('- remove elements', this.proxy.effects, this.proxy.mapping)
