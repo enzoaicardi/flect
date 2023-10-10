@@ -2,11 +2,13 @@
 
 */
 
-import { buildProxy } from "./proxy-globals"
+import { buildProxy } from "./proxy-globals.js"
 
-export function createProxyEffects(xelement){
+export function createProxyEffects(xelement, key){
 
-    return proxy = {
+    return {
+        
+        key: key,
 
         context: xelement,
 
@@ -15,15 +17,12 @@ export function createProxyEffects(xelement){
         
         // set a property, trigger effects and create necessary proxys
         set: setter,
-        
-        // apply all triggered effects
-        run: runner
 
     }
 
 }
 
-function build(object){
+function build(object, key){
 
     // loop over all object properties
     for(let property in object){
@@ -31,13 +30,14 @@ function build(object){
         if(typeof object[property] === 'object'){
 
             // change property to proxy reference 
-            object[property] = this.build(object[property])
+            object[property] = this.build(object[property], key + '.' + property)
 
         }
 
     }
 
-    return buildProxy(object, this.context.proxy)
+    // create a new proxy
+    return buildProxy(object, createProxyEffects(this.context, key))
 
 }
 
@@ -47,22 +47,18 @@ function setter(object, property, value){
     // trigger update only if property value change
     if(object[property] !== value){
 
+        let key = this.key + '.' + property
+
         if(typeof value === 'object'){
-            value = this.build(value)
+            value = this.build(value, key)
         }
 
         object[property] = value
 
-        this.run(property, value)
+        this.context._xeffects.applyEffects(key, value)
 
     }
 
-}
-
-function runner(property, value){
-
-    let xelement = this.context
-
-    // loop over xelement effects linked to property
+    return true
 
 }

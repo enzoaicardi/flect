@@ -1,5 +1,16 @@
 /*
 
+    effects : {
+
+        map: {
+            product: [[
+                [node, [action, ]]
+            ]]
+            product.[]: 
+        }
+
+    }
+
 */
 
 export function createElementEffects(xelement){
@@ -12,7 +23,9 @@ export function createElementEffects(xelement){
 
         createEffect: createEffect,
 
-        removeEffect: removeEffect
+        removeEffect: removeEffect,
+
+        applyEffects: applyEffects
 
     }
 
@@ -24,4 +37,8 @@ function createEffect(){
 
 function removeEffect(){
 
+}
+
+function applyEffects(key, value){
+    console.log('key:', key, '|value:', value)
 }

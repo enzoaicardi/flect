@@ -7,29 +7,9 @@
 </head>
 <body>
 
-    <!-- <script src="../dist/flect.js"></script>
-    <script src="./refactor.js" type="module"></script> -->
+    <script src="./refactor.js" type="module"></script>
 
-    <x-input>
-    </x-input>
+    <x-test></x-test>
 
-    <script>
-
-        let array = []
-        let proxy = {
-            set: function(target, property, value, receiver) {
-                console.log('setting ' + property + ' for ' + target + ' with value ' + value);
-                target[property] = value;
-                // you have to return true to accept the changes
-                return true;
-            }
-        }
-
-        let obj = new Proxy(array, proxy)
-
-        obj.name ='my name'
-        obj.push('lol')
-
-    </script>
 </body>
 </html>

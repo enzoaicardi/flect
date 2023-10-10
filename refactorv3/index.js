@@ -1,3 +1,5 @@
+import { XElement } from "./element/element-class.js";
+
 let registry = {}
 
 // export XElement as Flect.x
