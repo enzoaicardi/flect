@@ -5,15 +5,25 @@
     effects : {
 
         map: {
+            []: {
+
+            }
             product: {
                 0: [node, action]
             }
             product.[]: {
-                ...
+                index: [[node, node, node], action]
             }
             product.0: {
                 0: [node, action]
                 1: [node, action]
+                ... cascading to product.0.[]
+            }
+            product.0.[]: {
+                ...
+            }
+            product.0.name: {
+                ... only this
             }
         }
 
@@ -27,7 +37,7 @@ export function createElementEffects(xelement){
 
         context: xelement,
         
-        map: new Map(),
+        map: {},
 
         createEffect: createEffect,
 
@@ -39,7 +49,7 @@ export function createElementEffects(xelement){
 
 }
 
-function createEffect(){
+function createEffect(key, node, action){
     
 }
 

@@ -25,6 +25,13 @@ this.createBindingMap(this.children, matches)
 
 - [x] ou alors crée un proxy pour chaque objet, meme imbriqué lors de sa définition sur l'objet global, c'est ce proxy qui se charge de lancer un effet lors de sa mise a jour
 
+- [ ] lors de la mise a jour d'une propriété les effets directs sont appliqués mais aussi les effet de bord name[] -> et les enfants ? Les enfants sont-ils joués automatiquement (certainement puisqu'ils sont redéfinis -> a voir) ?
+
+## Path
+
+- [ ] récupérer le chemin `{products[].name|filter}` split avec `(\.|\[)` puis dans chacun split les filtres
+- [ ] les références sont fixes quand il s'agit de lettres ou de nombres, mais dynamiques lorsque `[]`
+
 ## Forloop
 
 - [ ] prévoir en amont la gestion des références
