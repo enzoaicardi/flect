@@ -1,12 +1,20 @@
 /*
 
+    product.[].name
+
     effects : {
 
         map: {
-            product: [[
-                [node, [action, ]]
-            ]]
-            product.[]: 
+            product: {
+                0: [node, action]
+            }
+            product.[]: {
+                ...
+            }
+            product.0: {
+                0: [node, action]
+                1: [node, action]
+            }
         }
 
     }

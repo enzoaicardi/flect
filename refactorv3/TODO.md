@@ -20,10 +20,10 @@ this.createBindingMap(this.children, matches)
 ## Effects
 
 - [ ] revoir la structure des effets
-- [ ] pour économiser de la mémoire, déléguer les fonctions à des fonctions nommées (comme pour xElement)
+- [x] pour économiser de la mémoire, déléguer les fonctions à des fonctions nommées (comme pour xElement)
 - [ ] supprimer getPatternValue, avoir une seule méthode unifiée de récupération de valeur, c'est cette valeur qui doit être transmise a l'effet et executée uniquement si elle a changée (cela permettrait de faire des effects: products[].name?)
 
-- [ ] ou alors crée un proxy pour chaque objet, meme imbriqué lors de sa définition sur l'objet global, c'est ce proxy qui se charge de lancer un effet lors de sa mise a jour
+- [x] ou alors crée un proxy pour chaque objet, meme imbriqué lors de sa définition sur l'objet global, c'est ce proxy qui se charge de lancer un effet lors de sa mise a jour
 
 ## Forloop
 
