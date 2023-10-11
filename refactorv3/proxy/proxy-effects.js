@@ -4,16 +4,19 @@
 
 import { buildProxy } from "./proxy-globals.js"
 
-export function createProxyEffects(xelement, key){
+export function createProxyEffects(xelements, key){
 
     return {
         
         key: key,
 
-        context: xelement,
+        contexts: xelements,
 
         // explore an object a create necessary proxys
         build: build,
+
+        // push new context into proxy object
+        populate: populate,
         
         // set a property, trigger effects and create necessary proxys
         set: setter,
@@ -36,8 +39,35 @@ function build(object, key){
 
     }
 
+    // create the proxy observer
+    let proxy = createProxyEffects(this.contexts, key)
+
+    // define _xproxy property on object
+    Object.defineProperty(object, '_xproxy', {
+        enumerable: false,
+        configurable: false,
+        writable: false,
+        value: proxy,
+    });
+
     // create a new proxy
-    return buildProxy(object, createProxyEffects(this.context, key))
+    return buildProxy(object, proxy)
+
+}
+
+function populate(xelement, target){
+
+    this.contexts.push(xelement)
+
+    for(let key in target){
+
+        if(target[key]._xproxy){
+
+            target[key]._xproxy.populate(xelement, target)
+            
+        }
+
+    }
 
 }
 
@@ -47,15 +77,21 @@ function setter(object, property, value){
     // trigger update only if property value change
     if(object[property] !== value){
 
+        // setup the proxy access key
         let key = this.key + '.' + property
 
+        // build if the new value is an object
         if(typeof value === 'object'){
             value = this.build(value, key)
         }
 
+        // setup property value
         object[property] = value
 
-        this.context._xeffects.applyEffects(key, value)
+        // apply effects of all contexts
+        for(let context of this.contexts){
+            context._xeffects.applyEffects(key, value)
+        }
 
     }
 
