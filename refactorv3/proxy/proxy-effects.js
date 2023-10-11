@@ -61,10 +61,10 @@ function populate(xelement, target){
 
     for(let key in target){
 
-        if(target[key]._xproxy){
+        if(!!target[key]._xproxy){
 
             target[key]._xproxy.populate(xelement, target)
-            
+
         }
 
     }
