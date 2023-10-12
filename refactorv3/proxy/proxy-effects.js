@@ -88,9 +88,12 @@ function setter(object, property, value){
         // setup property value
         object[property] = value
 
-        // apply effects of all contexts
-        for(let context of this.contexts){
-            context._xeffects.applyEffects(key, value)
+        let x = this.contexts.length - 1
+        
+        // apply effects of all contexts or lazy remove
+        while(x--){
+            let effects = this.contexts[x]._xeffects
+            !effects ? (this.contexts.splice(x, 1)) : (effects.applyEffects(key, value))
         }
 
     }
