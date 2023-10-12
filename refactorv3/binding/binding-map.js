@@ -17,7 +17,7 @@ export function createBindingMap(nodeList){
         if(isXElement(element)){
             // explore, prebind
             // add references
-            // add cache + add registry
+            // add _xcache {bindingMap, template} + add registry
             // setup map.index
         }
 

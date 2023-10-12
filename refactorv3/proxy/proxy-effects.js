@@ -93,7 +93,7 @@ function setter(object, property, value){
         // apply effects of all contexts or lazy remove
         while(x--){
             let effects = this.contexts[x]._xeffects
-            !effects ? (this.contexts.splice(x, 1)) : (effects.applyEffects(key, value))
+            !effects ? (this.contexts.splice(x, 1)) : (effects.applyEffects(this.key, key, value))
         }
 
     }

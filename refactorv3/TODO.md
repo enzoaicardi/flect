@@ -7,21 +7,19 @@
 
 ## BindingMap
 
-- [ ] prendre un tableau comme argument (cela permet de ne boucler que sur children et pas sur childNodes)
+- [x] prendre un tableau comme argument (cela permet de ne boucler que sur children et pas sur childNodes)
+- [ ] les matches doivent êtres stockés sur le xelement -> et reportés sur les elements
 
 ```js
-this.createBindingMap(this.children, matches)
+this.createBindingMap(this.children)
 ```
 
-## BindElements
-
-- [ ] penser a utiliser des objets stockeurs de référence ou a stocker la previous value afin d'éviter les mises a jour inutiles du DOM via effects
 
 ## Effects
 
-- [ ] revoir la structure des effets
+- [x] revoir la structure des effets
 - [x] pour économiser de la mémoire, déléguer les fonctions à des fonctions nommées (comme pour xElement)
-- [ ] supprimer getPatternValue, avoir une seule méthode unifiée de récupération de valeur, c'est cette valeur qui doit être transmise a l'effet et executée uniquement si elle a changée (cela permettrait de faire des effects: products[].name?)
+- [x] (EDIT pas de path, la valeur est renvoyée par les effets) supprimer getPatternValue, avoir une seule méthode unifiée de récupération de valeur, c'est cette valeur qui doit être transmise a l'effet et executée uniquement si elle a changée (cela permettrait de faire des effects: products[].name?)
 
 - [x] ou alors crée un proxy pour chaque objet, meme imbriqué lors de sa définition sur l'objet global, c'est ce proxy qui se charge de lancer un effet lors de sa mise a jour
 
@@ -29,8 +27,8 @@ this.createBindingMap(this.children, matches)
 
 ## Path
 
-- [ ] récupérer le chemin `{products[].name|filter}` split avec `(\.|\[)` puis dans chacun split les filtres
-- [ ] les références sont fixes quand il s'agit de lettres ou de nombres, mais dynamiques lorsque `[]`
+- [ ] (EDIT recupérer seulement la partie du début, ne pas permettre de chainer après les filtres pour des raisons de performance) récupérer le chemin `{products[].name|filter}` split avec `(\.|\[)` puis dans chacun split les filtres
+- [ ] (EDIT on passe d'abord par l'effet global à chaques fois string concatenation dans le proxy effects key + name) les références sont fixes quand il s'agit de lettres ou de nombres, mais dynamiques lorsque `[]`
 
 ## Forloop
 
