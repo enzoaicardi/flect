@@ -1,4 +1,4 @@
-import { isXElement } from "../../refactorv2/utils/test"
+import { isXElement } from "../../refactorv2/utils/test.js"
 
 export function createBindingMap(nodeList){
 

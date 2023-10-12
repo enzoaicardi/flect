@@ -13,6 +13,7 @@ export class XElement extends HTMLElement{
 
         this._xdatas = this.datas
         this.datas = this.x = {}
+        this._xmatches = {}
 
         this._xproxy = createProxyEffects(this)
         this._xeffects = createElementEffects(this)
