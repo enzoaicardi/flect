@@ -30,13 +30,13 @@ this.createBindingMap(this.children)
 - [ ] (EDIT recupérer seulement la partie du début, ne pas permettre de chainer après les filtres pour des raisons de performance) récupérer le chemin `{products[].name|filter}` split avec `(\.|\[)` puis dans chacun split les filtres
 - [ ] (EDIT on passe d'abord par l'effet global à chaques fois string concatenation dans le proxy effects key + name) les références sont fixes quand il s'agit de lettres ou de nombres, mais dynamiques lorsque `[]`
 
-## Forloop
+## Forloop (EDIT - devient un customelement)
 
 - [ ] prévoir en amont la gestion des références
 - [ ] prévoir l'index comme une entité supérieure qui serait utilisable partout ?
 - [ ] les références doivent êtres stockées sur les éléments root (de type documentFragment)
 - [ ] voir comment supprimer efficacement des noeuds DOM comme LitJS
 
-## Rollup
+## Rollup (EDIT tenter de passer a ESbuild comparer taille bundle)
 
 - [ ] penser a optimiser le mangle en utilisant des noms peu communs
