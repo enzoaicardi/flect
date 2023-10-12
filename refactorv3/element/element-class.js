@@ -11,7 +11,7 @@ export class XElement extends HTMLElement{
 
         super()
 
-        // this._xregistry = defined by parent component
+        // this._xcache = defined by parent component's bindingMap
 
         this._xdatas = this.datas
         this.datas = this.x = {}

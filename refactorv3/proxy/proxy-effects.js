@@ -55,8 +55,10 @@ function build(object, key){
 
 function populate(xelement, target){
 
+    // add a new context into current proxy
     this.contexts.push(xelement)
 
+    // populate children
     for(let key in target){
 
         if(!!target[key]._xproxy){

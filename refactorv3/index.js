@@ -1,3 +1,7 @@
+/*
+
+*/
+
 import { XElement } from "./element/element-class.js";
 
 // export XElement as Flect.x
@@ -7,10 +11,10 @@ export { XElement as x }
 export function define(name, definition){
 
     // setup class statics
-    definition.prototype._registry = {}
     definition.prototype._xclass = definition
 
     // define native customElement
     customElements.define('x-' + name, definition)
 
 }
+
