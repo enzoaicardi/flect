@@ -11,6 +11,8 @@ export class XElement extends HTMLElement{
 
         super()
 
+        // this._xregistry = defined by parent component
+
         this._xdatas = this.datas
         this.datas = this.x = {}
         this._xmatches = {}

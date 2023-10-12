@@ -1,23 +1,16 @@
 import { XElement } from "./element/element-class.js";
 
-let registry = {}
-
 // export XElement as Flect.x
 export { XElement as x }
 
 // export define as Flect.define
 export function define(name, definition){
 
-    // check class definition in registry
-    if(registry[name]){
-        throw `Component x-${name} is already defined !`
-    }
-
-    // add class definition to registry
-    registry[name] = 1
+    // setup class statics
+    definition.prototype._registry = {}
+    definition.prototype._xclass = definition
 
     // define native customElement
-    definition.prototype._xclass = definition
     customElements.define('x-' + name, definition)
 
 }

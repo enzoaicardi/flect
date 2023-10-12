@@ -2,8 +2,6 @@
 
 */
 
-import { buildProxy } from "./proxy-globals.js"
-
 export function createProxyEffects(xelements, key){
 
     return {
@@ -48,10 +46,10 @@ function build(object, key){
         configurable: false,
         writable: false,
         value: proxy,
-    });
+    })
 
     // create a new proxy
-    return buildProxy(object, proxy)
+    return new Proxy(object, proxy)
 
 }
 
