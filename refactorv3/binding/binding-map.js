@@ -1,6 +1,6 @@
 import { isXAttribute, isXElement } from "../../refactorv2/utils/test.js"
 import { getPath } from "../path/path-definition.js"
-import { getAttributeAction } from "./binding-attribute.js"
+import { getAttributeAction } from "./binding-map-attribute.js"
 
 export function createBindingMap(nodeList){
 
