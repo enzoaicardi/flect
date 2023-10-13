@@ -43,7 +43,7 @@ this.createBindingMap(this.children)
 
 ## Polyfill
 
-- [ ] a voir si utile car templates ne sont pas supportés par IE11 et firefox 35, et en terme d'usage firefox < 35 = 0
+- [ ] a voir si utile car templates ne sont pas supportés par IE11 et firefox 35, et en terme d'usage firefox < 35 = 0 - en fait es6 est supporté a 100% sauf IE11 donc...
 
 - [ ] réaliser un polyfill prenant en compte les mutation observer (compatible IE11) et qui permet de se passer des customelements sans presque rien changer (ne doit pas apporter une grosse surcouche au code)
 
