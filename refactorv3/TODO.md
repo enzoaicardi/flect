@@ -43,4 +43,10 @@ this.createBindingMap(this.children)
 
 ## Polyfill
 
+- [ ] a voir si utile car templates ne sont pas supportés par IE11 et firefox 35, et en terme d'usage firefox < 35 = 0
+
 - [ ] réaliser un polyfill prenant en compte les mutation observer (compatible IE11) et qui permet de se passer des customelements sans presque rien changer (ne doit pas apporter une grosse surcouche au code)
+
+- [ ] pour un support complet, passer le composant sous forme de fonction, la fonction remplace init, on peut définir des propriétés sur la fonction elle meme (comme render par exemple) et elles serint transmises a la classe apres son extends.
+
+- [ ] changer replaceWith par replaceChild et toutes les methodes qui sont de l'ES6 pur pour augmenter la compatibilité

@@ -41,6 +41,7 @@ export class XElement extends HTMLElement{
 
         // setup dom render
         // ...
+        // this.parentNode.replaceChild(xfragment, this)
 
     }
 

@@ -14,12 +14,37 @@ Flect.define('test', class extends Flect.x {
             console.log(this.x.item)
         }, 200)
 
+        this.effects = {
+            visibility: ()=>updateClass(),
+            name: ()=>updateClass()
+        }
     }
 
     render(){
         return /*html*/`
-            <p>Text</p>
+            <p x-class="Class">Text</p>
         `
     }
 
+    updateClass(){
+        return this.visibility + ' ' + this.name
+    }
+
 })
+
+// Version fonction
+
+function xTest(){
+    this.x.item = [1,1,1,1,1,1,1,1,1,1,1,1,1]
+    console.log(this.x.item)
+}
+
+xTest.render = function(){
+    return /* html */`<p x-class="Class">Text</p>`
+}
+
+xTest.updateClass = function(){
+    // ...
+}
+
+Flect.define('test', xTest)
