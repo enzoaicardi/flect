@@ -15,3 +15,28 @@ export function getPathValue(value, path){
     return path.negative ? !value : value
 
 }
+
+export function getPatternValue(value, pattern, key){
+
+    // setup the first value
+    let text = pattern.text[0]
+
+    // explore all path
+    for(let x = 0; x < pattern.paths.length; x++){
+
+        let path = pattern.paths[x]
+
+        // update path value in memory
+        if(path.key === key){
+            path.value = getPathValue(value)
+        }
+
+        // update text value
+        text += path.value || ''
+
+    }
+
+    // return value is allways <string>
+    return text
+
+}

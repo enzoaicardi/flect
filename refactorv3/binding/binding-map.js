@@ -1,4 +1,6 @@
-import { isXElement } from "../../refactorv2/utils/test.js"
+import { isXAttribute, isXElement } from "../../refactorv2/utils/test.js"
+import { getPath } from "../path/path-definition.js"
+import { getAttributeAction } from "./binding-attribute.js"
 
 export function createBindingMap(nodeList){
 
@@ -7,6 +9,8 @@ export function createBindingMap(nodeList){
     for(let x = 0; x < nodeList.length; x++){
 
         let element = nodeList[x]
+        let isComponent = isXElement(element)
+
         let map = {
             effects: [],
             once: [],
@@ -14,18 +18,43 @@ export function createBindingMap(nodeList){
             index: false
         }
 
-        if(isXElement(element)){
-            // explore, prebind
-            // add references
-            // add _xcache {bindingMap, template} + add registry
-            // setup map.index
+        let x = element.attributes.length-1
+
+        while(x--){
+            
+            // setup shortcuts
+            let attribute = element.attributes[x]
+            let value = attribute.value
+            let name = attribute.name
+
+            if(!isXAttribute(name)) continue
+
+            if(isComponent){
+                
+                // ...
+
+            }
+
+            else{
+
+                let path = getPath(value)
+                let action = getAttributeAction(name, path)
+
+            }
+
+            element.removeAttribute(name)
+            // clear attribute
+
         }
 
-        else{
-            // explore attrs
-            // bind children
-            // setup map.index
-        }
+        // explore, prebind
+        // add references
+        // add _xcache {bindingMap, template} + add registry
+        // setup map.index
+
+        // explore attrs
+        // bind children
+        // setup map.index
 
         // setup map list
         map.list = createBindingMap(element.children)

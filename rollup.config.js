@@ -1,7 +1,7 @@
 import terser from '@rollup/plugin-terser';
 
 export default {
-	input: 'refactorv2/define.js',
+	input: 'refactorv3/index.js',
 	output: {
 		file: 'dist/flect.js',
 		format: 'iife',
