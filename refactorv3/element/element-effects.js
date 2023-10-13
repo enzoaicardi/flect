@@ -16,7 +16,7 @@ export function createElementEffects(xelement){
     return {
 
         context: xelement,
-        
+
         map: {},
 
         createEffect: createEffect,
@@ -30,11 +30,12 @@ export function createElementEffects(xelement){
 }
 
 function createEffect(key, node, action){
-    
+    !this.map[key] && (this.map[key] = new Map())
+    this.map[key].set(node, action)
 }
 
-function removeEffect(){
-
+function removeEffect(key, node){
+    this.map[key].delete(node)
 }
 
 function applyEffects(key, path, value){
