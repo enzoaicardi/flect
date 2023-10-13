@@ -15,19 +15,23 @@ export function createBindingMap(nodeList){
             effects: [],
             once: [],
             list: false,
-            index: false
+            index: false,
+            template: false
         }
 
-        let x = element.attributes.length-1
+        let l = element.attributes.length-1
 
-        while(x--){
+        while(l--){
             
             // setup shortcuts
-            let attribute = element.attributes[x]
+            let attribute = element.attributes[l]
             let value = attribute.value
             let name = attribute.name
 
             if(!isXAttribute(name)) continue
+
+            // setup map.index
+            map.index = x
 
             if(isComponent){
                 
@@ -37,26 +41,39 @@ export function createBindingMap(nodeList){
 
             else{
 
+                // setup [path, action]
                 let path = getPath(value)
                 let action = getAttributeAction(name, path)
 
+                if(path.isPattern){
+
+                    let uniques = {}
+
+                    // create all effects related to unique paths
+                    for(let p of path.paths){
+                        if(uniques[p.key]) continue
+                        createBindingMapEffect(map, path, action, p.key)
+                    }
+
+                }
+
+                else {
+                    // create effect for the only path
+                    createBindingMapEffect(map, path, action)
+                }
+
             }
 
-            element.removeAttribute(name)
             // clear attribute
+            element.removeAttribute(name)
 
         }
 
         // explore, prebind
         // add references
         // add _xcache {bindingMap, template} + add registry
-        // setup map.index
 
-        // explore attrs
-        // bind children
-        // setup map.index
-
-        // setup map list
+        // setup map list (even for xElements)
         map.list = createBindingMap(element.children)
 
         // push map into the list
@@ -66,5 +83,14 @@ export function createBindingMap(nodeList){
     }
 
     return list.length && list
+
+}
+
+function createBindingMapEffect(map, path, action, key){
+
+    let effect = [path, action]
+        effect.key = key || path.key
+
+    map.effects.push(effect)
 
 }

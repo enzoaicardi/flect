@@ -40,3 +40,7 @@ this.createBindingMap(this.children)
 ## Rollup (EDIT tenter de passer a ESbuild comparer taille bundle)
 
 - [ ] penser a optimiser le mangle en utilisant des noms peu communs
+
+## Polyfill
+
+- [ ] réaliser un polyfill prenant en compte les mutation observer (compatible IE11) et qui permet de se passer des customelements sans presque rien changer (ne doit pas apporter une grosse surcouche au code)

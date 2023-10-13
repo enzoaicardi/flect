@@ -3,7 +3,7 @@ import { getPathValue, getPatternValue } from "../path/path-accesser.js"
 export function getAttributeAction(name, path){
 
     switch(name){
-        case 'x-ref': return updateRefAction
+        // case 'x-ref': return updateRefAction
         case 'x-show': return updateDisplayAction
         case 'x-text': return path.isPattern ? updateTextPatternAction : updateTextAction
         case 'x-html': return path.isPattern ? updateHtmlPatternAction : updateHtmlAction
