@@ -1,4 +1,4 @@
-import { isXAttribute, isXElement } from "../utils/utils-test.js"
+import { isXAttribute, isXElement } from "../utils/utils-tests.js"
 import { getPath } from "../path/path-definition.js"
 import { getAttributeAction } from "./binding-map-attribute.js"
 
