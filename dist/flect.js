@@ -1,1 +1,593 @@
-var Flect=function(t){"use strict";let e=document.createComment(""),i=document.createDocumentFragment(),s=new DOMParser;function n(t,e){let i=e.children,s=[];for(let e in i){let n=i[e],h=t.childNodes[e];if(!t.t||(h.t=t.t),!n.i){h.component=this;let t=n.effects;s.push(h);for(let e in t){this.o.h(e,h,t[e]);for(let[i,s]of t[e])i.call(this,null,h,s)}for(let t of n.l)t.call(this,h,n)}n.u||s.push(...this.p(h,n))}return s}function h(t){return"X-FOR"===t.tagName||"X-IF"===t.tagName}function f(t){return 0===t.tagName.indexOf("X-")&&!h(t)}function r(t){return 0===t.indexOf("x-")}function o(t){return 0===t.indexOf("x-on:")}function l(t){return"x-scoped"===t}let u="style-ref",c="xEventHandler_";function a(t){switch(t){case"x-text":return x;case"x-html":return m;case"x-show":return w;case"x-ref":return y;default:return v}}function d(t){t.setAttribute(u,this.m.selector)}function p(t,e){for(let i of e.M.v)t.addEventListener(i,e.M)}function x(t,e,i){e.textContent=this.X(i,e)}function m(t,e,i){e.innerHTML=this.X(i,e)}function w(t,e,i){let s=e.style.display;this.X(i,e)?e.style.display="none":s?e.style.display=s:e.style.removeProperty("display")}function y(t,e,i){if(t){let t=this.F[i.O];!t||t(e)}else for(let t of this._[i.O])t(e)}function v(t,e,i){e.setAttribute(i.g,this.X(i,e))}function E(t,e,i){e.datas||(e.datas={}),e.datas[i.g]=this.X(i,e)}function M(t,e,i){F(e);let s=i.P,n=e.$,h=this.R(i,e);h&&!n?(O.call(this,e,s,0),e.$=1):!h&&n&&(_.call(this,e,s,0),e.$=0)}function X(t,e,i){F(e);let s=i.P,n=e.$,h=this.R(i,e),f="number"==typeof h?h:h.length,r=f-n;if(r>0)for(let t=n;t<n+r&&t<f;t++)O.call(this,e,s,t,i);else if(r<0)for(let t=n-1;t>n-1+r&&t>=0;t--)_.call(this,e,s,t);e.$+=r}function F(t){t.t||(t.t=[]),t.k||(t.k={}),t.$||(t.$=0)}function O(t,e,i,s){let n=e.C.cloneNode(!0);n.t=s?new Map(t.t):t.t,!s||n.t.set(s,i),n.firstChild.C=e.C,t.k[i]=this.p(n,e),t.parentNode.insertBefore(n,t)}function _(t,e,i){let s={},n=t.parentNode;for(;(!s.C||s.C!==e.C)&&(s=t.previousSibling);)n.removeChild(s);this.D(t.k[i]),delete t.k[i]}let b=/\{[a-zA-Z0-9_.$!?|-]+\}/g;function g(t,e={}){let i={H:"!"===t[0],I:("!"===t[0]?t.substring(1):t).split(".").map((t=>t.split("|")))},s=e[P(i)];return i.S=P(s||i),i.I[0].j=s,i}function P(t){return t.S||t.I[0][0]}function $(t,e){let i={datas:{},O:t},s=t.match(b);if(s)for(let t of s)i.datas[t]=g(t.substring(1,t.length-1),e);else i.datas[t]=g(t,e);return i}function R(t,s={}){if(1!==t.nodeType&&11!==t.nodeType)return;const n=1===t.nodeType&&t!==this&&f(t);let u,x={effects:{},l:[],children:{}};if(1===t.nodeType)if(h(t)){let n=t.getAttribute("key"),h=t.getAttribute("var");if(h){let f=g(h,s),r=function(t){switch(t){case"X-IF":return M;case"X-FOR":return X;default:throw"Undefined"}}(t.tagName);!n||(s[n]=f),t.replaceWith(e.cloneNode()),u||(u=x),u.u=!0,u.C=i.cloneNode(),u.effects[f.S]=[[r,f]],f.P=u,u.C.append(e.cloneNode(),...t.childNodes),t=u.C}}else for(let e=0;e<t.attributes.length;e++){let i=t.attributes[e],h=i.name,f=i.value;if(r(h)){if(u||(u=x),o(h)){let t=h.substring(5);u.M||(u.M={v:[],A:t=>{u.M[c+t.type].call(this,t)}}),u.M.v.push(t),u.M[c+t]=this[f],u.l.push(p)}else if(l(h))!this.m.selector||u.l.push(d);else{let t=n?E:a(h),e=$(f,s);e.g=h.substring(2);for(let i in e.datas){let s=e.datas[i].S;u.effects[s]||(u.effects[s]=[]),u.effects[s].push([t,e])}}t.removeAttribute(h),e--}}if(!n&&t.firstChild){let e=t.firstChild,i=0;do{let t=this.J(e,s);t&&(u||(u=x)&&(u.i=!0),u.children[i]=t),i++}while(e=e.nextSibling)}return u}function k(t){for(let e of t){if(1!==e.nodeType||!f(e)||e.L(),e.k)for(let t in e.k)this.D(e.k[t]);this.o.N(e)}}let C=0,D=!1;function H(t,e){return t.datas[t.O]?this.R(t.datas[t.O],e):t.O.replace(b,(i=>this.R(t.datas[i],e)))}function I(t,e){let i=this.F;for(let s=0;s<t.I.length&&i;s++){let n=t.I[s];i=n.j?this.R(n.j,e)[e.t.get(n.j)]:i[n[0]];for(let t=1;t<n.length;t++)i=this.filters[n[t]](i)}return t.H?!i:i}class S extends HTMLElement{constructor(){super(),this.F=this.datas,this.datas={},this.filters={},this.effects={},this._={},this.T=new Map,this.J=R,this.D=k,this.p=n,this.X=H,this.R=I}connectedCallback(){this.init(),this.U(),this.F=this.F?Object.assign(this.datas,this.F):this.datas,this.Z(),this.q&&(this.m.selector||this.B()),this.G()}L(){this.disconnect(),delete this.datas,delete this.o,delete this.F,delete this._,delete this.filters,delete this.effects;for(let[t]of this.T)t.disconnect(this);delete this.T}init(){}disconnect(){}refs(t,e){let i=this._;i[t]||(i[t]=[]),i[t].push(e),this.datas[t]=e}U(){let t=this.datas;t.body=this.childNodes;for(let e of this.attributes){let i=e.name;if("datas-"===i.substring(0,6)){let s=JSON.parse(e.value);t[i.substring(6)]=s}else t[i]=e.value}}Z(){var t;this.o={K:t=this,V:{},W:new Map,h(t,e,i){let s=this.V,n=this.W;s[t]||(s[t]=new Map),s[t].get(e)||(s[t].set(e,[]),n.get(e)||n.set(e,[])),s[t].get(e).push(...i),n.get(e).push(t)},N(t){for(let e of this.W.get(t))this.V[e].delete(t),this.W.delete(t)},Y(e,i){let s=this.V;if(s[e])for(let[n,h]of s[e])for(let[e,s]of h)e.call(t,i,n,s)},set(t,e,i){return t[e]=i,this.Y(e,i),!0}},this.datas=new Proxy(this.F,this.o);for(let t in this.effects)this.o.h(t,this,[[this.effects[t]]]),this.effects[t](this.F[t])}B(){this.m.selector=function(t){let e="x"+C++;return D||(D=document.createElement("style"),document.head.appendChild(D)),D.textContent+=t(`[${u}="${e}"]`),e}(this.q)}G(){let t,e=this.m;if(!e.tt){let n=this.render();"string"!=typeof n?t=n:e.tt=function(t){let e=i.cloneNode();return e.append(...s.parseFromString(t,"text/html").body.childNodes),e}(n),e.P=this.J(e.tt||n)}t||(t=e.tt.cloneNode(!0)),!e.P||this.p(t,e.P),this.replaceWith(t)}}let j={};return t.context=function(){let t={datas:!1,W:new Map,use(t){return t&&(this.W.set(t,0),t.T.set(this,0)),this.datas},disconnect(t){this.W.delete(t),t.T.delete(this)},set(t,e,i){t[e]=i;for(let[t]of this.W)t&&t.datas&&(t.datas[e]=i);return!0}};return t.datas=new Proxy({},t),t},t.define=function(t,e){if(j[t])throw`Component x-${t} is already defined !`;e.prototype.m=e,customElements.define("x-"+t,e)},t.disconnect=function(t){t.L()},t.x=S,t}({});
+var Flect = (function (exports) {
+    'use strict';
+
+    /*
+
+    */
+
+    function createProxyEffects(xelements, key){
+
+        return {
+            
+            key: key,
+
+            contexts: xelements,
+
+            // explore an object a create necessary proxys
+            build: build,
+
+            // push new context into proxy object
+            populate: populate,
+            
+            // set a property, trigger effects and create necessary proxys
+            set: setter,
+
+        }
+
+    }
+
+    function build(object, key){
+
+        // loop over all object properties
+        for(let property in object){
+
+            if(typeof object[property] === 'object'){
+
+                // change property to proxy reference 
+                object[property] = this.build(object[property], key + '.' + property);
+
+            }
+
+        }
+
+        // create the proxy observer
+        let proxy = createProxyEffects(this.contexts, key);
+
+        // define _xproxy property on object
+        Object.defineProperty(object, '_xproxy', {
+            enumerable: false,
+            configurable: false,
+            writable: false,
+            value: proxy,
+        });
+
+        // create a new proxy
+        return new Proxy(object, proxy)
+
+    }
+
+    function populate(xelement, target){
+
+        // add a new context into current proxy
+        this.contexts.push(xelement);
+
+        // populate children
+        for(let key in target){
+
+            if(!!target[key]._xproxy){
+
+                target[key]._xproxy.populate(xelement, target);
+
+            }
+
+        }
+
+    }
+
+    // every property set (works also for push, pop, etc...)
+    function setter(object, property, value){
+
+        // trigger update only if property value change
+        if(object[property] !== value){
+
+            // setup the proxy access key
+            let key = this.key + '.' + property;
+
+            // build if the new value is an object
+            if(typeof value === 'object'){
+                value = this.build(value, key);
+            }
+
+            // setup property value
+            object[property] = value;
+
+            let x = this.contexts.length - 1;
+            
+            // apply effects of all contexts or lazy remove
+            while(x--){
+                let effects = this.contexts[x]._xeffects;
+                !effects ? (this.contexts.splice(x, 1)) : (effects.applyEffects(this.key, key, value));
+            }
+
+        }
+
+        return true
+
+    }
+
+    /*
+
+    map: {
+        []: {}
+        product: {}
+        product[]: {}
+        product.0: {}
+        product.0[]: {}
+        product.0.name: {}
+    }
+
+    */
+
+    function createElementEffects(xelement){
+
+        return {
+
+            context: xelement,
+
+            map: {},
+
+            createEffect: createEffect,
+
+            removeEffect: removeEffect,
+
+            applyEffects: applyEffects
+
+        }
+
+    }
+
+    function createEffect(key, node, action){
+        !this.map[key] && (this.map[key] = new Map());
+        this.map[key].set(node, action);
+    }
+
+    function removeEffect(key, node){
+        this.map[key].delete(node);
+    }
+
+    function applyEffects(key, path, value){
+
+        // global effects
+        for(let property in this.map[key + '[]']){
+            console.log('[effects] globals -> key:', key, '|value:', value);
+        }
+
+        // current effects
+        for(let property in this.map[path]){
+            console.log('[effects] current -> key:', key, '|value:', value);
+        }
+
+    }
+
+    function isXElement(element){
+        return element.tagName.indexOf('X-') === 0
+    }
+
+    function isXAttribute(name){
+        return name.indexOf('x-') === 0
+    }
+
+    /*
+
+    */
+
+    let xregex = /\{(([a-z_]+[0-9a-z_]*|[0-9]+)(\[\])?(\.|\|)?)+([a-z_]+[0-9a-z_]*\|?)*\}/gi;
+
+    /*
+
+    */
+
+
+    function createPath(text){
+
+        // split filters
+        let steps = text.split('|');
+
+        // get negative status
+        let negative = steps[0][0] === '!';
+
+        return {
+            key: !negative ? steps[0] : (steps[0].substring(1)),
+            steps: steps,
+            negative: negative,
+            lastIndex: steps.length-1
+        }
+
+    }
+
+    function createPattern(text, matches){
+
+        let pattern = {
+            paths: [],
+            texts: [],
+            isPattern: true
+        };
+
+        let index = 0;
+
+        for(let match of matches){
+
+            let x = index;
+                index = text.indexOf(match, x);
+            
+            pattern.texts.push(text.substring(x, index));
+            pattern.paths.push(createPath(match.substring(1, match.length-1)));
+
+            index += match.length;
+
+        }
+
+        pattern.texts.push(text.substring(index));
+
+        return pattern
+
+    }
+
+    // return <Path|Pattern>
+    function getPath(text){
+
+        // get path matches
+        let matches = text.match(xregex);
+
+        // if 0 {pattern} found
+        if(!matches){
+            return createPath(text)
+        }
+
+        // if 1 or more {pattern} found
+        return createPattern(text, matches)
+
+    }
+
+    /*
+        Only apply filters because value is sent by the proxy object throught effects
+    */
+
+    function getPathValue(value, path){
+
+        if(path.lastIndex){
+            // apply path filters (n+1)
+            for(let x = 1; x < path.lastIndex; x++){
+                value = path.steps[x](value);
+            }
+        }
+
+        // return final value (with negative status)
+        return path.negative ? !value : value
+
+    }
+
+    function getPatternValue(value, pattern, key){
+
+        // setup the first value
+        let text = pattern.text[0];
+
+        // explore all path
+        for(let x = 0; x < pattern.paths.length; x++){
+
+            let path = pattern.paths[x];
+
+            // update path value in memory
+            if(path.key === key){
+                path.value = getPathValue(value);
+            }
+
+            // update text value
+            text += path.value || '';
+
+        }
+
+        // return value is allways <string>
+        return text
+
+    }
+
+    function getAttributeAction(name, path){
+
+        switch(name){
+            // case 'x-ref': return updateRefAction
+            case 'x-show': return updateDisplayAction
+            case 'x-text': return path.isPattern ? updateTextPatternAction : updateTextAction
+            case 'x-html': return path.isPattern ? updateHtmlPatternAction : updateHtmlAction
+            default: return path.isPattern ? updateAttributePatternAction : updateAttributeAction
+        }
+
+    }
+
+    // x-text
+    function updateTextAction(value, path){
+        this.textContent = getPathValue(value, path);
+    }
+
+    function updateTextPatternAction(value, pattern, key){
+        this.textContent = getPatternValue(value, pattern, key);
+    }
+
+    // x-html
+    function updateHtmlAction(value, path){
+        this.innerHTML = getPathValue(value, path);
+    }
+
+    function updateHtmlPatternAction(value, pattern, key){
+        this.innerHTML = getPatternValue(value, pattern, key);
+    }
+
+    // x-attr
+    function updateAttributeAction(value, path){
+        this.setAttribute(path.attribute, getPathValue(value, path));
+    }
+
+    function updateAttributePatternAction(value, pattern, key){
+        this.setAttribute(pattern.attribute, getPatternValue(value, pattern, key));
+    }
+
+    // x-show
+    function updateDisplayAction(value, path){
+
+        let initial = this.style.display;
+        let visible = getPathValue(value, path);
+
+        if(!visible){
+            this.style.display = 'none';
+        }
+        else {
+            initial ? (this.style.display = initial) : (this.style.removeProperty('display'));
+        }
+
+    }
+
+    // x-ref
+    // TODO : a réimplémenter comme il faut
+
+    function createBindingMap(nodeList){
+
+        let list = [];
+
+        for(let x = 0; x < nodeList.length; x++){
+
+            let element = nodeList[x];
+            let isComponent = isXElement(element);
+
+            let map = {
+                effects: [],
+                once: [],
+                list: false,
+                index: false,
+                template: false
+            };
+
+            let l = element.attributes.length-1;
+
+            while(l--){
+                
+                // setup shortcuts
+                let attribute = element.attributes[l];
+                let value = attribute.value;
+                let name = attribute.name;
+
+                if(!isXAttribute(name)) continue
+
+                // setup map.index
+                map.index = x;
+
+                if(isComponent);
+
+                else {
+
+                    // setup [path, action]
+                    let path = getPath(value);
+                    let action = getAttributeAction(name, path);
+
+                    if(path.isPattern){
+
+                        let uniques = {};
+
+                        // create all effects related to unique paths
+                        for(let p of path.paths){
+                            if(uniques[p.key]) continue
+                            createBindingMapEffect(map, path, action, p.key);
+                        }
+
+                    }
+
+                    else {
+                        // create effect for the only path
+                        createBindingMapEffect(map, path, action);
+                    }
+
+                }
+
+                // clear attribute
+                element.removeAttribute(name);
+
+            }
+
+            // explore, prebind
+            // add references
+            // add _xcache {bindingMap, template} + add registry
+
+            // setup map list (even for xElements)
+            map.list = createBindingMap(element.children);
+
+            // push map into the list
+            map.index !== false || map.list && (list.push(map));
+
+
+        }
+
+        return list.length && list
+
+    }
+
+    function createBindingMapEffect(map, path, action, key){
+
+        let effect = [path, action];
+            effect.key = key || path.key;
+
+        map.effects.push(effect);
+
+    }
+
+    document.createComment('');
+    let xtemplate = document.createElement('template');
+    let xfragment = document.createDocumentFragment();
+
+    function createTemplate(html){
+
+        // clone the template Element and inject innerHTML (for parsing)
+        let template = xtemplate.cloneNode();
+            template.innerHTML = html;
+
+        // return the template DocumentfFragment
+        return template.content
+
+    }
+
+    function asTemplate(node){
+
+        let template = xfragment.cloneNode();
+            template.append(...node.childNodes);
+
+        return template
+
+    }
+
+    /*
+
+    */
+
+
+    class XElement extends HTMLElement{
+
+        constructor(){
+
+            super();
+
+            // this._xcache = local bindingmap saved if there is a parent component
+            // that have a template string litteral
+
+            this._xdatas = this.datas;
+            this.datas = this.x = {};
+            this._xmatches = {};
+
+            this._xproxy = createProxyEffects(this);
+            this._xeffects = createElementEffects(this);
+
+        }
+
+        connectedCallback(){
+
+            // run init function from sub-class
+            this.init();
+
+            // setup datas from non-x attributes
+            // ...
+
+            // setup _xdatas = datas and assign datas from x-attributes
+            this._xdatas = this._xdatas ? Object.assign(this.datas, this._xdatas) : this.datas;
+
+            // setup the datas proxy
+            this.datas = this.x = this._xproxy.build(this._xdatas, 'datas');
+
+            // setup stylesheet
+            // ...
+
+            // setup dom render
+            this.setupRender();
+
+            // this.parentNode.replaceChild(xfragment, this)
+
+            console.log('xelement init -> ' + this.tagName);
+
+        }
+
+        setupAttributesDatas(){
+
+        }
+
+        setupScopedStylesheet(){
+
+        }
+
+        setupRender(){
+
+            let definition = this._xcache || this._xclass;
+            let template = definition.template;
+            this._xcache || this._xclass.map;
+
+            // if there is no template in cache or class statics
+            // in this case there is also no bindingMap
+            if(!template){
+
+                // get result of render function
+                let render = this.render();
+
+                // if render is a string
+                if(typeof render === 'string'){
+                    template = definition.template = createTemplate(render);
+                }
+                // if render is xelement (this)
+                else {
+                    template = asTemplate(render);
+                }
+
+                // we finaly create and store the bindingMap
+                definition.map = createBindingMap(template.children);
+
+            }
+
+            // if template is now in cache or class statics
+            if(definition.template){
+                template = template.cloneNode(true);
+            }
+
+            // bindElements(map, template)
+
+            // replace xelement by his children
+            this.parentNode.replaceChild(template, this);
+
+        }
+
+        // --- fallbacks
+
+        init(){
+            // fallback -> prevent error if init is empty
+            /*
+                Define fallback datas via this.datas... = ...
+                Define effects via this.effects = {...}
+                Define filters via this.filters = {...}
+            */
+        }
+
+        disconnect(){
+            // fallback -> prevent error if disconnect is empty
+            /*
+                Remove all persistent states when disconnected
+                Example : clearInterval(my_persistent_interval)
+            */
+        }
+
+    }
+
+    /*
+
+    */
+
+
+    // export define as Flect.define
+    function define(name, definition){
+
+        // setup class statics
+        definition.prototype._xclass = definition;
+
+        // define native customElement
+        customElements.define('x-' + name, definition);
+
+    }
+
+    exports.define = define;
+    exports.x = XElement;
+
+    return exports;
+
+})({});

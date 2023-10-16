@@ -21,9 +21,7 @@ Flect.define('test', class extends Flect.x {
     }
 
     render(){
-        return /*html*/`
-            <p x-class="Class">Text</p>
-        `
+        return this
     }
 
     updateClass(){

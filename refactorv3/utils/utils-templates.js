@@ -13,19 +13,11 @@ export function createTemplate(html){
 
 }
 
-export function getTemplate(){
+export function asTemplate(node){
 
-    // get the template DocumentfFragment
-    let template = this._xcache ? this._xcache.template : this._xclass._xtemplate
+    let template = xfragment.cloneNode()
+        template.append(...node.childNodes)
 
-    // return the cloned template
-    return template.cloneNode(true)
-
-}
-
-export function getBindingMap(){
-
-    // return bindingMap from cache or class static
-    return this._xcache || this._xclass._xmap
+    return template
 
 }

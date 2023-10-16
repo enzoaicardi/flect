@@ -4,6 +4,8 @@
 
 import { createProxyEffects } from "../proxy/proxy-effects.js"
 import { createElementEffects } from "./element-effects.js"
+import { createBindingMap } from "../binding/binding-map.js"
+import { asTemplate, createTemplate } from "../utils/utils-templates.js"
 
 export class XElement extends HTMLElement{
 
@@ -41,7 +43,8 @@ export class XElement extends HTMLElement{
         // ...
 
         // setup dom render
-        // ...
+        this.setupRender()
+
         // this.parentNode.replaceChild(xfragment, this)
 
         console.log('xelement init -> ' + this.tagName)
@@ -58,7 +61,40 @@ export class XElement extends HTMLElement{
 
     setupRender(){
 
-        // ... check cache, add template / bindingmap, etc...
+        let definition = this._xcache || this._xclass
+        let template = definition.template
+        let map = this._xcache || this._xclass.map
+
+        // if there is no template in cache or class statics
+        // in this case there is also no bindingMap
+        if(!template){
+
+            // get result of render function
+            let render = this.render()
+
+            // if render is a string
+            if(typeof render === 'string'){
+                template = definition.template = createTemplate(render)
+            }
+            // if render is xelement (this)
+            else{
+                template = asTemplate(render)
+            }
+
+            // we finaly create and store the bindingMap
+            map = definition.map = createBindingMap(template.children)
+
+        }
+
+        // if template is now in cache or class statics
+        if(definition.template){
+            template = template.cloneNode(true)
+        }
+
+        // bindElements(map, template)
+
+        // replace xelement by his children
+        this.parentNode.replaceChild(template, this)
 
     }
 
