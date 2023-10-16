@@ -24,8 +24,9 @@ Flect.define('test', class extends Flect.x {
         return /*html*/`
             <div x-class="{Class} {Class}">
                 <div>
-                    <p x-text="mario">
-                    </p>
+                    <x-p x-text="mario">
+                        Wii
+                    </x-p>
                 </div>
             </div>
         `

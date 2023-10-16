@@ -1,10 +1,11 @@
 import { isXAttribute, isXElement } from "../utils/utils-tests.js"
 import { getPath } from "../path/path-definition.js"
 import { getAttributeAction } from "./binding-map-attribute.js"
+import { asTemplate } from "../utils/utils-templates.js"
 
 export function createBindingMap(nodeList){
 
-    let list = []
+    let bindings = []
 
     for(let x = 0; x < nodeList.length; x++){
 
@@ -14,13 +15,27 @@ export function createBindingMap(nodeList){
         let map = {
             effects: [],
             once: [],
-            list: false,
+            bindings: false,
             index: false,
             template: false
         }
 
+        if(isComponent){
+
+            // setup map.index
+            map.index = x
+
+            // update template cache of xelement
+            map.template = asTemplate(element)
+
+            // update nodeList to keep tracking
+            nodeList = map.template.children
+
+        }
+
+        // check element attributes
         let l = element.attributes.length
-        
+
         while(l--){
             
             // setup shortcuts
@@ -36,6 +51,11 @@ export function createBindingMap(nodeList){
             if(isComponent){
                 
                 // ...
+                // mettre a jour les datas en les passant par tunnel
+                // cela se fait au bindElements mais stocké dans les onces
+                // car la référence est directement passée donc pas besoin de
+                // mise a jour
+                // ... Ajouter les références potentielles... a explorer
 
             }
 
@@ -70,22 +90,18 @@ export function createBindingMap(nodeList){
 
         }
 
-        // explore, prebind
-        // add references
-        // add _xcache {bindingMap, template} + add registry
+        // setup map bindings (even for xElements)
+        map.bindings = createBindingMap(element.children)
 
-        // setup map list (even for xElements)
-        map.list = createBindingMap(element.children)
-
-        // push map into the list
-        if(map.index !== false || map.list){
-            list.push(map)
+        // push map into the bindings
+        if(map.index !== false || map.bindings){
+            bindings.push(map)
         }
 
 
     }
 
-    return list.length && list
+    return bindings.length && bindings
 
 }
 

@@ -63,7 +63,7 @@ export class XElement extends HTMLElement{
 
         let definition = this._xcache || this._xclass
         let template = definition.template
-        let map = this._xcache || this._xclass.map
+        let bindings = definition.bindings
 
         // if there is no template in cache or class statics
         // in this case there is also no bindingMap
@@ -82,7 +82,7 @@ export class XElement extends HTMLElement{
             }
 
             // we finaly create and store the bindingMap
-            map = definition.map = createBindingMap(template.children)
+            bindings = definition.bindings = createBindingMap(template.children)
 
         }
 
@@ -91,9 +91,9 @@ export class XElement extends HTMLElement{
             template = template.cloneNode(true)
         }
 
-        console.log(definition.map)
+        console.log(definition.bindings)
 
-        // bindElements(map, template)
+        // bindElements(bindings, template)
 
         // replace xelement by his children
         this.parentNode.replaceChild(template, this)
