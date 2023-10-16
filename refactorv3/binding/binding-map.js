@@ -19,8 +19,8 @@ export function createBindingMap(nodeList){
             template: false
         }
 
-        let l = element.attributes.length-1
-
+        let l = element.attributes.length
+        
         while(l--){
             
             // setup shortcuts
@@ -53,6 +53,7 @@ export function createBindingMap(nodeList){
                     for(let p of path.paths){
                         if(uniques[p.key]) continue
                         createBindingMapEffect(map, path, action, p.key)
+                        uniques[p.key] = 1
                     }
 
                 }
@@ -77,7 +78,9 @@ export function createBindingMap(nodeList){
         map.list = createBindingMap(element.children)
 
         // push map into the list
-        map.index !== false || map.list && (list.push(map))
+        if(map.index !== false || map.list){
+            list.push(map)
+        }
 
 
     }

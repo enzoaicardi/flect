@@ -21,7 +21,14 @@ Flect.define('test', class extends Flect.x {
     }
 
     render(){
-        return this
+        return /*html*/`
+            <div x-class="{Class} {Class}">
+                <div>
+                    <p x-text="mario">
+                    </p>
+                </div>
+            </div>
+        `
     }
 
     updateClass(){

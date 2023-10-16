@@ -91,6 +91,8 @@ export class XElement extends HTMLElement{
             template = template.cloneNode(true)
         }
 
+        console.log(definition.map)
+
         // bindElements(map, template)
 
         // replace xelement by his children
