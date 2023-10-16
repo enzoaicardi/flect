@@ -23,11 +23,9 @@ Flect.define('test', class extends Flect.x {
     render(){
         return /*html*/`
             <div x-class="{Class} {Class}">
-                <div>
-                    <x-p x-text="mario">
-                        Wii
-                    </x-p>
-                </div>
+                <x-div x-product>
+                    
+                </x-div>
             </div>
         `
     }

@@ -43,11 +43,9 @@ export class XElement extends HTMLElement{
         // ...
 
         // setup dom render
-        this.setupRender()
+        this.render && this.setupRender()
 
-        // this.parentNode.replaceChild(xfragment, this)
-
-        console.log('xelement init -> ' + this.tagName)
+        console.log('xElement initialized -> ' + this.tagName)
 
     }
 

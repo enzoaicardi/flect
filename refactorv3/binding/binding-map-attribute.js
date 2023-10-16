@@ -2,6 +2,8 @@ import { getPathValue, getPatternValue } from "../path/path-accesser.js"
 
 export function getAttributeAction(name, path){
 
+    path.attribute = name
+    
     switch(name){
         // case 'x-ref': return updateRefAction
         case 'x-show': return updateDisplayAction

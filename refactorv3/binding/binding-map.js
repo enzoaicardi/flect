@@ -2,6 +2,7 @@ import { isXAttribute, isXElement } from "../utils/utils-tests.js"
 import { getPath } from "../path/path-definition.js"
 import { getAttributeAction } from "./binding-map-attribute.js"
 import { asTemplate } from "../utils/utils-templates.js"
+import { getDataAction } from "./binding-map-datas.js"
 
 export function createBindingMap(nodeList){
 
@@ -48,41 +49,26 @@ export function createBindingMap(nodeList){
             // setup map.index
             map.index = x
 
-            if(isComponent){
-                
-                // ...
-                // mettre a jour les datas en les passant par tunnel
-                // cela se fait au bindElements mais stocké dans les onces
-                // car la référence est directement passée donc pas besoin de
-                // mise a jour
-                // ... Ajouter les références potentielles... a explorer
+            // setup [path, action]
+            let path = getPath(value)
+            let action = !isComponent ? (getAttributeAction(name, path)) : (getDataAction(name, path))
+
+            if(path.isPattern){
+
+                let uniques = {}
+
+                // create all effects related to unique paths
+                for(let p of path.paths){
+                    if(uniques[p.key]) continue
+                    createBindingMapEffect(map, path, action, p.key)
+                    uniques[p.key] = 1
+                }
 
             }
 
-            else{
-
-                // setup [path, action]
-                let path = getPath(value)
-                let action = getAttributeAction(name, path)
-
-                if(path.isPattern){
-
-                    let uniques = {}
-
-                    // create all effects related to unique paths
-                    for(let p of path.paths){
-                        if(uniques[p.key]) continue
-                        createBindingMapEffect(map, path, action, p.key)
-                        uniques[p.key] = 1
-                    }
-
-                }
-
-                else {
-                    // create effect for the only path
-                    createBindingMapEffect(map, path, action)
-                }
-
+            else {
+                // create effect for the only path
+                createBindingMapEffect(map, path, action)
             }
 
             // clear attribute
