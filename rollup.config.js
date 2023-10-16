@@ -7,11 +7,11 @@ export default {
 		format: 'iife',
 		name: 'Flect'
 	},
-    // plugins: [terser({
-	// 	mangle: {
-	// 	  properties: {
-	// 		reserved: ['connectedCallback', 'render', 'refs', 'effects', 'filters', 'datas', 'component', 'init', 'disconnect', 'context', 'use'],
-	// 	  },
-	// 	},
-	// })]
+    plugins: [terser({
+		mangle: {
+		  properties: {
+			reserved: ['connectedCallback', 'render', 'refs', 'effects', 'filters', 'datas', 'component', 'init', 'disconnect', 'context', 'use'],
+		  },
+		},
+	})]
 };
