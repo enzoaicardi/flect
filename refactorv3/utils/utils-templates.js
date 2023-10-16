@@ -16,7 +16,7 @@ export function createTemplate(html){
 export function getTemplate(){
 
     // get the template DocumentfFragment
-    let template = this._xcache ? this._xcache.template : this._xclass.template
+    let template = this._xcache ? this._xcache.template : this._xclass._xtemplate
 
     // return the cloned template
     return template.cloneNode(true)
@@ -26,6 +26,6 @@ export function getTemplate(){
 export function getBindingMap(){
 
     // return bindingMap from cache or class static
-    return this._xcache || this._xclass.map
-    
+    return this._xcache || this._xclass._xmap
+
 }
