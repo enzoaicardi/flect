@@ -11,7 +11,8 @@ export class XElement extends HTMLElement{
 
         super()
 
-        // this._xcache = defined by parent component's bindingMap
+        // this._xcache = local bindingmap saved if there is a parent component
+        // that have a template string litteral
 
         this._xdatas = this.datas
         this.datas = this.x = {}
@@ -42,6 +43,22 @@ export class XElement extends HTMLElement{
         // setup dom render
         // ...
         // this.parentNode.replaceChild(xfragment, this)
+
+        console.log('xelement init -> ' + this.tagName)
+
+    }
+
+    setupAttributesDatas(){
+
+    }
+
+    setupScopedStylesheet(){
+
+    }
+
+    setupRender(){
+
+        // ... check cache, add template / bindingmap, etc...
 
     }
 
