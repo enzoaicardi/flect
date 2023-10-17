@@ -17,7 +17,7 @@ export function createBindingMap(nodeList){
             effects: [],
             once: [],
             bindings: 0,
-            index: false,
+            index: x,
             template: false
         }
 
@@ -32,9 +32,6 @@ export function createBindingMap(nodeList){
             let name = attribute.name
 
             if(!isXAttribute(name)) continue
-
-            // setup map.index
-            map.index = x
 
             // setup [path, action]
             let path = getPath(value)
@@ -66,9 +63,6 @@ export function createBindingMap(nodeList){
         if(element.children.length){
 
             if(isComponent){
-
-                // setup map.index
-                map.index = x
 
                 // update template cache of xelement
                 map.template = asTemplate(element)
