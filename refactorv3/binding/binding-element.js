@@ -8,7 +8,7 @@ export function bindElements(nodeList, bindings){
 
         let index = map.index
         let element = nodeList[index]
-        let isComponent = !!map.template
+        let isComponent = !!map.template && (element.component = this)
         // can be usefull in case of unbind ?
         // let isBinded = map.effects.length || map.once.length
 
