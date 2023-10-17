@@ -78,7 +78,7 @@ export function createBindingMap(nodeList){
         }
 
         // push map into the bindings
-        if(map.index !== false || map.bindings){
+        if(map.effects.length || map.once.length || map.bindings){
             bindings.push(map)
         }
 
