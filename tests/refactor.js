@@ -23,9 +23,9 @@ Flect.define('test', class extends Flect.x {
     render(){
         return /*html*/`
             <div x-class="{Class} {Class}">
-                <x-div x-product>
-                    
-                </x-div>
+                <x-for x-product>
+                    <p></p>
+                </x-for>
             </div>
         `
     }

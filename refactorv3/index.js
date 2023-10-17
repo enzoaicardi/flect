@@ -2,6 +2,7 @@
 
 */
 
+import { xForElement } from "./element/element-class-for.js";
 import { XElement } from "./element/element-class.js";
 
 // export XElement as Flect.x
@@ -18,3 +19,5 @@ export function define(name, definition){
 
 }
 
+// define core elements
+define('for', xForElement)

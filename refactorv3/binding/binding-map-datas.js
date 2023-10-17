@@ -21,6 +21,10 @@ export function getDataAction(name, path){
     // mise a jour
     // ... Ajouter les références potentielles... a explorer
 
+    /*
+        ...
+    */
+
 }
 
 function updateDataAction(value, path){
