@@ -43,7 +43,7 @@ export class XElement extends HTMLElement{
         // ...
 
         // setup dom render
-        this.render && this.setupRender()
+        this.render && (this.setupRender())
 
         console.log('xElement initialized -> ' + this.tagName)
 

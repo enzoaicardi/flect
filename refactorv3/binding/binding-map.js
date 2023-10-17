@@ -16,22 +16,9 @@ export function createBindingMap(nodeList){
         let map = {
             effects: [],
             once: [],
-            bindings: false,
+            bindings: 0,
             index: false,
             template: false
-        }
-
-        if(isComponent){
-
-            // setup map.index
-            map.index = x
-
-            // update template cache of xelement
-            map.template = asTemplate(element)
-
-            // update nodeList to keep tracking
-            nodeList = map.template.children
-
         }
 
         // check element attributes
@@ -76,8 +63,25 @@ export function createBindingMap(nodeList){
 
         }
 
-        // setup map bindings (even for xElements)
-        map.bindings = createBindingMap(element.children)
+        if(element.children.length){
+
+            if(isComponent){
+
+                // setup map.index
+                map.index = x
+
+                // update template cache of xelement
+                map.template = asTemplate(element)
+
+                // update element to keep tracking
+                element = map.template
+
+            }
+
+            // setup map bindings (even for xElements)
+            map.bindings = createBindingMap(element.children)
+
+        }
 
         // push map into the bindings
         if(map.index !== false || map.bindings){
