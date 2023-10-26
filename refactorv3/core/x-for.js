@@ -2,7 +2,7 @@
 
 */
 
-import { XElement } from "./element-class.js";
+import { XElement } from "../element/element-class.js";
 
 export class xForElement extends XElement{
 

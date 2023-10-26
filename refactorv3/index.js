@@ -2,22 +2,21 @@
 
 */
 
-import { xForElement } from "./element/element-class-for.js";
+import { define } from "./core/define.js";
+import { lazy } from "./core/lazy.js";
 import { XElement } from "./element/element-class.js";
+import { xForElement } from "./core/x-for.js";
 
 // export XElement as Flect.x
 export { XElement as x }
 
 // export define as Flect.define
-export function define(name, definition){
+export { define }
 
-    // setup class statics
-    definition.prototype._xclass = definition
-
-    // define native customElement
-    customElements.define('x-' + name, definition)
-
-}
+// export lazy as Flect.lazy
+export { lazy }
 
 // define core elements
 define('for', xForElement)
+// define('if', xIfElement)
+// define('router', xIfElement)

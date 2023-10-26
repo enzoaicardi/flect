@@ -1,6 +1,10 @@
 
 import * as Flect from '../refactorv3/index.js';
 
+Flect.lazy({
+    'x': './me.js'
+})
+
 Flect.define('test', class extends Flect.x {
 
     init(){
