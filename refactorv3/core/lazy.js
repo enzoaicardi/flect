@@ -26,8 +26,7 @@ function setupLazyObserver(){
     // create observer and observe documentElement
     observer = new MutationObserver(lazyObserverCallback)
 
-    // TODO -> check si besoin de tout observer car element se supprime tout seul
-    // donc ajouté puis supprimé, donc peut etre pas besoin de tester certaines choses
+    // observe documentElement
     observer.observe(
         document.documentElement,
         {
@@ -55,10 +54,8 @@ function lazyObserverCallback(mutations){
                 // if node is still in registry
                 if(node.nodeType === 1 && isXElement(node) && registry[(tag = node.tagName.toLowerCase().substring(2))]){
 
-                    // import corresponding js file
-                    // TODO -> relative url start by /core/
-                    // Syntax {element: ()=>import(url)} ?
-                    import(registry[tag])
+                    // execute ()=>import('url')
+                    registry[tag]()
 
                     // mark the entry as false to fire only once
                     registry[tag] = false

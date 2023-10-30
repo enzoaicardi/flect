@@ -9,6 +9,11 @@ export function createPath(text){
     // split filters
     let steps = text.split('|')
 
+    // split filters accessers
+    for(let x = 1; x < steps.length; x++){
+        steps[x] = steps[x].split('.')
+    }
+
     // get negative status
     let negative = steps[0][0] === '!'
 

@@ -2,7 +2,7 @@
 import * as Flect from '../refactorv3/index.js';
 
 Flect.lazy({
-    'x': './me.js'
+    'x': ()=>import('./me.js')
 })
 
 Flect.define('test', class extends Flect.x {
@@ -26,6 +26,7 @@ Flect.define('test', class extends Flect.x {
 
     render(){
         return /*html*/`
+            <x-x></x-x>
             <div x-class="{Class} {Class}">
                 <x-for>
                     <p x-test></p>

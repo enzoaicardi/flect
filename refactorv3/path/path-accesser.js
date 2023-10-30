@@ -4,11 +4,21 @@
 
 export function getPathValue(value, path){
 
+    // if there is filters
     if(path.lastIndex){
+
         // apply path filters (n+1)
-        // TODO -> path filtres + propriétés doit etre possible, mais seul chemin avant doit etre conservé comme nom
         for(let x = 1; x < path.lastIndex; x++){
-            value = path.steps[x](value)
+
+            // get current filter
+            let step = path.steps[x]
+                value = step[0](value)
+
+            // access filter properties
+            for(let xb = 1; xb < step.length; xb++){
+                value = value[step[xb]]
+            }
+
         }
     }
 
