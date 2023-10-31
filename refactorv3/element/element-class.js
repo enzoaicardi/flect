@@ -6,6 +6,7 @@ import { createProxyEffects } from "../proxy/proxy-effects.js"
 import { createElementEffects } from "./element-effects.js"
 import { createBindingMap } from "../binding/binding-map.js"
 import { asTemplate, createTemplate } from "../utils/utils-templates.js"
+import { bindElements } from "../binding/binding-element.js"
 
 export class XElement extends HTMLElement{
 
@@ -20,8 +21,10 @@ export class XElement extends HTMLElement{
         this.datas = this.x = {}
         this._xmatches = {}
 
-        this._xproxy = createProxyEffects(this)
+        this._xproxy = createProxyEffects([this])
         this._xeffects = createElementEffects(this)
+
+        this.bindElements = bindElements
 
     }
 
@@ -36,14 +39,14 @@ export class XElement extends HTMLElement{
         // setup _xdatas = datas and assign datas from x-attributes
         this._xdatas = this._xdatas ? Object.assign(this.datas, this._xdatas) : this.datas
 
-        // setup the datas proxy
-        this.datas = this.x = this._xproxy.build(this._xdatas, 'datas')
-
         // setup stylesheet
         // ...
 
         // setup dom render
         this.render && (this.setupRender())
+
+        // setup the datas proxy & effects first execution
+        this.datas = this.x = this._xproxy.build(this._xdatas, '')
 
         console.log('xElement initialized -> ' + this.tagName)
 
@@ -85,13 +88,14 @@ export class XElement extends HTMLElement{
         }
 
         // if template is now in cache or class statics
-        if(definition.template){
-            template = template.cloneNode(true)
-        }
+        definition.template && (template = template.cloneNode(true))
 
         console.log(definition.bindings)
+        
+        // if bindings is an object we can bind template children
+        bindings && (this.bindElements(template.children, bindings))
 
-        // bindElements(bindings, template)
+        console.log(this._xeffects)
 
         // replace xelement by his children
         this.parentNode.replaceChild(template, this)

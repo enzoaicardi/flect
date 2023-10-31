@@ -30,24 +30,25 @@ export function getPathValue(value, path){
 export function getPatternValue(value, pattern, key){
 
     // setup the first value
-    let text = pattern.text[0]
+    let string = pattern.texts[0]
 
     // explore all path
     for(let x = 0; x < pattern.paths.length; x++){
 
         let path = pattern.paths[x]
+        let text = pattern.texts[x+1]
 
         // update path value in memory
         if(path.key === key){
-            path.value = getPathValue(value)
+            path.value = getPathValue(value, path)
         }
 
         // update text value
-        text += path.value || ''
+        string += (path.value || '') + text
 
     }
 
     // return value is allways <string>
-    return text
+    return string
 
 }

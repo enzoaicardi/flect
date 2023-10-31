@@ -9,14 +9,12 @@ Flect.define('test', class extends Flect.x {
 
     init(){
 
-        this.x.item = [1,1,1,1,1,1,1,1,1,1,1,1,1]
-
-        // console.log(this.x.item)
+        this.datas.item = [1,1,1,1,1,1,1,1,1,1,1,1,1]
 
         setTimeout(()=>{
-            this.x.item.push(4)
-            // console.log(this.x.item)
-        }, 200)
+            this.datas.item.push(4)
+            console.log('pushed')
+        }, 1000)
 
         this.effects = {
             visibility: ()=>updateClass(),
@@ -26,8 +24,8 @@ Flect.define('test', class extends Flect.x {
 
     render(){
         return /*html*/`
-            <x-x></x-x>
             <div x-class="{Class} {Class}">
+                <p x-text="{item[]} bananas">Name should be here</p>
                 <x-for>
                     <p x-test></p>
                 </x-for>

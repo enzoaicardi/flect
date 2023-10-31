@@ -1,14 +1,5 @@
 /*
 
-map: {
-    []: {}
-    product: {}
-    product[]: {}
-    product.0: {}
-    product.0[]: {}
-    product.0.name: {}
-}
-
 */
 
 export function createElementEffects(xelement){
@@ -17,7 +8,14 @@ export function createElementEffects(xelement){
 
         context: xelement,
 
-        map: {},
+        map: {/*
+            []: {}
+            product: {}
+            product[]: {}
+            product.0: {}
+            product.0[]: {}
+            product.0.name: {}
+        */},
 
         createEffect: createEffect,
 
@@ -29,9 +27,9 @@ export function createElementEffects(xelement){
 
 }
 
-function createEffect(key, node, action){
+function createEffect(key, node, effect){
     !this.map[key] && (this.map[key] = new Map())
-    this.map[key].set(node, action)
+    this.map[key].set(node, effect)
 }
 
 function removeEffect(key, node){
@@ -40,14 +38,29 @@ function removeEffect(key, node){
 
 function applyEffects(key, path, value){
 
+
     // global effects
-    for(let property in this.map[key + '[]']){
-        console.log('[effects] globals -> key:', key, '|value:', value)
-    }
+    let globalKey = key + '[]'
+    executeEffects(this.map[globalKey], globalKey, value)
 
     // current effects
-    for(let property in this.map[path]){
-        console.log('[effects] current -> key:', key, '|value:', value)
+    executeEffects(this.map[path], path, value)
+
+}
+
+function executeEffects(map, key, value){
+
+    console.log(map, key, value)
+
+    // if map does not exist
+    if(!map) return;
+
+    // get all Effect<node: [path, action]>
+    for(let [node, [path, action]] of map){
+
+        // run the effect
+        action.call(node, value, path, key)
+
     }
 
 }

@@ -15,6 +15,7 @@ export function bindElements(nodeList, bindings){
         // get every Effect<[path, action]>
         for(let effect of map.effects){
             // do something here
+            this._xeffects.createEffect(effect.key, element, effect)
         }
 
         // get every Once<action>
