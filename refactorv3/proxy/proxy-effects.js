@@ -2,13 +2,12 @@
 
 */
 
-export function createProxyEffects(xelements, key){
+export function createProxyEffects(map){
 
     return {
         
-        key: key,
-
-        contexts: xelements,
+        // map of [context, key]
+        map: map || [],
 
         // explore an object a create necessary proxys
         build: build,
@@ -35,14 +34,14 @@ function build(object, key){
             // TODO -> lancer les effets par défaut sur le contexte courant (se limiter au dernier pour les objets et tableau)
             //      par rapport aux path name[] (sinon risque de multiples executions ?)
             //      comment faire lorsqu'un objet est modifié ?
-            object[property] = this.build(object[property], (!key ? '' : (key + '.')) + property)
+            object[property] = this.build([object[property], key + '.' + property])
 
         }
 
     }
 
     // create the proxy observer
-    let proxy = createProxyEffects(this.contexts, key)
+    let proxy = createProxyEffects(this.map)
 
     // define _xproxy property on object
     Object.defineProperty(object, '_xproxy', {
@@ -57,6 +56,8 @@ function build(object, key){
 
 }
 
+// TODO -> en soi inutile dans la configuration actuelle car le tableau des contextes
+//      est passé par référence
 function populate(xelement, target){
 
     // add a new context into current proxy
@@ -81,12 +82,12 @@ function setter(object, property, value){
     
     // trigger update only if property value change
     // TODO -> length exception ou on supprime la condition complete ?
-    if(object[property] !== value){
+    if(object[property] !== value || property === 'length'){
 
         // setup the proxy access key
         let key = this.key + '.' + property
 
-        console.log({key: this.key, path: key, value: value})
+        console.log({path: key, value: value, previous: object[property]})
 
         // build if the new value is an object
         if(typeof value === 'object'){

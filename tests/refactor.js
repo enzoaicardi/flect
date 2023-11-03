@@ -9,10 +9,12 @@ Flect.define('test', class extends Flect.x {
 
     init(){
 
-        this.datas.item = [1,1,1,1,1,1,1,1,1,1,1,1,1]
-
+        this.datas.item = [1,2,3,4,5]
+        
         setTimeout(()=>{
-            this.datas.item.push(4)
+            this.datas.bg = 'red'
+            this.datas.txt = 'yellow'
+            // this.datas.item.shift()
             console.log('pushed')
         }, 1000)
 
@@ -24,8 +26,8 @@ Flect.define('test', class extends Flect.x {
 
     render(){
         return /*html*/`
-            <div x-class="{Class} {Class}">
-                <p x-text="{item[]} bananas">Name should be here</p>
+            <div x-style="background:{bg}; color:{txt};">
+                <p x-text="{item.0} bananas">Name should be here</p>
                 <x-for>
                     <p x-test></p>
                 </x-for>

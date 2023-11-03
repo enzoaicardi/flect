@@ -38,25 +38,23 @@ function removeEffect(key, node){
 
 function applyEffects(key, path, value){
 
-
     // global effects
-    let globalKey = key + '[]'
-    executeEffects(this.map[globalKey], globalKey, value)
+    executeEffects(this.map, key + '[]', value)
 
     // current effects
-    executeEffects(this.map[path], path, value)
+    executeEffects(this.map, path, value)
 
 }
 
 function executeEffects(map, key, value){
-
-    console.log(map, key, value)
-
+    
     // if map does not exist
-    if(!map) return;
+    if(!map[key]) return;
+
+    console.log(map[key], key, value)
 
     // get all Effect<node: [path, action]>
-    for(let [node, [path, action]] of map){
+    for(let [node, [path, action]] of map[key]){
 
         // run the effect
         action.call(node, value, path, key)
