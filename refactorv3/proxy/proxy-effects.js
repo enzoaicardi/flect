@@ -1,5 +1,19 @@
 /*
 
+    proxy (datas){
+        parent: null
+        contexts: [c1, c2]
+        key: "datas"
+        props: {
+            name:
+            age:
+            proxy (items): {
+                parent: proxy (datas)
+                contexts: null
+            }
+        }
+    }
+
 */
 
 export function createProxyEffects(map){
