@@ -29,3 +29,9 @@ reactive(() => {
     console.log("parent function played once");
     reactive(() => console.log(`test value is ${test()} and double ${test()}`));
 });
+
+render(html`
+    <div style=${() => `background: ${bgcolor()}`}>
+        <p>Text test ${() => `text node here need analyze ?`}</p>
+    </div>
+`);
