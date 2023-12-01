@@ -31,8 +31,14 @@ reactive(() => {
 });
 
 render(html`
-    <div style="${() => `background: ${bgcolor()}`}">
-        <p>Text test ${() => `text node here need analyze ?`}</p>
+    <div
+        on:click=${(event) => clickHandler(event)}
+        style=${() => `background: ${bgcolor()}`}
+        class=${() => `bg-red bg-${color()}`}
+    >
+        ${() =>
+            text &&
+            html`<p>Text test ${() => `text node here need analyze ?`}</p>`}
     </div>
 `);
 /*
