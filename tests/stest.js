@@ -31,7 +31,13 @@ reactive(() => {
 });
 
 render(html`
-    <div style=${() => `background: ${bgcolor()}`}>
+    <div style="${() => `background: ${bgcolor()}`}">
         <p>Text test ${() => `text node here need analyze ?`}</p>
     </div>
 `);
+/*
+    Ci-dessus la fonction html recupère les chaines de caractères
+    et en valeur des fonctions => très bonne nouvelle car on peut les bind via reactive()
+    mais il faut pourvoir créer une fonction parente qui fait l'action demandée (comme setattribute)
+    probleme ? que faire si chaine split style="aaa bbb ${()=>ccc()}" = on interdit ?
+*/
