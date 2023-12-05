@@ -18,9 +18,10 @@ function signal(value) {
 }
 
 function reactive(fn) {
+    const previousValue = currentFunction;
     currentFunction = fn;
     fn();
-    currentFunction = null;
+    currentFunction = previousValue;
 }
 
 let test = signal({ name: "pierre" });
