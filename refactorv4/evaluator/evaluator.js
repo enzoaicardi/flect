@@ -1,7 +1,13 @@
 /* Flect Alpine.js implementation */
 
+/** evaluated expressions cache */
 const evaluatorMemo = {};
 
+/**
+ * Create a secure executable function from string expression
+ * @param {String} expression
+ * @returns {Function}
+ */
 function generateFunctionFromString(expression) {
     if (evaluatorMemo[expression]) {
         return evaluatorMemo[expression];
