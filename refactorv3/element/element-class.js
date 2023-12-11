@@ -2,109 +2,100 @@
 
 */
 
-import { createProxyEffects } from "../proxy/proxy-effects.js"
-import { createElementEffects } from "./element-effects.js"
-import { createBindingMap } from "../binding/binding-map.js"
-import { asTemplate, createTemplate } from "../utils/utils-templates.js"
-import { bindElements } from "../binding/binding-element.js"
+import { createProxyEffects } from "../proxy/proxy-effects.js";
+import { createElementEffects } from "./element-effects.js";
+import { createBindingMap } from "../binding/binding-map.js";
+import { asTemplate, createTemplate } from "../utils/utils-templates.js";
+import { bindElements } from "../binding/binding-element.js";
 
-export class XElement extends HTMLElement{
-
-    constructor(){
-
-        super()
+export class XElement extends HTMLElement {
+    constructor() {
+        super();
 
         // this._xcache = local bindingmap saved if there is a parent component
         // that have a template string litteral
 
-        this._xdatas = this.datas
-        this.datas = this.x = {}
-        this._xmatches = {}
+        this._xdatas = this.datas;
+        this.datas = this.x = {};
+        this._xmatches = {};
 
-        this._xproxy = createProxyEffects([this])
-        this._xeffects = createElementEffects(this)
+        this._xproxy = createProxyEffects([this]);
+        this._xeffects = createElementEffects(this);
 
-        this.bindElements = bindElements
-
+        this.bindElements = bindElements;
     }
 
-    connectedCallback(){
-
+    connectedCallback() {
         // run init function from sub-class
-        this.init()
+        this.init();
 
         // setup datas from non-x attributes
         // ...
 
         // setup _xdatas = datas and assign datas from x-attributes
-        this._xdatas = this._xdatas ? Object.assign(this.datas, this._xdatas) : this.datas
+        this._xdatas = this._xdatas
+            ? Object.assign(this.datas, this._xdatas)
+            : this.datas;
 
         // setup stylesheet
         // ...
 
         // setup dom render
-        this.render && (this.setupRender())
+        this.render && this.setupRender();
 
         // setup the datas proxy & effects first execution
-        this.datas = this.x = this._xproxy.build(this._xdatas, '')
+        this.datas = this.x = this._xproxy.build(this._xdatas, "");
 
-        console.log('xElement initialized -> ' + this.tagName)
-
+        console.log("xElement initialized -> " + this.tagName);
     }
 
-    setupAttributesDatas(){
+    setupAttributesDatas() {}
 
-    }
+    setupScopedStylesheet() {}
 
-    setupScopedStylesheet(){
-
-    }
-
-    setupRender(){
-
-        let definition = this._xcache || this._xclass
-        let template = definition.template
-        let bindings = definition.bindings
+    setupRender() {
+        let definition = this._xcache || this._xclass;
+        let template = definition.template;
+        let bindings = definition.bindings;
 
         // if there is no template in cache or class statics
         // in this case there is also no bindingMap
-        if(!template){
-
+        if (!template) {
             // get result of render function
-            let render = this.render()
+            let render = this.render();
 
             // if render is a string
-            if(typeof render === 'string'){
-                template = definition.template = createTemplate(render)
+            if (typeof render === "string") {
+                template = definition.template = createTemplate(render);
             }
             // if render is xelement (this)
-            else{
-                template = asTemplate(render)
+            else {
+                template = asTemplate(render);
             }
 
             // we finaly create and store the bindingMap
-            bindings = definition.bindings = createBindingMap(template.children)
-
+            bindings = definition.bindings = createBindingMap(
+                template.children
+            );
         }
 
         // if template is now in cache or class statics
-        definition.template && (template = template.cloneNode(true))
+        definition.template && (template = template.cloneNode(true));
 
-        console.log(definition.bindings)
-        
+        console.log(definition.bindings);
+
         // if bindings is an object we can bind template children
-        bindings && (this.bindElements(template.children, bindings))
+        bindings && this.bindElements(template.children, bindings);
 
-        console.log(this._xeffects)
+        console.log(this._xeffects);
 
         // replace xelement by his children
-        this.parentNode.replaceChild(template, this)
-
+        this.parentNode.replaceChild(template, this);
     }
 
     // --- fallbacks
 
-    init(){
+    init() {
         // fallback -> prevent error if init is empty
         /*
             Define fallback datas via this.datas... = ...
@@ -113,12 +104,11 @@ export class XElement extends HTMLElement{
         */
     }
 
-    disconnect(){
+    disconnect() {
         // fallback -> prevent error if disconnect is empty
         /*
             Remove all persistent states when disconnected
             Example : clearInterval(my_persistent_interval)
         */
     }
-
 }

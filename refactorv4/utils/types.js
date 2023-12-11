@@ -4,5 +4,6 @@
 */
 
 /**
- *
+ * @typedef {{map: xElementMap, attributes: {name: String, expression: Function}}} xElementMap
+ * @typedef {{template: DocumentFragment, map: xElementMap}} xElementDefinition
  */
