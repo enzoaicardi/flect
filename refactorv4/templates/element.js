@@ -4,6 +4,15 @@
     la mise en cache se prolonge grace à la carte d'intéractivité sur les modeles imbriqués.
 */
 
+import { signal } from "../reactivity/signal";
+import {
+    createEmptyTemplate,
+    createHtmlTemplate,
+    createTemplateFragmentFromNodeList,
+    createTemplateFragmentFromString,
+} from "./html";
+import { createTemplateMap } from "./map";
+
 export class xElement extends HTMLElement {
     constructor() {
         super();
@@ -35,6 +44,31 @@ export class xElement extends HTMLElement {
     }
 
     render() {
+        /** @type {xElementDefinition} */
+        const definition = this.cache || this.static;
+        let template = definition.template;
+        let map = definition.map;
+
+        const data = signal;
+        const html = template ? createHtmlTemplate : createEmptyTemplate;
+
+        /** @type {String|NodeList} */
+        const renderResult = this.static.renderFunction(data, html);
+
+        if (!template && renderResult) {
+            // if renderResult came from templateLiteral
+            if (typeof renderResult === "string") {
+                template = definition.template =
+                    createTemplateFragmentFromString(renderResult);
+            }
+
+            // we consider renderResult as a NodeList
+            else {
+                template = createTemplateFragmentFromNodeList(renderResult);
+            }
+
+            map = definition.map = createTemplateMap(template);
+        }
         // use only render from static -> because cache does not include renderFunction
         // render...
     }

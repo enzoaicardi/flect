@@ -6,7 +6,7 @@ let currentFunction = null;
  * @param {any} value
  * @returns {Function}
  */
-function signal(value) {
+export function signal(value) {
     const dependencies = new Set();
     const getter = function (dataUpdated) {
         if (dataUpdated) {
@@ -28,7 +28,7 @@ function signal(value) {
  * Run a function, if signal is played add the function to it's dependencies
  * @param {Function} fn
  */
-function reactive(fn) {
+export function reactive(fn) {
     const previousValue = currentFunction;
     currentFunction = fn;
     fn();
