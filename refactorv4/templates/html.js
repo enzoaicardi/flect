@@ -1,3 +1,7 @@
+export let xcomment = document.createComment("");
+export let xtemplate = document.createElement("template");
+export let xfragment = document.createDocumentFragment();
+
 /**
  * Used to return HTML templates from components renderFunction
  * @param {[String]} strings
@@ -19,19 +23,29 @@ export function createHtmlTemplate(strings, ...values) {
 export function createEmptyTemplate() {}
 
 /**
- * Create a documentFragment from a string literal
+ * Create a DocumentFragment from a string literal
  * @param {String} string
  * @returns {DocumentFragment}
  */
 export function createTemplateFragmentFromString(string) {
-    return;
+    // clone the template Element and inject innerHTML (for parsing)
+    let template = xtemplate.cloneNode();
+    template.innerHTML = html;
+
+    // return the template DocumentFragment
+    return template.content;
 }
 
 /**
- * Create a documentFragment from a NodeList
+ * Create a DocumentFragment from a NodeList
  * @param {NodeList} nodeList
  * @returns {DocumentFragment}
  */
 export function createTemplateFragmentFromNodeList(nodeList) {
-    return;
+    // clone the DocumentFragment and append the NodeList
+    let template = xfragment.cloneNode();
+    template.append(...nodeList);
+
+    // return the DocumentFragment
+    return template;
 }

@@ -1,4 +1,6 @@
-/* Flect Alpine.js implementation */
+/*
+    Flect evaluator implementation based on Alpine.js
+*/
 
 /** evaluated expressions cache */
 const evaluatorMemo = {};

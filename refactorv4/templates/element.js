@@ -55,21 +55,30 @@ export class xElement extends HTMLElement {
         /** @type {String|NodeList} */
         const renderResult = this.static.renderFunction(data, html);
 
-        if (!template && renderResult) {
-            // if renderResult came from templateLiteral
-            if (typeof renderResult === "string") {
-                template = definition.template =
-                    createTemplateFragmentFromString(renderResult);
+        // trigger render logic only if renderFunction return template
+        if (renderResult) {
+            if (!template) {
+                // if renderResult came from templateLiteral
+                if (typeof renderResult === "string") {
+                    template = definition.template =
+                        createTemplateFragmentFromString(renderResult);
+                }
+
+                // else we consider renderResult as a NodeList
+                else {
+                    template = createTemplateFragmentFromNodeList(renderResult);
+                }
+
+                map = definition.map = createTemplateMap(template);
             }
 
-            // we consider renderResult as a NodeList
-            else {
-                template = createTemplateFragmentFromNodeList(renderResult);
+            // if the template is stored (cache or static) we want to clone it
+            if (definition.template) {
+                // template = template.cloneNode(true)
             }
 
-            map = definition.map = createTemplateMap(template);
+            // bind template map
+            // replace x-element by template
         }
-        // use only render from static -> because cache does not include renderFunction
-        // render...
     }
 }
