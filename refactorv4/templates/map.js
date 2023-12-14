@@ -5,9 +5,30 @@
 
 /**
  * Create a xElement template map
- * @param {DocumentFragment} template
- * @returns {xElementMap}
+ * @param {NodeList} nodeList
+ * @returns {xMap}
  */
-export function createTemplateMap(template) {
+export function createTemplateMap(nodeList) {
+    /** @type {xMap} */
+    const mapList = [];
+
+    for (const x = 0; x < nodeList.length; x++) {
+        /** @type {HTMLElement} */
+        let element = nodeList[x];
+
+        /** @type {xDefinition} */
+        const definition = {
+            map: false,
+            template: false,
+            attributes: {},
+        };
+
+        let index = element.attributes.length;
+
+        while (index--) {
+            // bind here
+        }
+    }
+
     return;
 }

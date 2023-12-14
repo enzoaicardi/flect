@@ -44,7 +44,7 @@ export class xElement extends HTMLElement {
     }
 
     render() {
-        /** @type {xElementDefinition} */
+        /** @type {xDefinition} */
         const definition = this.cache || this.static;
         let template = definition.template;
         let map = definition.map;
@@ -69,12 +69,13 @@ export class xElement extends HTMLElement {
                     template = createTemplateFragmentFromNodeList(renderResult);
                 }
 
-                map = definition.map = createTemplateMap(template);
+                // build the component map
+                map = definition.map = createTemplateMap(template.children);
             }
 
             // if the template is stored (cache or static) we want to clone it
             if (definition.template) {
-                // template = template.cloneNode(true)
+                template = template.cloneNode(true);
             }
 
             // bind template map

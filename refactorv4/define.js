@@ -31,7 +31,7 @@ export function define(name, renderFunction) {
     // add prototype & static properties
     defineMemo[className].renderFunction = renderFunction;
 
-    /** @type {xElementDefinition} */
+    /** @type {xDefinition} */
     defineMemo[className].prototype.static = defineMemo[className];
 
     // define the customElement

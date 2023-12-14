@@ -1,99 +1,84 @@
-import { isXAttribute, isXElement } from "../utils/utils-tests.js"
-import { getPath } from "../path/path-definition.js"
-import { getAttributeAction } from "./binding-map-attribute.js"
-import { asTemplate } from "../utils/utils-templates.js"
-import { getDataAction } from "./binding-map-datas.js"
+import { isXAttribute, isXElement } from "../utils/utils-tests.js";
+import { getPath } from "../path/path-definition.js";
+import { getAttributeAction } from "./binding-map-attribute.js";
+import { asTemplate } from "../utils/utils-templates.js";
+import { getDataAction } from "./binding-map-datas.js";
 
-export function createBindingMap(nodeList){
+export function createBindingMap(nodeList) {
+    let bindings = [];
 
-    let bindings = []
-
-    for(let x = 0; x < nodeList.length; x++){
-
-        let element = nodeList[x]
-        let isComponent = isXElement(element)
+    for (let x = 0; x < nodeList.length; x++) {
+        let element = nodeList[x];
+        let isComponent = isXElement(element);
 
         let map = {
             effects: [],
             once: [],
             bindings: 0,
             index: x,
-            template: false
-        }
+            template: false,
+        };
 
         // check element attributes
-        let l = element.attributes.length
+        let l = element.attributes.length;
 
-        while(l--){
-            
+        while (l--) {
             // setup shortcuts
-            let attribute = element.attributes[l]
-            let value = attribute.value
-            let name = attribute.name
+            let attribute = element.attributes[l];
+            let value = attribute.value;
+            let name = attribute.name;
 
-            if(!isXAttribute(name)) continue
+            if (!isXAttribute(name)) continue;
 
             // setup [path, action]
-            let path = getPath(value)
-            let action = !isComponent ? (getAttributeAction(name, path)) : (getDataAction(name, path))
+            let path = getPath(value);
+            let action = !isComponent
+                ? getAttributeAction(name, path)
+                : getDataAction(name, path);
 
-            if(path.isPattern){
-
-                let uniques = {}
+            if (path.isPattern) {
+                let uniques = {};
 
                 // create all effects related to unique paths
-                for(let p of path.paths){
-                    if(uniques[p.key]) continue
-                    createBindingMapEffect(map, path, action, p.key)
-                    uniques[p.key] = 1
+                for (let p of path.paths) {
+                    if (uniques[p.key]) continue;
+                    createBindingMapEffect(map, path, action, p.key);
+                    uniques[p.key] = 1;
                 }
-
-            }
-
-            else {
+            } else {
                 // create effect for the only path
-                createBindingMapEffect(map, path, action)
+                createBindingMapEffect(map, path, action);
             }
 
             // clear attribute
-            element.removeAttribute(name)
-
+            element.removeAttribute(name);
         }
 
-        if(element.children.length){
-
-            if(isComponent){
-
+        if (element.children.length) {
+            if (isComponent) {
                 // update template cache of xelement
-                map.template = asTemplate(element)
+                map.template = asTemplate(element);
 
                 // update element to keep tracking
-                element = map.template
-
+                element = map.template;
             }
 
             // setup map bindings (even for xElements)
-            map.bindings = createBindingMap(element.children)
-
+            map.bindings = createBindingMap(element.children);
         }
 
         // push map into the bindings
-        if(map.effects.length || map.once.length || map.bindings){
-            bindings.push(map)
+        if (map.effects.length || map.once.length || map.bindings) {
+            bindings.push(map);
         }
-
-
     }
 
-    return bindings.length && bindings
-
+    return bindings.length && bindings;
 }
 
-function createBindingMapEffect(map, path, action, key){
+function createBindingMapEffect(map, path, action, key) {
+    let effect = [path, action];
+    effect.key = key || path.key;
 
-    let effect = [path, action]
-        effect.key = key || path.key
-
-    map.effects.push(effect)
-
+    map.effects.push(effect);
 }
