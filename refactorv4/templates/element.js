@@ -23,6 +23,8 @@ export class xElement extends HTMLElement {
             this.static.template - from renderFunction
             this.static.map - from binding
         */
+        /** @type {Object} */
+        this.datas = this.datas || {};
     }
 
     connectedCallback() {
@@ -52,8 +54,15 @@ export class xElement extends HTMLElement {
         const data = signal;
         const html = template ? createHtmlTemplate : createEmptyTemplate;
 
-        /** @type {String|NodeList} */
-        const renderResult = this.static.renderFunction(data, html);
+        /**
+         * Execute the renderFunction to get the template and hydrate this.datas
+         * @type {String|NodeList}
+         */
+        const renderResult = this.static.renderFunction.call(
+            this.datas,
+            data,
+            html
+        );
 
         // trigger render logic only if renderFunction return template
         if (renderResult) {
