@@ -1,13 +1,14 @@
 /*
     Toutes les directives d'attributs ici
-    x-text x-show ? x-ref x-... x-on:...
+    x-text x-show x-... x-on:...
+    x-if x-for
 */
 
 /**
  * Retrieve the corresponding directive from the attribute name
  * @param {Attribute} attribute
  */
-export function getAttributeDirective(attribute) {
+export function attributeDirective(attribute) {
     switch (attribute.name) {
         case "x-text":
             break; // text directive
@@ -19,3 +20,8 @@ export function getAttributeDirective(attribute) {
             break; // default attribute directive
     }
 }
+
+function textDirective() {}
+function showDirective() {}
+function dataDirective() {}
+function defaultDirective() {}
