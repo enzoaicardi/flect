@@ -29,8 +29,8 @@ export function define(name, renderFunction) {
     };
 
     // add prototype & static properties
+    /** @type {xRenderFunction} */
     defineMemo[className].renderFunction = renderFunction;
-
     /** @type {xDefinition} */
     defineMemo[className].prototype.static = defineMemo[className];
 

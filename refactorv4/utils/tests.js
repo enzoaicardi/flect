@@ -8,7 +8,7 @@
 import { xElement } from "../templates/element";
 
 /**
- * Test if the attribute is bindable
+ * Test if the attribute is reactive
  * @param {Attribute} attribute
  */
 export function isXAttribute(attribute) {

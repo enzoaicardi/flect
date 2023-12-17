@@ -4,9 +4,31 @@
 */
 
 /**
- * @typedef {[{map: xMap, template: NodeList, attributes: {name: String, expression: Function}}]} xMap
- * @typedef {{template: DocumentFragment, map: xMap}} xDefinition
- * @typedef {{directive: Function, expression: Function}} xDefinitionAttribute
- * @typedef {{name: xDefinitionAttribute}} xDefinitionAttributes
- * @typedef {{name: String, value: String}} Attribute
+ * @typedef {{}} xDatas Object containing component's relative datas
+ * @typedef {[xDefinition]} xMap Array of xDefinitions
+ * @typedef {{template: DocumentFragment, map: xMap, attributes: {name: xDefinitionAttribute}}} xDefinition Object representing the definition of a HTMLElement in Flect
+ * @typedef {{directive: Function, expression: xExpression|String}} xDefinitionAttribute Object defining a directive and the associated expression
+ * @typedef {{name: String, value: String}} Attribute HTMLElement attribute representation
+ */
+
+/**
+ * @callback xRenderFunction Function used to hydrate datas and create component template & map
+ * @param {Function} data
+ * @param {html} html
+ * @returns {DocumentFragment}
+ */
+
+/**
+ * @callback xExpression Function generated from string with the evaluator
+ * @param {xDatas} scope
+ * @returns {any}
+ */
+
+/**
+ * @callback xDirective Function creating a Flect directive
+ * @param {xDatas} context
+ * @param {HTMLElement} element
+ * @param {String} attributeName
+ * @param {xExpression} expression
+ * @returns {Function}
  */
