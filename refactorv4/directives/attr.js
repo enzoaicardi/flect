@@ -4,6 +4,7 @@
     x-if x-for
 */
 
+import { reactive } from "../reactivity/signal";
 import { isXEventAttribute } from "../utils/tests";
 
 /**
@@ -28,12 +29,17 @@ export function attributeDirective(attribute) {
             case "x-for":
                 break; // for directive
             default:
-                break; // default attribute directive
+                return defaultDirective; // default attribute directive
         }
     }
 }
 
-function textDirective() {}
-function showDirective() {}
-function dataDirective() {}
-function defaultDirective() {}
+/**
+ * Set HTMLElement attribute from the expression result
+ * @type {xDirective}
+ */
+function defaultDirective(context, element, attributeName, expression) {
+    return reactive(() =>
+        element.setAttribute(attributeName, expression(context))
+    );
+}
