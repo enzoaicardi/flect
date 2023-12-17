@@ -8,7 +8,7 @@ const evaluatorMemo = {};
 /**
  * Create a secure executable function from string expression
  * @param {String} expression
- * @returns {Function}
+ * @returns {xExpression}
  */
 function generateFunctionFromString(expression) {
     if (evaluatorMemo[expression]) {
@@ -32,8 +32,8 @@ function generateFunctionFromString(expression) {
     const safeSyncFunction = () => {
         try {
             let func = new SyncFunction(
-                ["__self", "scope"],
-                `with (scope) { __self.result = ${rightSideSafeExpression} }; __self.finished = true; return __self.result;`
+                ["scope"],
+                `with (scope) { return ${rightSideSafeExpression} };`
             );
 
             Object.defineProperty(func, "name", {
