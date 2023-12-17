@@ -6,5 +6,7 @@
 /**
  * @typedef {[{map: xMap, template: NodeList, attributes: {name: String, expression: Function}}]} xMap
  * @typedef {{template: DocumentFragment, map: xMap}} xDefinition
+ * @typedef {{directive: Function, expression: Function}} xDefinitionAttribute
+ * @typedef {{name: xDefinitionAttribute}} xDefinitionAttributes
  * @typedef {{name: String, value: String}} Attribute
  */

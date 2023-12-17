@@ -3,6 +3,7 @@
     cela permet de rendre beaucoup plus performant l'analyse d'un nouveau template
 */
 
+import { attributeDirective } from "../directives/attr";
 import { isXAttribute, isXElement } from "../utils/tests";
 import { createTemplateFragmentFromNodeList } from "./html";
 
@@ -24,6 +25,7 @@ export function createTemplateMap(nodeList) {
         const definition = {
             map: false,
             template: false,
+            /** @type {xDefinitionAttributes} */
             attributes: {},
         };
 
@@ -33,15 +35,13 @@ export function createTemplateMap(nodeList) {
             /** @type {Attribute} */
             const attr = element.attributes[index];
 
-            // tester les variations possibles avant
-            // xEventAttribute -> must have -> event bindind
-            // xScopedAttribute ? a voir...
-
             if (isXAttribute(attr)) {
-                // TODO
-                // Si xElement -> bind les données
-                // Sinon -> bind les attributs -> directives attr
-                //  on bind if et for ici aussi -> mais on verifie si element = template
+                /** @type {xDefinitionAttribute} */
+                definition.attributes[attr.name] = {
+                    directive: attributeDirective(attr),
+                    expression:
+                        attr.value && generateFunctionFromString(attr.value),
+                };
 
                 // clear element attribute
                 element.removeAttribute(attr);
