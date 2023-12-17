@@ -25,7 +25,6 @@ export function createTemplateMap(nodeList) {
         const definition = {
             map: false,
             template: false,
-            /** @type {xDefinitionAttributes} */
             attributes: {},
         };
 
@@ -38,7 +37,9 @@ export function createTemplateMap(nodeList) {
             if (isXAttribute(attr)) {
                 /** @type {xDefinitionAttribute} */
                 definition.attributes[attr.name] = {
+                    // extract the corresponding attribute directive
                     directive: attributeDirective(attr),
+                    // get the expression function
                     expression:
                         attr.value && generateFunctionFromString(attr.value),
                 };

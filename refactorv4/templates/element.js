@@ -21,18 +21,23 @@ export class xElement extends HTMLElement {
             this.datas - from self attributes
             this.static.render - from define
             this.static.template - from renderFunction
-            this.static.map - from binding
+            this.static.map - from hydration
         */
         /** @type {Object} */
         this.datas = this.datas || {};
+
+        // TODO -> garder une trace des propriétés pour examiner leurs dépendences
+        // cela permet d'unhydrate.
+        // On peut faire ça lors de l'execution de reactive, a chaque ajout par data de la fonction
+        // dans le Set, on ajoute en même temps une référence à la data dans la fonction
     }
 
     connectedCallback() {
         /*  ---> run this.static.render.connected() ?
             1 -> execute renderFunction(data, html) -> store result
-            2 -> check if template ? template = interpreted result (bindmap) : template = template
+            2 -> check if template ? template = interpreted result (hydratemap) : template = template
             3 -> clone the template
-            4 -> bind the template (use the bindmap)
+            4 -> hydrate the template (use the hydratemap)
             5 -> replace element in dom
         */
     }
@@ -41,7 +46,7 @@ export class xElement extends HTMLElement {
     // the element is immediatly disconnected after being initialized
     disconnectCallback() {
         /*  ---> run this.static.render.disconnected() ?
-            1 -> unbind the element reactivity
+            1 -> unhydrate the element reactivity
         */
     }
 
@@ -53,16 +58,14 @@ export class xElement extends HTMLElement {
 
         const data = signal;
         const html = template ? createHtmlTemplate : createEmptyTemplate;
+        /** @type {xRenderFunction} */
+        const renderFunction = this.static.renderFunction;
 
         /**
          * Execute the renderFunction to get the template and hydrate this.datas
          * @type {String|NodeList}
          */
-        const renderResult = this.static.renderFunction.call(
-            this.datas,
-            data,
-            html
-        );
+        const renderResult = renderFunction.call(this.datas, data, html);
 
         // trigger render logic only if renderFunction return template
         if (renderResult) {
@@ -87,8 +90,16 @@ export class xElement extends HTMLElement {
                 template = template.cloneNode(true);
             }
 
-            // bind template map
+            // hydrate template map
             // replace x-element by template
         }
+    }
+
+    hydrate() {
+        // ... hydration here
+    }
+
+    clear() {
+        // ... clear component hydration
     }
 }
