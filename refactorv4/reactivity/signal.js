@@ -1,4 +1,7 @@
-/** The current running function */
+/**
+ * The current running reactive function
+ * @type {Function|null}
+ */
 let currentFunction = null;
 
 /**
@@ -11,11 +14,15 @@ export function signal(value) {
     const getter = function (dataUpdated) {
         if (dataUpdated) {
             getter.data = dataUpdated;
-            for (const fn of dependencies) {
-                fn();
+            for (const callback of dependencies) {
+                callback();
             }
         } else {
-            currentFunction && dependencies.add(currentFunction);
+            if (currentFunction) {
+                dependencies.add(currentFunction);
+                // TODO ->
+                // currentFunction.signals.add(dependencies);
+            }
             return getter.data;
         }
     };
@@ -26,11 +33,13 @@ export function signal(value) {
 
 /**
  * Run a function, if signal is played add the function to it's dependencies
- * @param {Function} fn
+ * @param {Function} callback
  */
-export function reactive(fn) {
+export function reactive(callback) {
     const previousValue = currentFunction;
-    currentFunction = fn;
-    fn();
+    currentFunction = callback;
+    // TODO ->
+    // currentFunction.signals = new Set();
+    callback();
     currentFunction = previousValue;
 }
