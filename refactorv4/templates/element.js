@@ -30,6 +30,8 @@ export class xElement extends HTMLElement {
         // cela permet d'unhydrate.
         // On peut faire ça lors de l'execution de reactive, a chaque ajout par data de la fonction
         // dans le Set, on ajoute en même temps une référence à la data dans la fonction
+        /** @type {xTrace} */
+        this.trace = new Map();
     }
 
     connectedCallback() {
@@ -53,7 +55,9 @@ export class xElement extends HTMLElement {
     render() {
         /** @type {xDefinition} */
         const definition = this.cache || this.static;
+        /** @type {DocumentFragment} */
         let template = definition.template;
+        /** @type {xMap} */
         let map = definition.map;
 
         const data = signal;
@@ -89,14 +93,27 @@ export class xElement extends HTMLElement {
             if (definition.template) {
                 template = template.cloneNode(true);
             }
-
-            // hydrate template map
-            // replace x-element by template
         }
+
+        // hydrate template map
+        this.hydrate(template.children, map);
+
+        // replace x-element by template
+        // this.parentNode.replaceChild(template, this);
     }
 
-    hydrate() {
-        // ... hydration here
+    /**
+     * Hydrate HTMLElements based on xMap
+     * @param {NodeList} nodeList
+     * @param {xMap} map
+     */
+    hydrate(nodeList, map) {
+        /** @type {xDefinition} */
+        for (const definition of map) {
+            // retrieve the HTMLElement from the index
+            const element = nodeList[definition.index];
+            // ... hydration here
+        }
     }
 
     clear() {

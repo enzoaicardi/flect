@@ -6,9 +6,10 @@
 /**
  * @typedef {{}} xDatas Object containing component's relative datas
  * @typedef {[xDefinition]} xMap Array of xDefinitions
- * @typedef {{template: DocumentFragment, map: xMap, attributes: {name: xDefinitionAttribute}}} xDefinition Object representing the definition of a HTMLElement in Flect
+ * @typedef {{index: Number, template: DocumentFragment, map: xMap, attributes: {name: xDefinitionAttribute}}} xDefinition Object representing the definition of a HTMLElement in Flect
  * @typedef {{directive: Function, expression: xExpression|String}} xDefinitionAttribute Object defining a directive and the associated expression
  * @typedef {{name: String, value: String}} Attribute HTMLElement attribute representation
+ * @typedef {Map<HTMLElement, [Function]>} xTrace Map containing component's reactive functions
  */
 
 /**

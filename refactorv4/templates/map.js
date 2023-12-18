@@ -23,6 +23,7 @@ export function createTemplateMap(nodeList) {
 
         /** @type {xDefinition} */
         const definition = {
+            index: x,
             map: false,
             template: false,
             attributes: {},
