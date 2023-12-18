@@ -60,8 +60,11 @@ export class xElement extends HTMLElement {
         /** @type {xMap} */
         let map = definition.map;
 
+        /** @type {xSignal} */
         const data = signal;
+        /** @type {Function} */
         const html = template ? createHtmlTemplate : createEmptyTemplate;
+
         /** @type {xRenderFunction} */
         const renderFunction = this.static.renderFunction;
 

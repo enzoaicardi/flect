@@ -20,6 +20,13 @@
  */
 
 /**
+ * @callback xSignal Function used to get or change value rerunning dependencies functions
+ * @param {any?} updatedValue The (optional) new value of the variable
+ * @property {any} data That property access data without triggering signal
+ * @returns {any} Returns the variable value
+ */
+
+/**
  * @callback xExpression Function generated from string with the evaluator
  * @param {xDatas} scope
  * @returns {any}
