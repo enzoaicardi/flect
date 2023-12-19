@@ -36,6 +36,7 @@ export function signal(value) {
     };
     // use this to access data without triggering signal
     getter.data = value;
+    getter.issignal = true;
     return getter;
 }
 
