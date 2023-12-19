@@ -1,44 +1,44 @@
-/*
-    Toutes les directives d'attributs ici
-    x-text x-show x-... x-on:...
-    x-if x-for
-*/
-
 import { reactive } from "../reactivity/signal";
-import { isXEventAttribute } from "../utils/tests";
+import { showDirective } from "./show";
+import { textDirective } from "./text";
 
 /**
  * Retrieve the corresponding directive from the attribute name
  * @param {Attribute} attribute
  */
 export function attributeDirective(attribute) {
-    if (isXEventAttribute(attribute)) {
-        // event directive -> without reactive() wrapper
-    } else {
-        switch (attribute.name) {
-            case "x-text":
-                break; // text directive
-            case "x-show":
-                break; // show directive
-            case "x-ref":
-                break; // ref directive
-            case "x-css":
-                break; // css directive
-            case "x-if":
-                break; // if directive
-            case "x-for":
-                break; // for directive
-            default:
-                return defaultDirective; // default attribute directive
-        }
+    switch (attribute.name) {
+        case "x-text":
+            return textDirective;
+        case "x-show":
+            return showDirective;
+        case "x-ref":
+            break; // ref directive
+        case "x-css":
+            break; // css directive
+        case "x-if":
+            break; // if directive
+        case "x-for":
+            break; // for directive
+        default:
+            return defaultDirective; // default attribute directive
     }
 }
 
+/*
+    What append in a directive function ?
+    1 - the directive function is stored inside component's map
+    2 - during the hydration process the directive function run with the following parameters
+    3 - the directive function includes a reactive function, once activated it rerun every
+        time a containing signal change. On every run the reactive function will trigger the
+        expression with the new context (contains all this... values)
+    4 - the result of the expression based on the context is used to update the directive
+*/
 /**
  * Set HTMLElement attribute from the expression result
  * @type {xDirective}
  */
-function defaultDirective(context, element, attributeName, expression) {
+function defaultDirective(context, element, expression, attributeName) {
     return reactive(() =>
         element.setAttribute(attributeName, expression(context))
     );
