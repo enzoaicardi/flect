@@ -4,7 +4,9 @@
 */
 
 import { attributeDirective } from "../directives/attr";
-import { isXAttribute, isXElement } from "../utils/tests";
+import { dataDirective } from "../directives/data";
+import { eventDirective } from "../directives/event";
+import { isXAttribute, isXElement, isXEventAttribute } from "../utils/tests";
 import { createTemplateFragmentFromNodeList } from "./html";
 
 /**
@@ -36,14 +38,30 @@ export function createTemplateMap(nodeList) {
             const attr = element.attributes[index];
 
             if (isXAttribute(attr)) {
+                /** @type {Boolean} */
+                const isxevent = isXEventAttribute(attr);
+                /** @type {String} */
+                const name = isxevent ? attr.name.substring(5) : attr.name;
+
+                /**
+                 * get the expression function
+                 * @type {xExpression}
+                 */
+                const expression =
+                    attr.value && generateFunctionFromString(attr.value);
+
+                /**
+                 * extract the corresponding attribute or data directive
+                 * @type {xDirective}
+                 */
+                const directive = isxelement
+                    ? dataDirective
+                    : isxevent
+                    ? eventDirective
+                    : attributeDirective(attr);
+
                 /** @type {xDefinitionAttribute} */
-                definition.attributes[attr.name] = {
-                    // extract the corresponding attribute directive
-                    directive: attributeDirective(attr),
-                    // get the expression function
-                    expression:
-                        attr.value && generateFunctionFromString(attr.value),
-                };
+                definition.attributes[name] = { expression, directive };
 
                 // clear element attribute
                 element.removeAttribute(attr);
