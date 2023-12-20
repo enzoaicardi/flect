@@ -113,11 +113,50 @@ export class xElement extends HTMLElement {
      * @param {xMap} map
      */
     hydrate(nodeList, map) {
+        /** @type {xTrace} */
+        const trace = this.trace;
+
         /** @type {xDefinition} */
         for (const definition of map) {
-            // retrieve the HTMLElement from the index
+            /**
+             * retrieve the HTMLElement from the index
+             * @type {HTMLElement}
+             */
             const element = nodeList[definition.index];
-            // ... hydration here
+
+            /** @type {Boolean} */
+            const isxelement = !!definition.template;
+
+            // loop over all hydratable attributes
+            for (const name in definition.attributes) {
+                /** @type {xDefinitionAttribute} */
+                const attribute = definition.attributes[name];
+
+                // apply the corresponding directive
+                /** @type {xReactive} */
+                const reactiveFunction = attribute.directive(
+                    this.datas,
+                    element,
+                    attribute.expression,
+                    name
+                );
+
+                /**
+                 * get or create the element trace
+                 * @type {[Function]}
+                 */
+                const elementTrace =
+                    trace.get(element) ||
+                    (trace.set(element, []) && trace.get(element));
+
+                // push the reactive function into the trace
+                elementTrace.push(reactiveFunction);
+            }
+
+            // if the element is a Flect component we don't need to hydrate children
+            if (!isxelement && definition.map) {
+                this.hydrate(element.children, definition.map);
+            }
         }
     }
 
@@ -126,8 +165,23 @@ export class xElement extends HTMLElement {
      * @param {HTMLElement} element
      */
     clear(element) {
-        const dependencies = this.trace.get(element);
-        // ... clear element hydration
-        // and children hydration
+        /** @type {[Function]} */
+        const elementTrace = this.trace.get(element) || [];
+
+        /** @type {xReactive} */
+        for (const reactiveFunction of elementTrace) {
+            /** @type {xSignalDependencies} */
+            for (const signalDependencies of reactiveFunction.signals) {
+                // remove the function from the signal dependencies
+                // by doing this signal will not trigger the function on change
+                signalDependencies.delete(reactiveFunction);
+            }
+        }
+
+        for (const child of element.children) {
+            // -> TODO regarder si pas mieux en global (par défaut) ?
+            // -> TODO regarder si on peut se base sur la xMap ?
+            this.clear(child);
+        }
     }
 }

@@ -11,6 +11,8 @@
  * @typedef {{name: String, value: String}} Attribute HTMLElement attribute representation
  * @typedef {Map<HTMLElement, [Function]>} xTrace Map containing component's reactive functions
  * @typedef {{eventHandler: Function, context: xDatas}} xHandler Class representing an event handler object
+ * @typedef {Set<xReactive>} xSignalDependencies Set of reactive functions trigerred by signal
+ * @typedef {Set<xSignalDependencies>} xReactiveDependencies Set of reactive functions trigerred by signal
  */
 
 /**

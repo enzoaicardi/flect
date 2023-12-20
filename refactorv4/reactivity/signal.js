@@ -10,7 +10,10 @@ let currentReactive = null;
  * @returns {xSignal}
  */
 export function signal(value) {
-    // setup dependencies
+    /**
+     * setup dependencies
+     * @type {xSignalDependencies}
+     */
     const reactives = new Set();
 
     // create the getter function
@@ -50,6 +53,7 @@ export function reactive(callback) {
 
     // update currentReactive function and create a dependency Array
     currentReactive = callback;
+    /** @type {xReactiveDependencies} */
     currentReactive.signals = new Set();
 
     // call the function
