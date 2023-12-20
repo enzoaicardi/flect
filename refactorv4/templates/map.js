@@ -3,11 +3,11 @@
     cela permet de rendre beaucoup plus performant l'analyse d'un nouveau template
 */
 
-import { attributeDirective } from "../directives/attr";
-import { dataDirective } from "../directives/data";
-import { eventDirective } from "../directives/event";
-import { isXAttribute, isXElement, isXEventAttribute } from "../utils/tests";
-import { createTemplateFragmentFromNodeList } from "./html";
+import { attributeDirective } from "../directives/attr.js";
+import { dataDirective } from "../directives/data.js";
+import { eventDirective } from "../directives/event.js";
+import { isXAttribute, isXElement, isXEventAttribute } from "../utils/tests.js";
+import { createTemplateFragmentFromNodeList } from "./html.js";
 
 /**
  * Create a xElement template map

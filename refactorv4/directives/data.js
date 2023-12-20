@@ -1,4 +1,4 @@
-import { reactive, signal } from "../reactivity/signal";
+import { reactive, signal } from "../reactivity/signal.js";
 
 /**
  * Set Flect component datas from the expression result

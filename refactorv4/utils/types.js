@@ -10,7 +10,7 @@
  * @typedef {{expression: xExpression|String, directive: Function}} xDefinitionAttribute Object defining a directive and the associated expression
  * @typedef {{name: String, value: String}} Attribute HTMLElement attribute representation
  * @typedef {Map<HTMLElement, [Function]>} xTrace Map containing component's reactive functions
- * @typedef {{eventHandler: Function}} xHandler Class representing an event handler object
+ * @typedef {{eventHandler: Function, context: xDatas}} xHandler Class representing an event handler object
  */
 
 /**

@@ -5,7 +5,7 @@
     X- tags
 */
 
-import { xElement } from "../templates/element";
+import { xElement } from "../templates/element.js";
 
 /**
  * Test if the attribute is reactive

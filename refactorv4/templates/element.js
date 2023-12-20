@@ -4,14 +4,14 @@
     la mise en cache se prolonge grace à la carte d'intéractivité sur les modeles imbriqués.
 */
 
-import { signal } from "../reactivity/signal";
+import { signal } from "../reactivity/signal.js";
 import {
     createEmptyTemplate,
     createHtmlTemplate,
     createTemplateFragmentFromNodeList,
     createTemplateFragmentFromString,
-} from "./html";
-import { createTemplateMap } from "./map";
+} from "./html.js";
+import { createTemplateMap } from "./map.js";
 
 export class xElement extends HTMLElement {
     constructor() {
@@ -35,6 +35,7 @@ export class xElement extends HTMLElement {
     }
 
     connectedCallback() {
+        console.log("Flect element found in the dom");
         /*  ---> run this.static.render.connected() ?
             1 -> execute renderFunction(data, html) -> store result
             2 -> check if template ? template = interpreted result (hydratemap) : template = template
@@ -92,7 +93,8 @@ export class xElement extends HTMLElement {
                 map = definition.map = createTemplateMap(template.children);
             }
 
-            // if the template is stored (cache or static) we want to clone it
+            // if the template is stored (cache or static)
+            // we want to clone it before hydration
             if (definition.template) {
                 template = template.cloneNode(true);
             }
@@ -119,7 +121,13 @@ export class xElement extends HTMLElement {
         }
     }
 
-    clear() {
-        // ... clear component hydration
+    /**
+     * UnHydrate HTMLElements based on xTrace
+     * @param {HTMLElement} element
+     */
+    clear(element) {
+        const dependencies = this.trace.get(element);
+        // ... clear element hydration
+        // and children hydration
     }
 }

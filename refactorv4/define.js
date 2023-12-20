@@ -4,7 +4,7 @@
     enregistre le customelement class extends XElement
 */
 
-import { xElement } from "./templates/element";
+import { xElement } from "./templates/element.js";
 
 // keep track of defined components
 const defineMemo = {};
@@ -12,7 +12,7 @@ const defineMemo = {};
 /**
  * Define a custom xElement
  * @param {String} name
- * @param {Function} renderFunction
+ * @param {xRenderFunction} renderFunction
  * @returns {xElement}
  */
 export function define(name, renderFunction) {

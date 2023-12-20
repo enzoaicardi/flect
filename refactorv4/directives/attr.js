@@ -1,6 +1,6 @@
-import { reactive } from "../reactivity/signal";
-import { showDirective } from "./show";
-import { textDirective } from "./text";
+import { reactive } from "../reactivity/signal.js";
+import { showDirective } from "./show.js";
+import { textDirective } from "./text.js";
 
 /**
  * Retrieve the corresponding directive from the attribute name

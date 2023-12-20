@@ -1,11 +1,14 @@
-import { reactive } from "../reactivity/signal";
+import { reactive } from "../reactivity/signal.js";
 
 /**
  * Set HTMLElement display from the expression result
  * @type {xDirective}
  */
 export function showDirective(context, element, expression) {
-    // store the initial display value
+    /**
+     * store the initial display value
+     * @type {String}
+     */
     const initialValue = element.style.display;
 
     return reactive(() => {

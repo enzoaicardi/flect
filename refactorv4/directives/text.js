@@ -1,4 +1,4 @@
-import { reactive } from "../reactivity/signal";
+import { reactive } from "../reactivity/signal.js";
 
 /**
  * Set HTMLElement text content from the expression result
