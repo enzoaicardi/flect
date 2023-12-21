@@ -12,8 +12,7 @@ export function eventDirective(context, element, expression, attributeName) {
      * the handler is deleted by the garbage collector
      * @type {Flect.Handler}
      */
-    const eventHandler = (element.handler =
-        element.handler || new xHandler(context));
+    const eventHandler = (element.handler = element.handler || new xHandler());
 
     // assign the event handler method
     eventHandler[attributeName] = expression(context);
@@ -24,11 +23,7 @@ export function eventDirective(context, element, expression, attributeName) {
 
 /** @type {Flect.Handler} */
 export class xHandler {
-    constructor(context) {
-        /** @type {Flect.Element.Datas} */
-        this.context = context;
-    }
     handleEvent(event) {
-        this[event.type].call(context, event);
+        this[event.type](event);
     }
 }
