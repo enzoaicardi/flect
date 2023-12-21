@@ -17,21 +17,18 @@ import { Flect } from "../utils/types.js";
 export class xElement extends HTMLElement {
     constructor() {
         super();
-        /*
-            this.cache - from other xElement templates
-            this.datas - from self attributes
-            this.static.render - from define
-            this.static.template - from renderFunction
-            this.static.map - from hydration
-        */
-        /** @type {Flect.Element.Datas} */
+        /**
+         * datas is used as a context for the render function
+         * @type {Flect.Element.Datas}
+         */
         this.datas = this.datas || {};
 
-        // TODO -> garder une trace des propriétés pour examiner leurs dépendences
-        // cela permet d'unhydrate.
-        // On peut faire ça lors de l'execution de reactive, a chaque ajout par data de la fonction
-        // dans le Set, on ajoute en même temps une référence à la data dans la fonction
-        /** @type {Flect.Dependencies.Reactives} */
+        /**
+         * every time a directive run, we store the reactive function
+         * inside dependencies at this.trace, theses dependencies can be
+         * used to unhydrate a component or a sub set of elements
+         * @type {Flect.Dependencies.Reactives}
+         */
         this.trace = new Set();
     }
 
@@ -166,7 +163,8 @@ export class xElement extends HTMLElement {
                     this.datas,
                     element,
                     action.expression,
-                    name
+                    name,
+                    definition
                 );
 
                 // push the reactiveFunction into component trace

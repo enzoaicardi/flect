@@ -38,6 +38,7 @@ export const Flect = {};
  * @param {HTMLElement} element The element affected by the directive
  * @param {Flect.Expression} expression The expression executed
  * @param {String} attributeName The attribute responsible of the directive
+ * @param {Flect.Definition} definition The definition responsible of the directive
  * @returns {Flect.Reactive}
  */
 /** - Expression
