@@ -25,9 +25,9 @@ export function define(name, renderFunction) {
     };
 
     // add prototype & static properties
-    /** @type {xRenderFunction} */
+    /** @type {Flect.Method.Define.Render} */
     defineMemo[className].renderFunction = renderFunction;
-    /** @type {xDefinition} */
+    /** @type {Flect.Definition} */
     defineMemo[className].prototype.static = defineMemo[className];
 
     // define the customElement

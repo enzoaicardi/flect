@@ -79,7 +79,7 @@ export const Flect = {};
  */
 /** - Define.Render
  * @callback Flect.Method.Define.Render Function used to hydrate datas and create component template & map
- * @param {Function} data Function used to create signals
+ * @param {Flect.Method.Define.Render.Signal} data Function used to create signals
  * @param {Flect.Method.Define.Render.HTML} html Function used to create html template
  * @returns {Flect.Template} The final template of the component
  */
