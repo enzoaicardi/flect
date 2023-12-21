@@ -6,53 +6,57 @@
 import { attributeDirective } from "../directives/attr.js";
 import { dataDirective } from "../directives/data.js";
 import { eventDirective } from "../directives/event.js";
+import { generateFunctionFromString } from "../evaluator/evaluator.js";
 import { isXAttribute, isXElement, isXEventAttribute } from "../utils/tests.js";
 import { createTemplateFragmentFromNodeList } from "./html.js";
+import { Flect } from "../utils/types.js";
 
 /**
  * Create a xElement template map
  * @param {NodeList} nodeList
- * @returns {Boolean|xMap}
+ * @returns {Boolean|Flect.Map}
  */
 export function createTemplateMap(nodeList) {
-    /** @type {xMap} */
+    /** @type {Flect.Map} */
     const map = [];
 
-    for (const x = 0; x < nodeList.length; x++) {
+    for (let x = 0; x < nodeList.length; x++) {
         /** @type {HTMLElement} */
         const element = nodeList[x];
         const isxelement = isXElement(element);
 
-        /** @type {xDefinition} */
+        /** @type {Flect.Definition} */
         const definition = {
             index: x,
             map: false,
             template: false,
-            attributes: {},
+            attributes: new Map(),
         };
 
         let index = element.attributes.length;
 
         while (index--) {
-            /** @type {Attribute} */
+            /** @type {HTMLElement.attribute} */
             const attr = element.attributes[index];
 
             if (isXAttribute(attr)) {
                 /** @type {Boolean} */
                 const isxevent = isXEventAttribute(attr);
                 /** @type {String} */
-                const name = isxevent ? attr.name.substring(5) : attr.name;
+                const name = isxevent
+                    ? attr.name.substring(5)
+                    : attr.name.substring(2);
 
                 /**
                  * get the expression function
-                 * @type {xExpression}
+                 * @type {Flect.Expression}
                  */
                 const expression =
                     attr.value && generateFunctionFromString(attr.value);
 
                 /**
                  * extract the corresponding attribute or data directive
-                 * @type {xDirective}
+                 * @type {Flect.Directive}
                  */
                 const directive = isxelement
                     ? dataDirective
@@ -60,11 +64,14 @@ export function createTemplateMap(nodeList) {
                     ? eventDirective
                     : attributeDirective(attr);
 
-                /** @type {xDefinitionAttribute} */
-                definition.attributes[name] = { expression, directive };
+                /** @type {Flect.Action} */
+                const action = { expression, directive };
+
+                /** @type {Flect.Attributes} */
+                definition.attributes.set(name, action);
 
                 // clear element attribute
-                element.removeAttribute(attr);
+                element.removeAttribute(attr.name);
             }
         }
 
@@ -83,16 +90,21 @@ export function createTemplateMap(nodeList) {
             /**
              * If the element has children
              * we build the definition of the element
-             * @type {xMap}
+             * @type {Flect.Map}
              */
             definition.map = createTemplateMap(element.children);
+        }
+
+        // if the definition is not empty we add it to the map
+        if (definition.map || definition.attributes.size) {
+            map.push(definition);
         }
     }
 
     /**
      * If there is no definition current map return false
      * else return the array of definitions
-     * @type {Boolean|xMap}
+     * @type {Boolean|Flect.Map}
      */
     return map.length > 0 && map;
 }

@@ -1,8 +1,9 @@
 import { reactive } from "../reactivity/signal.js";
+import { Flect } from "../utils/types.js";
 
 /**
  * Set HTMLElement display from the expression result
- * @type {xDirective}
+ * @type {Flect.Directive}
  */
 export function showDirective(context, element, expression) {
     /**

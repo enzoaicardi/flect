@@ -1,14 +1,14 @@
 /*
     export Flect ->
         .define -> definir un nouvel element
-        .lazy -> definir une action lors de la détection d'un element
-        .xElement -> classe parente des elements interactifs
+        .observe -> definir une action lors de la détection d'un element
 */
 
 import { define } from "./define.js";
+import { Flect as FlectTypes } from "./utils/types.js";
 
 /**
- * @type {{define: Function, lazy: Function}}
+ * @type {{define: FlectTypes.Method.Define, observe: FlectTypes.Method.Observe}}
  */
 const Flect = {
     define: define,

@@ -18,7 +18,7 @@ export function createHtmlTemplate(strings, ...values) {
 
 /**
  * Used to avoid template evaluation and improve performances
- * @returns {void}
+ * @returns
  */
 export function createEmptyTemplate() {}
 
@@ -30,7 +30,7 @@ export function createEmptyTemplate() {}
 export function createTemplateFragmentFromString(string) {
     // clone the template Element and inject innerHTML (for parsing)
     let template = xtemplate.cloneNode();
-    template.innerHTML = html;
+    template.innerHTML = string;
 
     // return the template DocumentFragment
     return template.content;

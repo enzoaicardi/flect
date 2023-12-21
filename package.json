@@ -1,19 +1,19 @@
 {
-  "type": "module",
-  "devDependencies": {
-    "@rollup/plugin-terser": "^0.4.3",
-    "gzip-cli": "^1.2.0",
-    "rollup": "^3.23.0",
-    "vitepress": "^1.0.0-beta.4"
-  },
-  "scripts": {
-    "minify": "rollup --config",
-    "build": "rollup --config && gzip dist/flect.js",
-    "docs:dev": "vitepress dev docs/dev",
-    "docs:build": "vitepress build docs/dev",
-    "docs:preview": "vitepress preview docs/dev"
-  },
-  "prettier": {
-    "tabWidth": 4
-  }
+    "type": "module",
+    "devDependencies": {
+        "@rollup/plugin-terser": "^0.4.3",
+        "gzip-cli": "^1.2.0",
+        "rollup": "^3.23.0",
+        "vitepress": "^1.0.0-beta.4"
+    },
+    "scripts": {
+        "minify": "rollup --config",
+        "build": "rollup --config && gzip dist/flect.js",
+        "docs:dev": "vitepress dev docs/dev",
+        "docs:build": "vitepress build docs/dev",
+        "docs:preview": "vitepress preview docs/dev"
+    },
+    "prettier": {
+        "tabWidth": 4
+    }
 }

@@ -4,7 +4,7 @@ import { textDirective } from "./text.js";
 
 /**
  * Retrieve the corresponding directive from the attribute name
- * @param {Attribute} attribute
+ * @param {HTMLElement.attribute} attribute
  */
 export function attributeDirective(attribute) {
     switch (attribute.name) {
@@ -36,7 +36,7 @@ export function attributeDirective(attribute) {
 */
 /**
  * Set HTMLElement attribute from the expression result
- * @type {xDirective}
+ * @type {import("../utils/types.js").Flect.Directive}
  */
 function defaultDirective(context, element, expression, attributeName) {
     return reactive(() =>

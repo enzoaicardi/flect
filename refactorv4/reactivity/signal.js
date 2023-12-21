@@ -1,18 +1,19 @@
+import { Flect } from "../utils/types.js";
+
 /**
  * The current running reactive function
- * @type {Function|null}
+ * @type {Flect.Reactive|null}
  */
 let currentReactive = null;
 
 /**
  * Create a signal function
- * @param {any} value
- * @returns {xSignal}
+ * @type {Flect.Method.Define.Render.Signal}
  */
 export function signal(value) {
     /**
      * setup dependencies
-     * @type {xSignalDependencies}
+     * @type {Flect.Dependencies.Reactives}
      */
     const reactives = new Set();
 
@@ -31,7 +32,7 @@ export function signal(value) {
             // we create all necessary dependencies
             if (currentReactive) {
                 reactives.add(currentReactive);
-                currentReactive.signals.add(dependencies);
+                currentReactive.signals.add(reactives);
             }
         }
         // return the value
@@ -45,7 +46,9 @@ export function signal(value) {
 
 /**
  * Run a function, if signal is played add the function to it's dependencies
+ * then return the function as a reactive function
  * @param {Function} callback
+ * @returns {Flect.Reactive}
  */
 export function reactive(callback) {
     // store the previous value
@@ -53,7 +56,7 @@ export function reactive(callback) {
 
     // update currentReactive function and create a dependency Array
     currentReactive = callback;
-    /** @type {xReactiveDependencies} */
+    /** @type {Flect.Dependencies.Signals} */
     currentReactive.signals = new Set();
 
     // call the function

@@ -10,7 +10,7 @@ const evaluatorMemo = {};
  * @param {String} expression
  * @returns {xExpression}
  */
-function generateFunctionFromString(expression) {
+export function generateFunctionFromString(expression) {
     if (evaluatorMemo[expression]) {
         return evaluatorMemo[expression];
     }
@@ -37,7 +37,7 @@ function generateFunctionFromString(expression) {
             );
 
             Object.defineProperty(func, "name", {
-                value: `[Flect] ${expression}`,
+                value: `x-exp-${expression}`,
             });
 
             return func;

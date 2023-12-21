@@ -5,16 +5,12 @@
 */
 
 import { xElement } from "./templates/element.js";
+import { Flect } from "./utils/types.js";
 
 // keep track of defined components
 const defineMemo = {};
 
-/**
- * Define a custom xElement
- * @param {String} name
- * @param {xRenderFunction} renderFunction
- * @returns {xElement}
- */
+/** @type {Flect.Method.Define} */
 export function define(name, renderFunction) {
     const className = `__flect_${name}__`;
 

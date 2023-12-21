@@ -1,11 +1,12 @@
 import { reactive, signal } from "../reactivity/signal.js";
+import { Flect } from "../utils/types.js";
 
 /**
  * Set Flect component datas from the expression result
- * @type {xDirective}
+ * @type {Flect.Directive}
  */
 export function dataDirective(context, element, expression, attributeName) {
-    /** @type {xDatas} */
+    /** @type {Flect.Element.Datas} */
     element.datas = element.datas || {};
     const data = element.datas[attributeName];
 

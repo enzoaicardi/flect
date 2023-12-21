@@ -12,6 +12,7 @@ import {
     createTemplateFragmentFromString,
 } from "./html.js";
 import { createTemplateMap } from "./map.js";
+import { Flect } from "../utils/types.js";
 
 export class xElement extends HTMLElement {
     constructor() {
@@ -23,19 +24,39 @@ export class xElement extends HTMLElement {
             this.static.template - from renderFunction
             this.static.map - from hydration
         */
-        /** @type {Object} */
+        /** @type {Flect.Element.Datas} */
         this.datas = this.datas || {};
 
         // TODO -> garder une trace des propriétés pour examiner leurs dépendences
         // cela permet d'unhydrate.
         // On peut faire ça lors de l'execution de reactive, a chaque ajout par data de la fonction
         // dans le Set, on ajoute en même temps une référence à la data dans la fonction
-        /** @type {xTrace} */
-        this.trace = new Map();
+        /** @type {Flect.Dependencies.Reactives} */
+        this.trace = new Set();
     }
 
+    onMount() {}
     connectedCallback() {
         console.log("Flect element found in the dom");
+
+        /**
+         * hydrate datas with (non x) attributes values
+         * @type {HTMLElement.attribute}
+         */
+        for (const attribute of this.attributes) {
+            this.datas[attribute.name] = attribute.value;
+        }
+
+        /**
+         * onMount is an user custom function defined with :
+         * myClassReturnedByDefine.prototype.onMount = function(){ stuff here... }
+         * @type {Function}
+         */
+        this.onMount();
+
+        // render the component logic
+        this.render();
+
         /*  ---> run this.static.render.connected() ?
             1 -> execute renderFunction(data, html) -> store result
             2 -> check if template ? template = interpreted result (hydratemap) : template = template
@@ -47,26 +68,34 @@ export class xElement extends HTMLElement {
 
     // we use this instead of disconnectedCallback because
     // the element is immediatly disconnected after being initialized
+    onUnmount() {}
     disconnectCallback() {
+        /**
+         * onUnmount is an user custom function defined with :
+         * myClassReturnedByDefine.prototype.onUnmount = function(){ stuff here... }
+         * @type {Function}
+         */
+        this.onUnmount();
+
         /*  ---> run this.static.render.disconnected() ?
             1 -> unhydrate the element reactivity
         */
     }
 
     render() {
-        /** @type {xDefinition} */
+        /** @type {Flect.Definition} */
         const definition = this.cache || this.static;
-        /** @type {DocumentFragment} */
+        /** @type {Flect.Template} */
         let template = definition.template;
-        /** @type {xMap} */
+        /** @type {Flect.Map} */
         let map = definition.map;
 
-        /** @type {xSignal} */
+        /** @type {Flect.Method.Define.Render.Signal} */
         const data = signal;
-        /** @type {Function} */
-        const html = template ? createHtmlTemplate : createEmptyTemplate;
+        /** @type {Flect.Method.Define.Render.HTML} */
+        const html = template ? createEmptyTemplate : createHtmlTemplate;
 
-        /** @type {xRenderFunction} */
+        /** @type {Flect.Method.Define.Render} */
         const renderFunction = this.static.renderFunction;
 
         /**
@@ -101,22 +130,21 @@ export class xElement extends HTMLElement {
         }
 
         // hydrate template map
-        this.hydrate(template.children, map);
+        if (map) {
+            this.hydrate(template.children, map);
+        }
 
         // replace x-element by template
-        // this.parentNode.replaceChild(template, this);
+        this.parentNode.replaceChild(template, this);
     }
 
     /**
-     * Hydrate HTMLElements based on xMap
+     * Hydrate HTMLElements based on map
      * @param {NodeList} nodeList
-     * @param {xMap} map
+     * @param {Flect.Map} map
      */
     hydrate(nodeList, map) {
-        /** @type {xTrace} */
-        const trace = this.trace;
-
-        /** @type {xDefinition} */
+        /** @type {Flect.Definition} */
         for (const definition of map) {
             /**
              * retrieve the HTMLElement from the index
@@ -127,30 +155,22 @@ export class xElement extends HTMLElement {
             /** @type {Boolean} */
             const isxelement = !!definition.template;
 
-            // loop over all hydratable attributes
-            for (const name in definition.attributes) {
-                /** @type {xDefinitionAttribute} */
-                const attribute = definition.attributes[name];
-
+            /**
+             * loop over all hydratable attributes
+             * @type {[String, Flect.Action]}
+             */
+            for (const [name, action] of definition.attributes) {
                 // apply the corresponding directive
-                /** @type {xReactive} */
-                const reactiveFunction = attribute.directive(
+                /** @type {Flect.Reactive} */
+                const reactiveFunction = action.directive(
                     this.datas,
                     element,
-                    attribute.expression,
+                    action.expression,
                     name
                 );
 
-                /**
-                 * get or create the element trace
-                 * @type {[Function]}
-                 */
-                const elementTrace =
-                    trace.get(element) ||
-                    (trace.set(element, []) && trace.get(element));
-
-                // push the reactive function into the trace
-                elementTrace.push(reactiveFunction);
+                // push the reactiveFunction into component trace
+                this.trace.add(reactiveFunction);
             }
 
             // if the element is a Flect component we don't need to hydrate children
@@ -161,27 +181,18 @@ export class xElement extends HTMLElement {
     }
 
     /**
-     * UnHydrate HTMLElements based on xTrace
-     * @param {HTMLElement} element
+     * UnHydrate HTMLElements based on trace
+     * @param {Flect.Dependencies.Reactives} trace
      */
-    clear(element) {
-        /** @type {[Function]} */
-        const elementTrace = this.trace.get(element) || [];
-
-        /** @type {xReactive} */
-        for (const reactiveFunction of elementTrace) {
-            /** @type {xSignalDependencies} */
+    clear(trace) {
+        /** @type {Flect.Reactive} */
+        for (const reactiveFunction of trace) {
+            /** @type {Flect.Dependencies.Signals} */
             for (const signalDependencies of reactiveFunction.signals) {
                 // remove the function from the signal dependencies
                 // by doing this signal will not trigger the function on change
                 signalDependencies.delete(reactiveFunction);
             }
-        }
-
-        for (const child of element.children) {
-            // -> TODO regarder si pas mieux en global (par défaut) ?
-            // -> TODO regarder si on peut se base sur la xMap ?
-            this.clear(child);
         }
     }
 }
