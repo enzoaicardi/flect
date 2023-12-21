@@ -14,6 +14,7 @@ Flect.define("p", function (data, html) {
     }, 3000);
 
     return html`<p x-on:click="handler">
-        Je m'appelle <span x-text="name() + ', ravi de vous voir'"></span>
+        Je m'appelle
+        <span x-text="name() + ', ravi de vous voir' + subname"></span>
     </p>`;
 });
