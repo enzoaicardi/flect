@@ -1,4 +1,5 @@
 import { reactive } from "../reactivity/signal.js";
+import { cssDirective } from "./css.js";
 import { refDirective } from "./ref.js";
 import { showDirective } from "./show.js";
 import { textDirective } from "./text.js";
@@ -16,7 +17,7 @@ export function attributeDirective(attribute) {
         case "x-ref":
             return refDirective;
         case "x-css":
-            break; // css directive
+            return cssDirective();
         case "x-if":
             break; // if directive
         case "x-for":

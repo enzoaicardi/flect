@@ -15,7 +15,7 @@ export function define(name, renderFunction) {
     const className = `__flect_${name}__`;
 
     if (window[className]) {
-        throw `Element x-${name} is already defined !`;
+        throw `customElement x-${name} is already defined !`;
     }
 
     defineMemo[className] = class extends xElement {

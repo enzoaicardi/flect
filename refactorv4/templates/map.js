@@ -48,11 +48,14 @@ export function createTemplateMap(nodeList) {
                     : attr.name.substring(2);
 
                 /**
-                 * get the expression function
-                 * @type {Flect.Expression}
+                 * get the expression function or the attribute value for ref or css
+                 * @type {Flect.Expression|String}
                  */
                 const expression =
-                    attr.value && generateFunctionFromString(attr.value);
+                    attr.value &&
+                    (name === "ref" || name === "css"
+                        ? attr.value
+                        : generateFunctionFromString(attr.value));
 
                 /**
                  * extract the corresponding attribute or data directive
@@ -82,9 +85,8 @@ export function createTemplateMap(nodeList) {
                  * we generate a template and store it in the cache
                  * @type {DocumentFragment}
                  */
-                element = map.template = createTemplateFragmentFromNodeList(
-                    element.children
-                );
+                element = definition.template =
+                    createTemplateFragmentFromNodeList(element.children);
             }
 
             /**

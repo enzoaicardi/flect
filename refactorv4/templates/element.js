@@ -7,7 +7,6 @@
 
 import { signal } from "../reactivity/signal.js";
 import {
-    createEmptyTemplate,
     createHtmlTemplate,
     createTemplateFragmentFromNodeList,
     createTemplateFragmentFromString,
@@ -15,6 +14,8 @@ import {
 import { createTemplateMap } from "./map.js";
 import { Flect } from "../utils/types.js";
 import { createReferenceArray } from "../directives/ref.js";
+import { createEmptyTemplate } from "./empty.js";
+import { createCssTemplateOrSelector, cssNextId } from "./css.js";
 
 export class xElement extends HTMLElement {
     constructor() {
@@ -110,11 +111,17 @@ export class xElement extends HTMLElement {
         let template = definition.template;
         /** @type {Flect.Map} */
         let map = definition.map;
+        /** @type {Number} */
+        let selector = definition.selector;
 
         /** @type {Flect.Method.Define.Render.Signal} */
         const data = signal;
         /** @type {Flect.Method.Define.Render.HTML} */
         const html = template ? createEmptyTemplate : createHtmlTemplate;
+        /** @type {Flect.Method.Define.Render.CSS} */
+        const css = selector
+            ? createEmptyTemplate
+            : createCssTemplateOrSelector;
 
         /** @type {Flect.Method.Define.Render} */
         const renderFunction = this.static.renderFunction;
@@ -123,7 +130,7 @@ export class xElement extends HTMLElement {
          * Execute the renderFunction to get the template and hydrate this.datas
          * @type {String|NodeList}
          */
-        const renderResult = renderFunction.call(this.datas, data, html);
+        const renderResult = renderFunction.call(this.datas, data, html, css);
 
         // trigger render logic only if renderFunction return template
         if (renderResult) {
@@ -142,12 +149,18 @@ export class xElement extends HTMLElement {
                 // build the component map
                 map = definition.map = createTemplateMap(template.children);
             }
+        }
 
-            // if the template is stored (cache or static)
-            // we want to clone it before hydration
-            if (definition.template) {
-                template = template.cloneNode(true);
-            }
+        // if the template is stored (cache or static)
+        // we want to clone it before hydration
+        if (definition.template) {
+            template = template.cloneNode(true);
+        }
+
+        // if there is no selector we add it to the definition
+        // and finaly increment the cssSelectorsId
+        if (!selector) {
+            definition.selector = cssNextId();
         }
 
         // hydrate template map
@@ -182,13 +195,12 @@ export class xElement extends HTMLElement {
              */
             for (const [name, action] of definition.attributes) {
                 // apply the corresponding directive
-                /** @type {Flect.Reactive} */
+                /** @type {Flect.Reactive|undefined} */
                 const reactiveFunction = action.directive(
                     this.datas,
                     element,
                     action.expression,
-                    name,
-                    definition
+                    name
                 );
 
                 // push the reactiveFunction into component trace
@@ -198,8 +210,13 @@ export class xElement extends HTMLElement {
                 }
             }
 
-            // if the element is a Flect component we don't need to hydrate children
-            if (!isxelement && definition.map) {
+            // if the element is a Flect component we give the cache
+            if (isxelement && definition.template) {
+                /** @type {Flect.Definition} */
+                element.cache = definition;
+            }
+            // if the element is not a Flect component we hydrate children
+            else if (!isxelement && definition.map) {
                 this.hydrate(element.children, definition.map);
             }
         }

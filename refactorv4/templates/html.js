@@ -5,7 +5,7 @@ export let xfragment = document.createDocumentFragment();
 /**
  * Used to return HTML templates from components renderFunction
  * @param {[String]} strings
- * @param  {...any} values
+ * @param {...any} values
  * @returns {String}
  */
 export function createHtmlTemplate(strings, ...values) {
@@ -15,12 +15,6 @@ export function createHtmlTemplate(strings, ...values) {
         ""
     );
 }
-
-/**
- * Used to avoid template evaluation and improve performances
- * @returns
- */
-export function createEmptyTemplate() {}
 
 /**
  * Create a DocumentFragment from a string literal

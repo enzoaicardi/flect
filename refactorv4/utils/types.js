@@ -50,10 +50,9 @@ export const Flect = {};
  * @callback Flect.Directive Function creating a reactive function
  * @param {Flect.Element.Datas} context The context of the expression passed throught "with"
  * @param {HTMLElement} element The element affected by the directive
- * @param {Flect.Expression} expression The expression executed
+ * @param {Flect.Expression|String} expression The expression executed
  * @param {String} attributeName The attribute responsible of the directive
- * @param {Flect.Definition} definition The definition responsible of the directive
- * @returns {Flect.Reactive}
+ * @returns {Flect.Reactive|void}
  */
 /** - Expression
  * @callback Flect.Expression Function generated from string with the evaluator
@@ -96,16 +95,22 @@ export const Flect = {};
  * @callback Flect.Method.Define.Render Function used to hydrate datas and create component template & map
  * @param {Flect.Method.Define.Render.Signal} data Function used to create signals
  * @param {Flect.Method.Define.Render.HTML} html Function used to create html template
+ * @param {Flect.Method.Define.Render.CSS} css Function used to create css template
  * @this {Flect.Element.Datas}
  * @returns {Flect.Template} The final template of the component
  */
 /** - Define.Render.Signal
  * @callback Flect.Method.Define.Render.Signal Function used to create a signal
  * @param {any?} value Function used to create signals
- * @returns {Flect.Signal} The final template of the component
+ * @returns {Flect.Signal} A signal that can be used to create reactive variables
  */
 /** - Define.Render.HTML
  * @callback Flect.Method.Define.Render.HTML Function used to create html template
- * @param {String?} templateLiteral Function used to create signals
- * @returns {Flect.Template|null} The final template of the component
+ * @param {String?} templateLiteral String representation of html template
+ * @returns {Flect.Template|null} The component template
+ */
+/** - Define.Render.CSS
+ * @callback Flect.Method.Define.Render.CSS Function used to create css template and also define css selectors
+ * @param {String?} templateLiteral String representation of css template or the name of the selector
+ * @returns {String} String representation of css template
  */

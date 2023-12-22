@@ -2,12 +2,12 @@ import { reactive, signal } from "../reactivity/signal.js";
 import { Flect } from "../utils/types.js";
 
 /**
- * Set HTMLElement text content from the expression result
+ * Apply reference callbacks based on attribute value
  * @type {Flect.Directive}
  */
 export function refDirective(context, element, expression) {
     /** @type {String} */
-    const referenceName = expression(context);
+    const referenceName = expression;
 
     /** @type {Flect.Element.References.Array} */
     const referenceArray = context.ref(referenceName);
