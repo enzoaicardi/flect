@@ -1,6 +1,9 @@
 import Flect from "../../bundle.js";
 
-Flect.define("p", function (data, html, css) {
+let context = Flect.signal("no name...");
+
+Flect.define("p", function (signal, html, css) {
+    this.name = context;
     this.ref("p", (element) => (element.style.background = "red"));
 
     setTimeout(() => {
@@ -18,15 +21,17 @@ Flect.define("p", function (data, html, css) {
 
     return html`<p x-ref="p">
         Je m'appelle
-        <span x-css="uwu">mario</span>
+        <span x-css="uwu" x-text="name()">mario</span>
         <span x-css="owo">Luigi</span>
     </p>`;
 });
 
-Flect.define("q", function (data, html, css) {
+Flect.define("q", function (signal, html, css) {
+    this.name = context;
     this.ref("p", (element) => (element.style.background = "blue"));
 
     setTimeout(() => {
+        this.name("Fabrice");
         this.ref("p", (element) => (element.style.background = "yellow"));
     }, 1000);
 

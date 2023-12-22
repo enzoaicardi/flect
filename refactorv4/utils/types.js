@@ -93,15 +93,15 @@ export const Flect = {};
  */
 /** - Define.Render
  * @callback Flect.Method.Define.Render Function used to hydrate datas and create component template & schema
- * @param {Flect.Method.Define.Render.Signal} data Function used to create signals
+ * @param {Flect.Method.Define.Render.Signal} signal Function used to create a signal that can trigger changes through reactives functions
  * @param {Flect.Method.Define.Render.HTML} html Function used to create html template
  * @param {Flect.Method.Define.Render.CSS} css Function used to create css template
  * @this {Flect.Element.Datas}
  * @returns {Flect.Template} The final template of the component
  */
 /** - Define.Render.Signal
- * @callback Flect.Method.Define.Render.Signal Function used to create a signal
- * @param {any?} value Function used to create signals
+ * @callback Flect.Method.Define.Render.Signal Function used to create a signal that can trigger changes through reactives functions
+ * @param {any?} value Default value of signal data
  * @returns {Flect.Signal} A signal that can be used to create reactive variables
  */
 /** - Define.Render.HTML
