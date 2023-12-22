@@ -80,6 +80,12 @@ export class xElement extends HTMLElement {
         };
 
         /**
+         * define the component property
+         * @type {Flect.Element}
+         */
+        self.datas.component = self;
+
+        /**
          * onMount is an user custom function defined with :
          * myClassReturnedByDefine.prototype.onMount = function(){ stuff here... }
          * @type {Function}

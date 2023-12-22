@@ -12,7 +12,7 @@ export const Flect = {};
  * -- Element
  * @typedef {xElement} Flect.Element Main customElement class
  * -- Element.Datas
- * @typedef {{ref: Flect.Element.Datas.Reference}} Flect.Element.Datas Object containing component's relative datas
+ * @typedef {{ref: Flect.Element.Datas.Reference, component: Flect.Element}} Flect.Element.Datas Object containing component's relative datas
  * -- Element.References
  * @typedef {{name: [Function]}} Flect.Element.References Object containing component's relative references with callback list
  * -- Element.References.Array

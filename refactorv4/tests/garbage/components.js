@@ -19,11 +19,7 @@ Flect.define("p", function (signal, html, css) {
             color: white;
         }`;
 
-    return html`<p x-ref="p">
-        Je m'appelle
-        <span x-css="uwu" x-text="name()">mario</span>
-        <span x-css="owo">Luigi</span>
-    </p>`;
+    return this.component.children;
 });
 
 Flect.define("q", function (signal, html, css) {

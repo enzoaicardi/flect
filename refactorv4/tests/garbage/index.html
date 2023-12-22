@@ -14,7 +14,13 @@
         </p>
 
         <main>
-            <x-p subname="patrick"></x-p>
+            <x-p subname="patrick">
+                <p x-ref="p">
+                    Je m'appelle
+                    <span x-css="uwu" x-text="name()">mario</span>
+                    <span x-css="owo">Luigi</span>
+                </p>
+            </x-p>
             <x-p subname="jane"></x-p>
             <x-p subname="jakkie"></x-p>
             <x-q subname="jakkie"></x-q>
