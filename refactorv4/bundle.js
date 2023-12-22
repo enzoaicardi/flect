@@ -1,14 +1,15 @@
 /*
-    export Flect ->
-        .define -> definir un nouvel element
-        .observe -> definir une action lors de la détection d'un element
+    export Flect {
+        define: define a new customElement
+        observe: execute an action the first time we find the element in the DOM
+    }
 */
 
 import { define } from "./define.js";
-import { Flect as FlectTypes } from "./utils/types.js";
+import { Flect as Types } from "./utils/types.js";
 
 /**
- * @type {{define: FlectTypes.Method.Define, observe: FlectTypes.Method.Observe}}
+ * @type {{define: Types.Method.Define, observe: Types.Method.Observe}}
  */
 const Flect = {
     define: define,

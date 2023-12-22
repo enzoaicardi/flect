@@ -1,6 +1,6 @@
 /*
-    Carte des expressions, evalue un template et construit le schema d'intéractivité
-    cela permet de rendre beaucoup plus performant l'analyse d'un nouveau template
+    Expression map, evaluates a template and builds the interactivity schema.
+    This makes the analysis of a new template much more efficient.
 */
 
 import { attributeDirective } from "../directives/attr.js";

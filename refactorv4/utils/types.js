@@ -12,8 +12,22 @@ export const Flect = {};
  * -- Element
  * @typedef {xElement} Flect.Element Main customElement class
  * -- Element.Datas
- * @typedef {{}} Flect.Element.Datas Object containing component's relative datas
- *
+ * @typedef {{ref: Flect.Element.Datas.Reference}} Flect.Element.Datas Object containing component's relative datas
+ * -- Element.References
+ * @typedef {{name: [Function]}} Flect.Element.References Object containing component's relative references with callback list
+ * -- Element.References.Array
+ * @typedef {[Function, signal: Flect.Signal]} Flect.Element.References.Array Array containing reference callback list
+ */
+/** - Element.Datas.Reference
+ * @callback Flect.Element.Datas.Reference Function used to apply effects to a DOM reference
+ * @param {String} name The matching name of the DOM references
+ * @param {Flect.Element.Datas.Reference.Callback} callback Function to play when the reference is found in the DOM
+ */
+/** - Element.Datas.Reference.Callback
+ * @callback Flect.Element.Datas.Reference.Callback
+ * @param {HTMLElement} element The element affected by the callback
+ */
+/**
  * Element static representation
  * -- Template
  * @typedef {DocumentFragment} Flect.Template HTML templates used in components
@@ -82,6 +96,7 @@ export const Flect = {};
  * @callback Flect.Method.Define.Render Function used to hydrate datas and create component template & map
  * @param {Flect.Method.Define.Render.Signal} data Function used to create signals
  * @param {Flect.Method.Define.Render.HTML} html Function used to create html template
+ * @this {Flect.Element.Datas}
  * @returns {Flect.Template} The final template of the component
  */
 /** - Define.Render.Signal

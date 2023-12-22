@@ -1,14 +1,20 @@
 /*
     Flect evaluator implementation based on Alpine.js
+    https://github.com/alpinejs/alpine/blob/main/packages/alpinejs/src/evaluator.js
 */
 
-/** evaluated expressions cache */
+import { Flect } from "../utils/types.js";
+
+/**
+ * evaluated expressions cache
+ * @type {{string: Flect.Expression}}
+ */
 const evaluatorMemo = {};
 
 /**
  * Create a secure executable function from string expression
- * @param {String} expression
- * @returns {xExpression}
+ * @param {String} expression Javascript expression formatted as string
+ * @returns {Flect.Expression}
  */
 export function generateFunctionFromString(expression) {
     if (evaluatorMemo[expression]) {
