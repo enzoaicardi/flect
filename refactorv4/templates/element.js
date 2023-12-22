@@ -1,7 +1,8 @@
 /*
-    classe qui etend HTMLelement avec son propre cycle de vie
-    effectue une mise en cache de sa carté d'interactivité ainsi que de son template
-    la mise en cache se prolonge grace à la carte d'intéractivité sur les modeles imbriqués.
+    Class that extends HTMLElement with its own lifecycle,
+    caches its interactivity map as well as its template.
+    Caching is extended thanks to the interactivity map
+    on nested models.
 */
 
 import { signal } from "../reactivity/signal.js";
@@ -13,6 +14,7 @@ import {
 } from "./html.js";
 import { createTemplateMap } from "./map.js";
 import { Flect } from "../utils/types.js";
+import { createReferenceArray } from "../directives/ref.js";
 
 export class xElement extends HTMLElement {
     constructor() {
@@ -30,6 +32,12 @@ export class xElement extends HTMLElement {
          * @type {Flect.Dependencies.Reactives}
          */
         this.trace = new Set();
+
+        /**
+         * store every references with the callback list
+         * @type {Flect.Element.References}
+         */
+        this.references = {};
     }
 
     onMount() {}
@@ -45,6 +53,32 @@ export class xElement extends HTMLElement {
         }
 
         /**
+         * create the context.ref method
+         * @type {Flect.Element.Datas.Reference}
+         */
+        this.datas.ref = (name, callback) => {
+            /**
+             * get the reference's callback array or create it
+             * @type {Flect.Element.References.Array}
+             */
+            const referenceArray =
+                this.references[name] ||
+                (this.references[name] = createReferenceArray());
+
+            if (callback) {
+                // we push the callback into the reference array
+                referenceArray.push(callback);
+
+                // we trigger the signal associated at the reference
+                referenceArray.signal(referenceArray);
+            } else {
+                // if there is no callback we return the reference array
+                // this is usefull in refDirective to retrieve the signal
+                return referenceArray;
+            }
+        };
+
+        /**
          * onMount is an user custom function defined with :
          * myClassReturnedByDefine.prototype.onMount = function(){ stuff here... }
          * @type {Function}
@@ -53,14 +87,6 @@ export class xElement extends HTMLElement {
 
         // render the component logic
         this.render();
-
-        /*  ---> run this.static.render.connected() ?
-            1 -> execute renderFunction(data, html) -> store result
-            2 -> check if template ? template = interpreted result (hydratemap) : template = template
-            3 -> clone the template
-            4 -> hydrate the template (use the hydratemap)
-            5 -> replace element in dom
-        */
     }
 
     // we use this instead of disconnectedCallback because
@@ -74,9 +100,7 @@ export class xElement extends HTMLElement {
          */
         this.onUnmount();
 
-        /*  ---> run this.static.render.disconnected() ?
-            1 -> unhydrate the element reactivity
-        */
+        this.clear(this.trace);
     }
 
     render() {
@@ -168,7 +192,10 @@ export class xElement extends HTMLElement {
                 );
 
                 // push the reactiveFunction into component trace
-                this.trace.add(reactiveFunction);
+                // only if the directive return a reactive function
+                if (reactiveFunction) {
+                    this.trace.add(reactiveFunction);
+                }
             }
 
             // if the element is a Flect component we don't need to hydrate children

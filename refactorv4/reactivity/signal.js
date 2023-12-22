@@ -20,7 +20,7 @@ export function signal(value) {
     // create the getter function
     const getter = function (dataUpdated) {
         // if new data is sent
-        if (dataUpdated) {
+        if (dataUpdated !== undefined) {
             // update the value
             getter.data = dataUpdated;
             // run all the dependencies

@@ -8,12 +8,16 @@ Flect.define("p", function (data, html) {
         console.log("handler triggered", this.name());
     };
 
-    setTimeout(() => {
-        this.name("edie");
-        this.background("red");
-    }, 3000);
+    this.ref("p", (element) => (element.style.background = "red"));
 
-    return html`<p x-on:click="handler">
+    setTimeout(() => {
+        this.ref();
+        this.ref("p", (element) => (element.style.background = "green"));
+        // this.name("edie");
+        // this.background("red");
+    }, 1000);
+
+    return html`<p x-ref="'p'">
         Je m'appelle
         <span x-text="name() + ', ravi de vous voir' + subname"></span>
     </p>`;
