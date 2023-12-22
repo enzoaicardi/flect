@@ -1,6 +1,7 @@
-export let xcomment = document.createComment("");
-export let xtemplate = document.createElement("template");
-export let xfragment = document.createDocumentFragment();
+const dom = document;
+export let xcomment = dom.createComment("");
+export let xtemplate = dom.createElement("template");
+export let xfragment = dom.createDocumentFragment();
 
 /**
  * Used to return HTML templates from components renderFunction

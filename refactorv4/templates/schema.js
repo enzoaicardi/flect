@@ -1,5 +1,5 @@
 /*
-    Expression map, evaluates a template and builds the interactivity schema.
+    Evaluates a template and builds the interactivity schema.
     This makes the analysis of a new template much more efficient.
 */
 
@@ -12,13 +12,13 @@ import { createTemplateFragmentFromNodeList } from "./html.js";
 import { Flect } from "../utils/types.js";
 
 /**
- * Create a xElement template map
+ * Create a xElement template schema
  * @param {NodeList} nodeList
- * @returns {Boolean|Flect.Map}
+ * @returns {Boolean|Flect.Schema}
  */
-export function createTemplateMap(nodeList) {
-    /** @type {Flect.Map} */
-    const map = [];
+export function createTemplateSchema(nodeList) {
+    /** @type {Flect.Schema} */
+    const schema = [];
 
     for (let x = 0; x < nodeList.length; x++) {
         /** @type {HTMLElement} */
@@ -28,9 +28,9 @@ export function createTemplateMap(nodeList) {
         /** @type {Flect.Definition} */
         const definition = {
             index: x,
-            map: false,
+            schema: false,
             template: false,
-            attributes: new Map(),
+            attrs: new Map(),
         };
 
         let index = element.attributes.length;
@@ -71,7 +71,7 @@ export function createTemplateMap(nodeList) {
                 const action = { expression, directive };
 
                 /** @type {Flect.Attributes} */
-                definition.attributes.set(name, action);
+                definition.attrs.set(name, action);
 
                 // clear element attribute
                 element.removeAttribute(attr.name);
@@ -92,21 +92,21 @@ export function createTemplateMap(nodeList) {
             /**
              * If the element has children
              * we build the definition of the element
-             * @type {Flect.Map}
+             * @type {Flect.Schema}
              */
-            definition.map = createTemplateMap(element.children);
+            definition.schema = createTemplateSchema(element.children);
         }
 
-        // if the definition is not empty we add it to the map
-        if (definition.map || definition.attributes.size) {
-            map.push(definition);
+        // if the definition is not empty we add it to the schema
+        if (definition.schema || definition.attrs.size) {
+            schema.push(definition);
         }
     }
 
     /**
-     * If there is no definition current map return false
+     * If there is no definition current schema return false
      * else return the array of definitions
-     * @type {Boolean|Flect.Map}
+     * @type {Boolean|Flect.Schema}
      */
-    return map.length > 0 && map;
+    return schema.length > 0 && schema;
 }

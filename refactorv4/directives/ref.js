@@ -17,7 +17,7 @@ export function refDirective(context, element, expression) {
 
     return reactive(() => {
         /** @type {Flect.Element.References.Array} */
-        const array = referenceArray.signal();
+        const array = referenceArray.signalGetter();
 
         // apply all callbacks first time
         if (primaryHydration) {
@@ -40,7 +40,8 @@ export function refDirective(context, element, expression) {
  * @returns {Flect.Element.References.Array}
  */
 export function createReferenceArray() {
-    const array = [];
-    array.signal = signal([]);
-    return array;
+    const referenceArray = [];
+    // add a signal as property of the array
+    referenceArray.signalGetter = signal([]);
+    return referenceArray;
 }

@@ -31,16 +31,16 @@ export const Flect = {};
  * Element static representation
  * -- Template
  * @typedef {DocumentFragment} Flect.Template HTML templates used in components
- * -- Map
- * @typedef {[Flect.Definition]} Flect.Map Array of definitions
+ * -- Schema
+ * @typedef {[Flect.Definition]} Flect.Schema Array of definitions
  */
 
 /**
  * Hydration
  * -- Definition
- * @typedef {{index: Number, template: Flect.Template, map: Flect.Map, attributes: Flect.Attributes}} Flect.Definition Object representing the definition of a HTMLElement
+ * @typedef {{index: Number, template: Flect.Template, schema: Flect.Schema, attrs: Flect.Attributes}} Flect.Definition Object representing the definition of a HTMLElement
  * -- Attributes
- * @typedef {Map<String, Flect.Action>} Flect.Attributes Map of attributes with associated actions
+ * @typedef {Schema<String, Flect.Action>} Flect.Attributes Schema of attributes with associated actions
  * -- Action
  * @typedef {{expression: Flect.Expression|String, directive: Function}} Flect.Action Object defining a directive and the associated expression
  * -- Handler
@@ -92,7 +92,7 @@ export const Flect = {};
  * @typedef {String} Flect.Method.Define.Name The name of the customElement without x- prefix
  */
 /** - Define.Render
- * @callback Flect.Method.Define.Render Function used to hydrate datas and create component template & map
+ * @callback Flect.Method.Define.Render Function used to hydrate datas and create component template & schema
  * @param {Flect.Method.Define.Render.Signal} data Function used to create signals
  * @param {Flect.Method.Define.Render.HTML} html Function used to create html template
  * @param {Flect.Method.Define.Render.CSS} css Function used to create css template

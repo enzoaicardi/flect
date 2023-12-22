@@ -7,6 +7,10 @@
 -   [ ] Avec un routeur + lazy load
 -   [ ] Avec composants dynamiques
 
+-   [ ] Forcer le minification des propriétés :
+
+Lorsqu'il y a plus de 3 appels à `this` dans une même fonction, alors l'option `let self = this` est plus rentable.
+
 # Documentation
 
 -   [ ] Mettre à jour la documentation

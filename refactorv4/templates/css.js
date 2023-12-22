@@ -1,9 +1,14 @@
 /** @type {Number} css selectors needs to be unique so we need to store a global id */
-let xstyle = document.createElement("style");
+const dom = document;
+const xstyle = dom.createElement("style");
 
 export const cssAttributeName = "css-x";
 export let cssSelectorsId = 1;
 
+/**
+ * increment global id of css selectors
+ * @returns {Number}
+ */
 export function cssNextId() {
     return cssSelectorsId++;
 }
@@ -54,7 +59,7 @@ export function createCssTemplateOrSelector(strings, ...values) {
 
         // add the style tag in the document's head
         if (!xstyle.parentElement) {
-            document.head.appendChild(xstyle);
+            dom.head.appendChild(xstyle);
         }
     }
 }

@@ -29,7 +29,7 @@ export function attributeDirective(attribute) {
 
 /*
     What append in a directive function ?
-    1 - the directive function is stored inside component's map
+    1 - the directive function is stored inside component's schema
     2 - during the hydration process the directive function run with the following parameters
     3 - the directive function includes a reactive function, once activated it rerun every
         time a containing signal change. On every run the reactive function will trigger the
