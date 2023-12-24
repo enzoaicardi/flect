@@ -17,7 +17,7 @@ export function attributeDirective(attribute) {
         case "x-ref":
             return refDirective;
         case "x-css":
-            return cssDirective();
+            return cssDirective;
         case "x-if":
             break; // if directive
         case "x-for":

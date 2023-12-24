@@ -54,36 +54,16 @@ export class xElement extends HTMLElement {
         }
 
         /**
-         * create the context.ref method
-         * @type {Flect.Element.Datas.Reference}
-         */
-        self.datas.ref = (name, callback) => {
-            /**
-             * get the reference's callback array or create it
-             * @type {Flect.Element.References.Array}
-             */
-            const referenceArray =
-                self.references[name] ||
-                (self.references[name] = createReferenceArray());
-
-            if (callback) {
-                // we push the callback into the reference array
-                referenceArray.push(callback);
-
-                // we trigger the signal associated at the reference
-                referenceArray.signalGetter(referenceArray);
-            } else {
-                // if there is no callback we return the reference array
-                // this is usefull in refDirective to retrieve the signal
-                return referenceArray;
-            }
-        };
-
-        /**
          * define the component property
          * @type {Flect.Element}
          */
         self.datas.component = self;
+
+        /**
+         * create the context.ref method
+         * @type {Flect.Element.Datas.Reference}
+         */
+        self.datas.ref = self.reference;
 
         /**
          * onMount is an user custom function defined with :
@@ -120,7 +100,7 @@ export class xElement extends HTMLElement {
         /** @type {Flect.Schema} */
         let schema = definition.schema;
         /** @type {Number} */
-        let selectorId = definition.selectorId;
+        let selectorId = self.static.selectorId;
 
         /** @type {Flect.Method.Define.Render.Signal} */
         const data = signal;
@@ -161,16 +141,15 @@ export class xElement extends HTMLElement {
             }
         }
 
+        // if there is no selectorId we add it to the definition
+        // and to the context.component property (used in cssDirective)
+        // and finaly increment the cssSelectorsId if necessary
+        self.selectorId = self.static.selectorId = selectorId || cssNextId();
+
         // if the template is stored (cache or static)
         // we want to clone it before hydration
         if (definition.template) {
             template = template.cloneNode(true);
-        }
-
-        // if there is no selectorId we add it to the definition
-        // and finaly increment the cssSelectorsId
-        if (!selectorId) {
-            definition.selectorId = cssNextId();
         }
 
         // hydrate template schema
@@ -179,7 +158,7 @@ export class xElement extends HTMLElement {
         }
 
         // replace x-element by template
-        self.parentNode.replaceChild(template, self);
+        self.replaceWith(template);
     }
 
     /**
@@ -245,6 +224,32 @@ export class xElement extends HTMLElement {
                 // by doing this signal will not trigger the function on change
                 signalDependencies.delete(reactiveFunction);
             }
+        }
+    }
+
+    /**
+     * reference function used in context.ref
+     * @type {Flect.Element.Datas.Reference}
+     */
+    reference(name, callback) {
+        /**
+         * get the reference's callback array or create it
+         * @type {Flect.Element.References.Array}
+         */
+        const referenceArray =
+            this.component.references[name] ||
+            (this.component.references[name] = createReferenceArray());
+
+        if (callback) {
+            // we push the callback into the reference array
+            referenceArray.push(callback);
+
+            // we trigger the signal associated at the reference
+            referenceArray.signalGetter(referenceArray);
+        } else {
+            // if there is no callback we return the reference array
+            // this is usefull in refDirective to retrieve the signal
+            return referenceArray;
         }
     }
 }
