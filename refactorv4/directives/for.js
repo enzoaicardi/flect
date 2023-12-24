@@ -5,3 +5,11 @@
 
     -> regarder chez lit.js le tetes et queues -> algorithme pour ajouter, modifier ou supprimer des elements efficacement
 */
+
+export function forDirective() {
+    // for directive
+}
+
+export function reconcile() {
+    // algo de reconciliation
+}
