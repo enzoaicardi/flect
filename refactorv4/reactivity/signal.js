@@ -18,7 +18,7 @@ export function signal(value) {
             // update the value
             getter.data = dataUpdated;
             // run all the dependencies
-            for (const callback of reactives) {
+            for (const callback of getter.reactives) {
                 callback();
             }
         } else {
