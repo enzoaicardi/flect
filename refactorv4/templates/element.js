@@ -178,7 +178,14 @@ export class xElement extends HTMLElement {
             const element = nodeList[definition.index];
 
             /** @type {Boolean} */
-            const isxelement = !!definition.template;
+            const isxelementortemplate = !!definition.template;
+
+            // if the element is a Flect component we give the cache
+            // before running any directive (used in for and if directives)
+            if (isxelementortemplate) {
+                /** @type {Flect.Definition} */
+                element.cacheDefinition = definition;
+            }
 
             /**
              * loop over all hydratable attributes
@@ -201,14 +208,9 @@ export class xElement extends HTMLElement {
                 }
             }
 
-            // if the element is a Flect component we give the cache
-            if (isxelement && definition.template) {
-                /** @type {Flect.Definition} */
-                element.cacheDefinition = definition;
-            }
             // if the element is not a Flect component we hydrate children
-            else if (!isxelement && definition.schema) {
-                this.hydrate(element.children, definition.schema);
+            if (!isxelementortemplate && definition.schema) {
+                this.hydrate(element.children, definition.schema, datas);
             }
         }
     }
