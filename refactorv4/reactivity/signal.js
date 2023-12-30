@@ -11,12 +11,6 @@ let currentReactive = null;
  * @type {Flect.Method.Define.Render.Signal}
  */
 export function signal(value) {
-    /**
-     * setup dependencies
-     * @type {Flect.Dependencies.Reactives}
-     */
-    const reactives = new Set();
-
     // create the getter function
     const getter = function (dataUpdated) {
         // if new data is sent
@@ -31,8 +25,8 @@ export function signal(value) {
             // if signal is running inside of a reactive function
             // we create all necessary dependencies
             if (currentReactive) {
-                reactives.add(currentReactive);
-                currentReactive.signals.add(reactives);
+                getter.reactives.add(currentReactive);
+                currentReactive.signals.add(getter.reactives);
             }
         }
         // return the value
@@ -40,7 +34,15 @@ export function signal(value) {
     };
     // use this to access data without triggering signal
     getter.data = value;
+    // use this to check if a variable is a signal
     getter.issignal = true;
+    /**
+     * setup dependencies
+     * @type {Flect.Dependencies.Reactives}
+     */
+    getter.reactives = new Set();
+
+    // return the signal setter/getter function
     return getter;
 }
 
