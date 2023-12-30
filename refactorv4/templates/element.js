@@ -70,7 +70,7 @@ export class xElement extends HTMLElement {
          * myClassReturnedByDefine.prototype.onMount = function(){ stuff here... }
          * @type {Function}
          */
-        self.onMount();
+        self.onMount(self.datas);
 
         // render the component logic
         self.render();
@@ -80,14 +80,15 @@ export class xElement extends HTMLElement {
     // the element is immediatly disconnected after being initialized
     onUnmount() {}
     disconnectCallback() {
+        let self = this;
         /**
          * onUnmount is an user custom function defined with :
          * myClassReturnedByDefine.prototype.onUnmount = function(){ stuff here... }
          * @type {Function}
          */
-        this.onUnmount();
+        self.onUnmount(self.datas);
 
-        this.clear(this.trail);
+        self.unHydrate(self.trail);
     }
 
     render() {
@@ -165,8 +166,9 @@ export class xElement extends HTMLElement {
      * Hydrate HTMLElements based on schema
      * @param {NodeList} nodeList
      * @param {Flect.Schema} schema
+     * @param {Flect.Datas} datas
      */
-    hydrate(nodeList, schema) {
+    hydrate(nodeList, schema, datas = this.datas) {
         /** @type {Flect.Definition} */
         for (const definition of schema) {
             /**
@@ -186,7 +188,7 @@ export class xElement extends HTMLElement {
                 // apply the corresponding directive
                 /** @type {Flect.Reactive|undefined} */
                 const reactiveFunction = action.directive(
-                    this.datas,
+                    datas,
                     element,
                     action.expression,
                     name
@@ -215,7 +217,7 @@ export class xElement extends HTMLElement {
      * UnHydrate HTMLElements based on trail
      * @param {Flect.Dependencies.Reactives} trail
      */
-    clear(trail) {
+    unHydrate(trail = this.trail) {
         /** @type {Flect.Reactive} */
         for (const reactiveFunction of trail) {
             /** @type {Flect.Dependencies.Signals} */
@@ -225,6 +227,8 @@ export class xElement extends HTMLElement {
                 signalDependencies.delete(reactiveFunction);
             }
         }
+        // clear the trail dependencies
+        trail.clear();
     }
 
     /**
