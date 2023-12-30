@@ -33,3 +33,12 @@ export function isXEventAttribute(attribute) {
 export function isXElement(element) {
     return element.tagName.indexOf("X-") === 0;
 }
+
+/**
+ * Test if the element is a template element
+ * @param {HTMLTemplateElement} element
+ * @returns {Boolean}
+ */
+export function isXTemplate(element) {
+    return !!element.content;
+}
