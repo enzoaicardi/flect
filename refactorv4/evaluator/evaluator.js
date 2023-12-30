@@ -39,7 +39,7 @@ export function generateFunctionFromString(expression) {
         try {
             let func = new SyncFunction(
                 ["scope"],
-                `this=scope;with(scope){return ${rightSideSafeExpression}};`
+                `with(scope){return ${rightSideSafeExpression}};`
             );
 
             Object.defineProperty(func, "name", {
