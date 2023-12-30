@@ -8,12 +8,12 @@ import { Flect } from "../utils/types.js";
 export function dataDirective(context, element, expression, attributeName) {
     /** @type {Flect.Element.Datas} */
     element.datas = element.datas || {};
-    const data = element.datas[attributeName];
 
     return reactive(() => {
+        const data = element.datas[attributeName];
         const value = expression(context);
 
-        if (data.issignal) {
+        if (data && data.issignal) {
             // we use the signal function
             data(value);
         } else {
