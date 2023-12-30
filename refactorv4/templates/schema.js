@@ -7,9 +7,15 @@ import { attributeDirective } from "../directives/attr.js";
 import { dataDirective } from "../directives/data.js";
 import { eventDirective } from "../directives/event.js";
 import { generateFunctionFromString } from "../evaluator/evaluator.js";
-import { isXAttribute, isXElement, isXEventAttribute } from "../utils/tests.js";
+import {
+    isXAttribute,
+    isXElement,
+    isXEventAttribute,
+    isXTemplate,
+} from "../utils/tests.js";
 import { createTemplateFragmentFromNodeList } from "./html.js";
 import { Flect } from "../utils/types.js";
+import { templateDirective } from "../directives/template.js";
 
 /**
  * Create a xElement template schema
@@ -22,8 +28,9 @@ export function createTemplateSchema(nodeList) {
 
     for (let x = 0; x < nodeList.length; x++) {
         /** @type {HTMLElement} */
-        const element = nodeList[x];
+        let element = nodeList[x];
         const isxelement = isXElement(element);
+        const isxtemplate = !isxelement && isXTemplate(element);
 
         /** @type {Flect.Definition} */
         const definition = {
@@ -63,6 +70,8 @@ export function createTemplateSchema(nodeList) {
                  */
                 const directive = isxelement
                     ? dataDirective
+                    : isxtemplate
+                    ? templateDirective(attr)
                     : isxevent
                     ? eventDirective
                     : attributeDirective(attr);
@@ -78,15 +87,19 @@ export function createTemplateSchema(nodeList) {
             }
         }
 
-        if (element.childNodes.length) {
-            if (isxelement) {
+        // in case of <template> childNodes are always empty
+        // because <template> return a documentFragment, itself
+        // accessible with the element.content property
+        if ((element.content || element).childNodes.length) {
+            if (isxelement || isxtemplate) {
                 /**
                  * If the element is a flect custom element
                  * we generate a template and store it in the cache
                  * @type {DocumentFragment}
                  */
-                element = definition.template =
-                    createTemplateFragmentFromNodeList(element.childNodes);
+                element = definition.template = isxtemplate
+                    ? element.content
+                    : createTemplateFragmentFromNodeList(element.childNodes);
             }
 
             /**
