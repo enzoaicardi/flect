@@ -1,5 +1,6 @@
 /*
-    xElement est une classe qui étend xTemplate afin de créer des customElements possédant leurs propres cycles de vie définis par les utilisateurs
+TODO -> traduire
+    xElement est une classe qui étend xAbstract afin de créer des customElements possédant leurs propres cycles de vie définis par les utilisateurs
 */
 
 import { signal } from "../reactivity/signal.js";
@@ -15,12 +16,13 @@ import {
     createLiteralTemplate,
 } from "../templates/generic.js";
 import { createCssTemplateOrSelector, cssNextId } from "../templates/css.js";
-import { xTemplate } from "./template.js";
 import { elementCloneNode } from "../utils/shortcuts.js";
+import { xAbstract } from "./abstract.js";
 
-export class xElement extends xTemplate {
+export class xElement extends HTMLElement {
     constructor() {
         super();
+        this.setup();
         /**
          * store every references with the callback list
          * @type {FLECT.Element.References}
@@ -144,7 +146,7 @@ export class xElement extends xTemplate {
             self.hydrate(template.children, schema);
         }
 
-        // replace xTemplate by template
+        // replace xElement by template
         self.replaceWith(template);
     }
 
@@ -174,3 +176,5 @@ export class xElement extends xTemplate {
         }
     }
 }
+
+Object.assign(xElement.prototype, xAbstract);

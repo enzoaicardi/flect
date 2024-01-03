@@ -1,17 +1,9 @@
 /*
-TODO rewrite
-    xTemplate est une classe qui étend HTMLElement en implémentant les méthodes de xReactive afin de pouvoir créer des customElements qui étendent x-template
-*/
-/*
-    xReactive est une classe générique qui expose des méthodes d'intéractivité comme "hydrate" ou "unHydrate"
-    son rôle est d'encapsuler dans un même objet une liste de données "datas", une liste de dépendance "trail" et éventuellement une définition "cacheDefinition"
+    TODO -> explain
 */
 
-import { customElementsDefine } from "../utils/shortcuts.js";
-
-export class xTemplate extends HTMLElement {
-    constructor(datas) {
-        super();
+export const xAbstract = {
+    setup(datas) {
         let self = this;
 
         /**
@@ -33,12 +25,12 @@ export class xTemplate extends HTMLElement {
          * @type {FLECT.Dependencies.Trail}
          */
         self.trail = new Set();
-    }
+    },
 
     // used to unHydrate the current element
     disconnectCallback() {
         this.unHydrate();
-    }
+    },
 
     /**
      * Hydrate HTMLElements based on schema
@@ -88,7 +80,7 @@ export class xTemplate extends HTMLElement {
                 self.hydrate(element.children, definition.schema);
             }
         }
-    }
+    },
 
     /**
      * UnHydrate HTMLElements based on trail
@@ -106,7 +98,5 @@ export class xTemplate extends HTMLElement {
         }
         // clear the trail dependencies
         this.trail.clear();
-    }
-}
-
-customElementsDefine("x-template", xTemplate);
+    },
+};
