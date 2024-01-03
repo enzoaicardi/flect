@@ -22,21 +22,22 @@ import { templateDirective } from "../directives/template.js";
  * @param {NodeList} nodeList
  * @returns {Boolean|Flect.Schema}
  */
-export function createTemplateSchema(nodeList) {
+export const createTemplateSchema = (nodeList) => {
     /** @type {Flect.Schema} */
     const schema = [];
 
     for (let x = 0; x < nodeList.length; x++) {
         /** @type {HTMLElement} */
         let element = nodeList[x];
-        const isxelement = isXElement(element);
-        const isxtemplate = !isxelement && isXTemplate(element);
+        const isxtemplate = isXTemplate(element);
+        const isxelement = isxtemplate || isXElement(element);
 
         /** @type {Flect.Definition} */
         const definition = {
             index: x,
             schema: false,
             template: false,
+            reactive: isxelement,
             attrs: new Map(),
         };
 
@@ -68,10 +69,10 @@ export function createTemplateSchema(nodeList) {
                  * extract the corresponding attribute or data directive
                  * @type {Flect.Directive}
                  */
-                const directive = isxelement
-                    ? dataDirective
-                    : isxtemplate
+                const directive = isxtemplate
                     ? templateDirective(attr)
+                    : isxelement
+                    ? dataDirective
                     : isxevent
                     ? eventDirective
                     : attributeDirective(attr);
@@ -87,19 +88,16 @@ export function createTemplateSchema(nodeList) {
             }
         }
 
-        // in case of <template> childNodes are always empty
-        // because <template> return a documentFragment, itself
-        // accessible with the element.content property
-        if ((element.content || element).childNodes.length) {
-            if (isxelement || isxtemplate) {
+        if (element.childNodes.length) {
+            if (isxelement) {
                 /**
                  * If the element is a flect custom element
                  * we generate a template and store it in the cache
+                 * If the element is a template we store it's content
                  * @type {DocumentFragment}
                  */
-                element = definition.template = isxtemplate
-                    ? element.content
-                    : createTemplateFragmentFromNodeList(element.childNodes);
+                element = definition.template =
+                    createTemplateFragmentFromNodeList(element.childNodes);
             }
 
             /**
@@ -122,4 +120,4 @@ export function createTemplateSchema(nodeList) {
      * @type {Boolean|Flect.Schema}
      */
     return schema.length > 0 && schema;
-}
+};
