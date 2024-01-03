@@ -1,8 +1,12 @@
+import { xManager } from "../classes/manager.js";
 import { signal } from "../reactivity/signal.js";
 import { xcomment } from "../templates/html.js";
-import { documentCreateElement, elementCloneNode } from "../utils/shortcuts.js";
+import { elementCloneNode } from "../utils/shortcuts.js";
 import { FLECT } from "../utils/types.js";
 import { forDirective } from "./for.js";
+
+// TODO -> remplacer x-template par template
+// et replacer les methods utils/shortcuts qui sont peu utilisées
 
 /** @returns {Comment} */
 export const createFlag = () => elementCloneNode(xcomment);
@@ -15,12 +19,17 @@ export const createFlag = () => elementCloneNode(xcomment);
  * @returns {FLECT.Part}
  */
 export const createPart = (context, key, value) => {
+    // create a flag to identify the head and tail of the fragment
     const flag = createFlag();
+    // create a signal for the current array value
     const property = signal(value);
-    // TODO explain
-    const manager = documentCreateElement("x-template");
-    manager.datas = { ...context, [key]: property };
+    // create a manager to manage the fragment state and setup its context
+    // 1 - clone the current context
+    // 2 - add a new [key] or "item" property corresponding
+    //    to signal of current array value
+    const manager = new xManager({ ...context, [key]: property });
 
+    // return the part
     return { flag, property, manager };
 };
 
