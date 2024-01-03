@@ -4,13 +4,14 @@
 */
 
 import { xHandler } from "../directives/event.js";
-import { xElement } from "../templates/element.js";
+import { xElement } from "../classes/element.js";
+import { xTemplate } from "../classes/template.js";
 export const Flect = {};
 
 /**
  * Element prototype
  * -- Element
- * @typedef {xElement} Flect.Element Main customElement class
+ * @typedef {xTemplate|xElement} Flect.Element Interactive element class
  * -- Element.Datas
  * @typedef {{ref: Flect.Element.Datas.Reference, component: Flect.Element}} Flect.Element.Datas Object containing component's relative datas
  * -- Element.References
@@ -38,7 +39,7 @@ export const Flect = {};
 /**
  * Hydration
  * -- Definition
- * @typedef {{index: Number, template: Flect.Template, schema: Flect.Schema, attrs: Flect.Attributes}} Flect.Definition Object representing the definition of a HTMLElement
+ * @typedef {{index: Number, template: Flect.Template, schema: Flect.Schema, reactive: Boolean, attrs: Flect.Attributes}} Flect.Definition Object representing the definition of a HTMLElement
  * -- Attributes
  * @typedef {Schema<String, Flect.Action>} Flect.Attributes Schema of attributes with associated actions
  * -- Action
@@ -64,6 +65,7 @@ export const Flect = {};
 /**
  * Reactivity
  * -- Dependencies...
+ * @typedef {Set<Flect.Reactive|Flect.Element>} Flect.Dependencies.Trail Set of reactive functions and elements
  * @typedef {Set<Flect.Reactive>} Flect.Dependencies.Reactives Set of reactive functions trigerred by signal
  * @typedef {Set<Flect.Dependencies.Reactives>} Flect.Dependencies.Signals Set of reactive functions trigerred by signal
  */
