@@ -8,8 +8,6 @@ import { FLECT } from "../utils/types.js";
 import { createFlag, createPart } from "./template.js";
 
 export const forDirective = (context, element, expression) => {
-    // TODO -> setup the element datas for hydration
-
     /** @type {[any]} */
     let prevList = [];
 
@@ -49,22 +47,23 @@ function reconcile(context, element, prevList, nextList, parts, key) {
 
     /** @type {Number} */
     let index = 0;
-    /** @type {Number} */
     const prevLength = prevList.length;
     const nextLength = nextList.length;
+
+    /** @type {Number} */
     let gap = nextLength - prevLength;
 
+    // UPDATE ELEMENTS
     while (index < prevLength && index < nextLength) {
         // if the two values are different
         if (prevList[index] !== nextList[index]) {
             // we update the signal value with the nextList value
-            parts[index].signal(nextList[index]);
+            parts[index].property(nextList[index]);
         }
         index++;
     }
 
     // ADD ELEMENTS
-
     /** @type {[Element]} */
     const newElements = [];
 
@@ -78,20 +77,19 @@ function reconcile(context, element, prevList, nextList, parts, key) {
         // we create the part corresponding to the fragment
         // the part will be stored into an array of parts
         // for each par we can retrieve the flag, the signal
-        // for the current array item, and the component which
+        // for the current array item, and the manager which
         // store the context and the hydration methods
         const part =
             parts[index + 1] ||
             (parts[index + 1] = createPart(context, key, nextList[index]));
 
-        // push the template and the flag into newElements array
+        // push the template fragment and the flag into newElements array
         newElements.push(fragment, part.flag);
 
-        // is there is a cached schema, hydrate the fragment
+        // if there is a cached schema, hydrate the fragment
         definition.schema &&
-            part.component.hydrate(fragment.children, definition.schema);
-
-        // TODO -> conversion de classes en prototypes + double héritage
+            part.manager.hydrate(fragment.children, definition.schema);
+        // TODO -> recheck le process de binding ici juste pour bien se souvenir
 
         // update indexes
         gap--;
@@ -112,6 +110,10 @@ function reconcile(context, element, prevList, nextList, parts, key) {
          */
         let head = flags[index];
         const tail = flags[index - gap];
+
+        // TODO -> loop sur les parts
+        // marker -> while remove()
+        // unbind avant
 
         /**
          * Remove all the elements between head and tail

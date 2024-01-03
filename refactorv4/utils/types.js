@@ -1,17 +1,18 @@
 /*
+TODO -> traduire
     Définition de l'ensemble des types grace à JsDoc pour mieux fournir plus de détails
     sur l'implémentation de la librairie
 */
 
 import { xHandler } from "../directives/event.js";
 import { xElement } from "../classes/element.js";
-import { xTemplate } from "../classes/template.js";
+import { xManager } from "../classes/manager.js";
 export const FLECT = {};
 
 /**
  * Element prototype
  * -- Element
- * @typedef {xTemplate|xElement} FLECT.Element Interactive element class
+ * @typedef {xManager|xElement} FLECT.Element Interactive element class
  * -- Element.Datas
  * @typedef {{ref: FLECT.Element.Datas.Reference, component: FLECT.Element}} FLECT.Element.Datas Object containing component's relative datas
  * -- Element.References

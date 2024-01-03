@@ -93,7 +93,6 @@ export const createTemplateSchema = (nodeList) => {
                 /**
                  * If the element is a flect custom element
                  * we generate a template and store it in the cache
-                 * If the element is a template we store it's content
                  * @type {DocumentFragment}
                  */
                 element = definition.template =

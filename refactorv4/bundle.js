@@ -3,6 +3,7 @@
         define: define a new customElement
         signal: create a Flect signal
         observe: execute an action the first time we find the element in the DOM
+        navigate: update the current route, history and url global signal
     }
 */
 
@@ -14,7 +15,6 @@ import { FLECT } from "./utils/types.js";
  * @type {{define: FLECT.Method.Define, signal: FLECT.Method.Define.Render.Signal, observe: FLECT.Method.Observe}}
  */
 const Flect = {
-    x: "x",
     define: define,
     signal: signal,
 };
