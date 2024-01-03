@@ -8,7 +8,7 @@ import {
     createTemplateFragmentFromString,
 } from "../templates/html.js";
 import { createTemplateSchema } from "../templates/schema.js";
-import { Flect } from "../utils/types.js";
+import { FLECT } from "../utils/types.js";
 import { createReferenceArray } from "../directives/ref.js";
 import {
     createEmptyTemplate,
@@ -23,7 +23,7 @@ export class xElement extends xTemplate {
         super();
         /**
          * store every references with the callback list
-         * @type {Flect.Element.References}
+         * @type {FLECT.Element.References}
          */
         this.references = {};
     }
@@ -41,13 +41,13 @@ export class xElement extends xTemplate {
 
         /**
          * define the component property
-         * @type {Flect.Element}
+         * @type {FLECT.Element}
          */
         self.datas.component = self;
 
         /**
          * create the context.ref method
-         * @type {Flect.Element.Datas.Reference}
+         * @type {FLECT.Element.Datas.Reference}
          */
         self.datas.ref = self.reference;
 
@@ -80,25 +80,25 @@ export class xElement extends xTemplate {
     render() {
         let self = this;
 
-        /** @type {Flect.Definition} */
+        /** @type {FLECT.Definition} */
         const definition = self.cacheDefinition || self.static;
-        /** @type {Flect.Template} */
+        /** @type {FLECT.Template} */
         let template = definition.template;
-        /** @type {Flect.Schema} */
+        /** @type {FLECT.Schema} */
         let schema = definition.schema;
         /** @type {Number} */
         let selectorId = self.static.selectorId;
 
-        /** @type {Flect.Method.Define.Render.Signal} */
+        /** @type {FLECT.Method.Define.Render.Signal} */
         const data = signal;
-        /** @type {Flect.Method.Define.Render.HTML} */
+        /** @type {FLECT.Method.Define.Render.HTML} */
         const html = template ? createEmptyTemplate : createLiteralTemplate;
-        /** @type {Flect.Method.Define.Render.CSS} */
+        /** @type {FLECT.Method.Define.Render.CSS} */
         const css = selectorId
             ? createEmptyTemplate
             : createCssTemplateOrSelector;
 
-        /** @type {Flect.Method.Define.Render} */
+        /** @type {FLECT.Method.Define.Render} */
         const renderFunction = self.static.renderFunction;
 
         /**
@@ -150,12 +150,12 @@ export class xElement extends xTemplate {
 
     /**
      * reference function used in context.ref
-     * @type {Flect.Element.Datas.Reference}
+     * @type {FLECT.Element.Datas.Reference}
      */
     reference(name, callback) {
         /**
          * get the reference's callback array or create it
-         * @type {Flect.Element.References.Array}
+         * @type {FLECT.Element.References.Array}
          */
         const referenceArray =
             this.component.references[name] ||

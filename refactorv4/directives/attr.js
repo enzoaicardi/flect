@@ -1,4 +1,5 @@
 import { reactive } from "../reactivity/signal.js";
+import { FLECT } from "../utils/types.js";
 import { cssDirective } from "./css.js";
 import { refDirective } from "./ref.js";
 import { showDirective } from "./show.js";
@@ -16,7 +17,7 @@ import { textDirective } from "./text.js";
 
 /**
  * Set HTMLElement attribute from the expression result
- * @type {import("../utils/types.js").Flect.Directive}
+ * @type {FLECT.Directive}
  */
 const defaultDirective = (context, element, expression, attributeName) => {
     return reactive(() =>

@@ -3,18 +3,18 @@
     https://github.com/alpinejs/alpine/blob/main/packages/alpinejs/src/evaluator.js
 */
 
-import { Flect } from "../utils/types.js";
+import { FLECT } from "../utils/types.js";
 
 /**
  * evaluated expressions cache
- * @type {{string: Flect.Expression}}
+ * @type {{string: FLECT.Expression}}
  */
 const evaluatorMemo = {};
 
 /**
  * Create a secure executable function from string expression
  * @param {String} expression Javascript expression formatted as string
- * @returns {Flect.Expression}
+ * @returns {FLECT.Expression}
  */
 export const generateFunctionFromString = (expression) => {
     if (evaluatorMemo[expression]) {

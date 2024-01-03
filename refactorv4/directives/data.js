@@ -1,12 +1,12 @@
 import { reactive, signal } from "../reactivity/signal.js";
-import { Flect } from "../utils/types.js";
+import { FLECT } from "../utils/types.js";
 
 /**
  * Set Flect component datas from the expression result
- * @type {Flect.Directive}
+ * @type {FLECT.Directive}
  */
 export const dataDirective = (context, element, expression, attributeName) => {
-    /** @type {Flect.Element.Datas} */
+    /** @type {FLECT.Element.Datas} */
     element.datas = element.datas || {};
 
     return reactive(() => {

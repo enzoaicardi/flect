@@ -8,12 +8,13 @@
 
 import { define } from "./define.js";
 import { signal } from "./reactivity/signal.js";
-import { Flect as Types } from "./utils/types.js";
+import { FLECT } from "./utils/types.js";
 
 /**
- * @type {{define: Types.Method.Define, signal: Types.Method.Define.Render.Signal, observe: Types.Method.Observe}}
+ * @type {{define: FLECT.Method.Define, signal: FLECT.Method.Define.Render.Signal, observe: FLECT.Method.Observe}}
  */
 const Flect = {
+    x: "x",
     define: define,
     signal: signal,
 };

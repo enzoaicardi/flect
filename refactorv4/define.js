@@ -7,12 +7,12 @@
 
 import { xElement } from "./classes/element.js";
 import { customElementsDefine } from "./utils/shortcuts.js";
-import { Flect } from "./utils/types.js";
+import { FLECT } from "./utils/types.js";
 
 // keep track of defined components
 const defineMemo = {};
 
-/** @type {Flect.Method.Define} */
+/** @type {FLECT.Method.Define} */
 export const define = (name, renderFunction) => {
     const className = `__flect_${name}__`;
 
@@ -27,9 +27,9 @@ export const define = (name, renderFunction) => {
     };
 
     // add prototype & static properties
-    /** @type {Flect.Method.Define.Render} */
+    /** @type {FLECT.Method.Define.Render} */
     defineMemo[className].renderFunction = renderFunction;
-    /** @type {Flect.Definition} */
+    /** @type {FLECT.Definition} */
     defineMemo[className].prototype.static = defineMemo[className];
 
     // define the customElement

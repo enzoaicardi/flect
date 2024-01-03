@@ -4,7 +4,7 @@
 
 import { reactive } from "../reactivity/signal.js";
 import { elementCloneNode } from "../utils/shortcuts.js";
-import { Flect } from "../utils/types.js";
+import { FLECT } from "../utils/types.js";
 import { createFlag, createPart } from "./template.js";
 
 export const forDirective = (context, element, expression) => {
@@ -13,7 +13,7 @@ export const forDirective = (context, element, expression) => {
     /** @type {[any]} */
     let prevList = [];
 
-    /** @type {[Flect.Signal]} */
+    /** @type {[FLECT.Part]} */
     const parts = [{ flag: createFlag() }];
 
     /** @type {String} */
@@ -36,15 +36,15 @@ export const forDirective = (context, element, expression) => {
 
 /**
  * Implementation of reconcile algorithm
- * @param {Flect.Element.Datas} context
+ * @param {FLECT.Element.Datas} context
  * @param {HTMLTemplateElement} element
  * @param {[any]} prevList
  * @param {[any]} nextList
- * @param {[Flect.Part]} parts
+ * @param {[FLECT.Part]} parts
  * @param {String} key
  */
 function reconcile(context, element, prevList, nextList, parts, key) {
-    /** @type {Flect.Definition} */
+    /** @type {FLECT.Definition} */
     const definition = element.cacheDefinition;
 
     /** @type {Number} */

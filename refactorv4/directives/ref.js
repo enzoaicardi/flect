@@ -1,10 +1,10 @@
 import { reactive, signal } from "../reactivity/signal.js";
-import { Flect } from "../utils/types.js";
+import { FLECT } from "../utils/types.js";
 
 /**
  * Function used to create an array with a signal property
  * this is usefull to trigger references updates
- * @returns {Flect.Element.References.Array}
+ * @returns {FLECT.Element.References.Array}
  */
 export const createReferenceArray = () => {
     const referenceArray = [];
@@ -15,20 +15,20 @@ export const createReferenceArray = () => {
 
 /**
  * Apply reference callbacks based on attribute value
- * @type {Flect.Directive}
+ * @type {FLECT.Directive}
  */
 export const refDirective = (context, element, expression) => {
     /** @type {String} */
     const referenceName = expression;
 
-    /** @type {Flect.Element.References.Array} */
+    /** @type {FLECT.Element.References.Array} */
     const referenceArray = context.ref(referenceName);
 
     // used to determine if it's necessary to run the last callback only
     let primaryHydration = true;
 
     return reactive(() => {
-        /** @type {Flect.Element.References.Array} */
+        /** @type {FLECT.Element.References.Array} */
         const array = referenceArray.signalGetter();
 
         // apply all callbacks first time

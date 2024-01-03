@@ -1,8 +1,8 @@
-import { Flect } from "../utils/types.js";
+import { FLECT } from "../utils/types.js";
 
 /**
  * Set HTMLElement eventListener from the expression result
- * @type {Flect.Directive}
+ * @type {FLECT.Directive}
  */
 export const eventDirective = (context, element, expression, attributeName) => {
     /**
@@ -10,7 +10,7 @@ export const eventDirective = (context, element, expression, attributeName) => {
      * we store it on the element for memory reasons
      * because when the element is removed from the DOM
      * the handler is deleted by the garbage collector
-     * @type {Flect.Handler}
+     * @type {FLECT.Handler}
      */
     const eventHandler = (element.handler = element.handler || new xHandler());
 
@@ -21,7 +21,7 @@ export const eventDirective = (context, element, expression, attributeName) => {
     element.addEventListener(attributeName, eventHandler);
 };
 
-/** @type {Flect.Handler} */
+/** @type {FLECT.Handler} */
 export class xHandler {
     handleEvent(event) {
         this[event.type](event);

@@ -14,16 +14,16 @@ import {
     isXTemplate,
 } from "../utils/tests.js";
 import { createTemplateFragmentFromNodeList } from "./html.js";
-import { Flect } from "../utils/types.js";
+import { FLECT } from "../utils/types.js";
 import { templateDirective } from "../directives/template.js";
 
 /**
  * Create a xElement template schema
  * @param {NodeList} nodeList
- * @returns {Boolean|Flect.Schema}
+ * @returns {Boolean|FLECT.Schema}
  */
 export const createTemplateSchema = (nodeList) => {
-    /** @type {Flect.Schema} */
+    /** @type {FLECT.Schema} */
     const schema = [];
 
     for (let x = 0; x < nodeList.length; x++) {
@@ -32,7 +32,7 @@ export const createTemplateSchema = (nodeList) => {
         const isxtemplate = isXTemplate(element);
         const isxelement = isxtemplate || isXElement(element);
 
-        /** @type {Flect.Definition} */
+        /** @type {FLECT.Definition} */
         const definition = {
             index: x,
             schema: false,
@@ -57,7 +57,7 @@ export const createTemplateSchema = (nodeList) => {
 
                 /**
                  * get the expression function or the attribute value for ref or css
-                 * @type {Flect.Expression|String}
+                 * @type {FLECT.Expression|String}
                  */
                 const expression =
                     attr.value &&
@@ -67,7 +67,7 @@ export const createTemplateSchema = (nodeList) => {
 
                 /**
                  * extract the corresponding attribute or data directive
-                 * @type {Flect.Directive}
+                 * @type {FLECT.Directive}
                  */
                 const directive = isxtemplate
                     ? templateDirective(attr)
@@ -77,10 +77,10 @@ export const createTemplateSchema = (nodeList) => {
                     ? eventDirective
                     : attributeDirective(attr);
 
-                /** @type {Flect.Action} */
+                /** @type {FLECT.Action} */
                 const action = { expression, directive };
 
-                /** @type {Flect.Attributes} */
+                /** @type {FLECT.Attributes} */
                 definition.attrs.set(name, action);
 
                 // clear element attribute
@@ -103,7 +103,7 @@ export const createTemplateSchema = (nodeList) => {
             /**
              * If the element has children
              * we build the definition of the element
-             * @type {Flect.Schema}
+             * @type {FLECT.Schema}
              */
             definition.schema = createTemplateSchema(element.children);
         }
@@ -117,7 +117,7 @@ export const createTemplateSchema = (nodeList) => {
     /**
      * If there is no definition current schema return false
      * else return the array of definitions
-     * @type {Boolean|Flect.Schema}
+     * @type {Boolean|FLECT.Schema}
      */
     return schema.length > 0 && schema;
 };

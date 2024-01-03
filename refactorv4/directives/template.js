@@ -1,7 +1,7 @@
 import { signal } from "../reactivity/signal.js";
 import { xcomment } from "../templates/html.js";
 import { documentCreateElement, elementCloneNode } from "../utils/shortcuts.js";
-import { Flect } from "../utils/types.js";
+import { FLECT } from "../utils/types.js";
 import { forDirective } from "./for.js";
 
 /** @returns {Comment} */
@@ -9,14 +9,15 @@ export const createFlag = () => elementCloneNode(xcomment);
 
 /**
  * create an abstract DOM part to manipulate a fragment
- * @param {Flect.Element.Datas} context
+ * @param {FLECT.Element.Datas} context
  * @param {String} key
  * @param {any} value
- * @returns {flag: Comment, property: Flect.Signal, manager: Flect.Element}
+ * @returns {FLECT.Part}
  */
 export const createPart = (context, key, value) => {
     const flag = createFlag();
     const property = signal(value);
+    // TODO explain
     const manager = documentCreateElement("x-template");
     manager.datas = { ...context, [key]: property };
 

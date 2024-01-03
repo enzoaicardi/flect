@@ -1,9 +1,9 @@
 import { createCssSelector, cssAttributeName } from "../templates/css.js";
-import { Flect } from "../utils/types.js";
+import { FLECT } from "../utils/types.js";
 
 /**
  * Add scoped style attribute based on attribute value
- * @type {Flect.Directive}
+ * @type {FLECT.Directive}
  */
 export const cssDirective = (context, element, expression) => {
     // get select the selector id and name

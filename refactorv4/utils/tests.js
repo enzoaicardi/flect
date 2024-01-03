@@ -5,7 +5,7 @@
     X- tags
 */
 
-import { Flect } from "../utils/types.js";
+import { FLECT } from "../utils/types.js";
 
 /**
  * Test if the attribute is reactive
@@ -24,7 +24,7 @@ export const isXEventAttribute = (attribute) =>
 
 /**
  * Test if the element is a flect custom element
- * @param {Flect.Element} element
+ * @param {FLECT.Element} element
  * @returns {Boolean}
  */
 export const isXElement = (element) => element.tagName.indexOf("X-") === 0;
