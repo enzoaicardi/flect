@@ -10,7 +10,7 @@ let currentReactive = null;
  * Create a signal function
  * @type {Flect.Method.Define.Render.Signal}
  */
-export function signal(value) {
+export const signal = (value) => {
     // create the getter function
     const getter = function (dataUpdated) {
         // if new data is sent
@@ -44,7 +44,7 @@ export function signal(value) {
 
     // return the signal setter/getter function
     return getter;
-}
+};
 
 /**
  * Run a function, if signal is played add the function to it's dependencies
@@ -52,13 +52,16 @@ export function signal(value) {
  * @param {Function} callback
  * @returns {Flect.Reactive}
  */
-export function reactive(callback) {
+export const reactive = (callback) => {
     // store the previous value
     const previousValue = currentReactive;
 
     // update currentReactive function and create a dependency Array
     currentReactive = callback;
-    /** @type {Flect.Dependencies.Signals} */
+    /**
+     * setup dependencies
+     * @type {Flect.Dependencies.Signals}
+     */
     currentReactive.signals = new Set();
 
     // call the function
@@ -68,4 +71,4 @@ export function reactive(callback) {
     // this is very important for nested reactives functions
     currentReactive = previousValue;
     return callback;
-}
+};

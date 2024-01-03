@@ -5,7 +5,7 @@ import { Flect } from "../utils/types.js";
  * Set HTMLElement display from the expression result
  * @type {Flect.Directive}
  */
-export function showDirective(context, element, expression) {
+export const showDirective = (context, element, expression) => {
     /**
      * store the initial display value
      * @type {String}
@@ -25,4 +25,4 @@ export function showDirective(context, element, expression) {
             element.style.display = "none";
         }
     });
-}
+};

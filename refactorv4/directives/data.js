@@ -5,7 +5,7 @@ import { Flect } from "../utils/types.js";
  * Set Flect component datas from the expression result
  * @type {Flect.Directive}
  */
-export function dataDirective(context, element, expression, attributeName) {
+export const dataDirective = (context, element, expression, attributeName) => {
     /** @type {Flect.Element.Datas} */
     element.datas = element.datas || {};
 
@@ -21,4 +21,4 @@ export function dataDirective(context, element, expression, attributeName) {
             element.datas[attributeName] = signal(value);
         }
     });
-}
+};

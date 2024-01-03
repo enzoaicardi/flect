@@ -16,7 +16,7 @@ const evaluatorMemo = {};
  * @param {String} expression Javascript expression formatted as string
  * @returns {Flect.Expression}
  */
-export function generateFunctionFromString(expression) {
+export const generateFunctionFromString = (expression) => {
     if (evaluatorMemo[expression]) {
         return evaluatorMemo[expression];
     }
@@ -57,4 +57,4 @@ export function generateFunctionFromString(expression) {
     evaluatorMemo[expression] = func;
 
     return func;
-}
+};

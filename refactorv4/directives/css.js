@@ -5,7 +5,7 @@ import { Flect } from "../utils/types.js";
  * Add scoped style attribute based on attribute value
  * @type {Flect.Directive}
  */
-export function cssDirective(context, element, expression) {
+export const cssDirective = (context, element, expression) => {
     // get select the selector id and name
     const selectorName = expression;
     const selectorId = context.component.selectorId;
@@ -15,4 +15,4 @@ export function cssDirective(context, element, expression) {
         cssAttributeName,
         createCssSelector(selectorName, selectorId)
     );
-}
+};

@@ -12,33 +12,26 @@ import { Flect } from "../utils/types.js";
  * @param {HTMLElement.attribute} attribute
  * @returns {Boolean}
  */
-export function isXAttribute(attribute) {
-    return attribute.name.indexOf("x-") === 0;
-}
+export const isXAttribute = (attribute) => attribute.name.indexOf("x-") === 0;
 
 /**
  * Test if the attribute represent an event
  * @param {HTMLElement.attribute} attribute
  * @returns {Boolean}
  */
-export function isXEventAttribute(attribute) {
-    return attribute.name.indexOf("x-on:") === 0;
-}
+export const isXEventAttribute = (attribute) =>
+    attribute.name.indexOf("x-on:") === 0;
 
 /**
  * Test if the element is a flect custom element
  * @param {Flect.Element} element
  * @returns {Boolean}
  */
-export function isXElement(element) {
-    return element.tagName.indexOf("X-") === 0;
-}
+export const isXElement = (element) => element.tagName.indexOf("X-") === 0;
 
 /**
  * Test if the element is a template element
  * @param {HTMLTemplateElement} element
  * @returns {Boolean}
  */
-export function isXTemplate(element) {
-    return !!element.content;
-}
+export const isXTemplate = (element) => element.tagName === "X-TEMPLATE";

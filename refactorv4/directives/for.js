@@ -2,147 +2,126 @@
     Flect reconcile algorithm implementation based on signals
 */
 
-import { reactive, signal } from "../reactivity/signal.js";
-import { xcomment } from "../templates/html.js";
-import { isXTemplate } from "../utils/tests.js";
+import { reactive } from "../reactivity/signal.js";
+import { elementCloneNode } from "../utils/shortcuts.js";
 import { Flect } from "../utils/types.js";
+import { createFlag, createPart } from "./template.js";
 
-/** @returns {Comment} */
-const createMarker = () => xcomment.cloneNode();
+export const forDirective = (context, element, expression) => {
+    // TODO -> setup the element datas for hydration
 
-export function forDirective(context, element, expression) {
-    if (isXTemplate(element)) {
-        /** @type {[any]} */
-        let prevList = [];
+    /** @type {[any]} */
+    let prevList = [];
 
-        /** @type {[Flect.Signal]} */
-        let signals = [];
+    /** @type {[Flect.Signal]} */
+    const parts = [{ flag: createFlag() }];
 
-        // we create the first marker used to prepend elements
-        /** @type {[Comment]} */
-        const markers = [createMarker()];
+    /** @type {String} */
+    const key = element.getAttribute("key") || "item";
 
-        /** @type {String} */
-        const key = element.getAttribute("key") || "item";
+    // replace the current element by the main flag
+    element.replaceWith(parts[0].flag);
 
-        // replace the current element by the main marker
-        element.replaceWith(markers[0]);
+    return reactive(() => {
+        /** @type {Array} */
+        const nextList = expression(context);
 
-        return reactive(() => {
-            /** @type {Array} */
-            const nextList = expression(context);
+        // apply reconcile algorithm
+        reconcile(context, element, prevList, nextList, parts, key);
 
-            // apply reconcile algorithm
-            reconcile(
-                context,
-                element,
-                prevList,
-                nextList,
-                signals,
-                markers,
-                key
-            );
-
-            // update prevList value to nextList
-            prevList = nextList;
-        });
-    }
-}
+        // update prevList value to nextList
+        prevList = nextList;
+    });
+};
 
 /**
- *
+ * Implementation of reconcile algorithm
  * @param {Flect.Element.Datas} context
  * @param {HTMLTemplateElement} element
  * @param {[any]} prevList
  * @param {[any]} nextList
- * @param {[Flect.Signal]} signals
- * @param {[Comment]} markers
+ * @param {[Flect.Part]} parts
  * @param {String} key
  */
-function reconcile(
-    context,
-    element,
-    prevList,
-    nextList,
-    signals,
-    markers,
-    key
-) {
+function reconcile(context, element, prevList, nextList, parts, key) {
     /** @type {Flect.Definition} */
     const definition = element.cacheDefinition;
-    /** @type {Flect.Template} */
-    const fragment = definition.template;
 
     /** @type {Number} */
     let index = 0;
     /** @type {Number} */
-    let gap = nextList.length - prevList.length;
+    const prevLength = prevList.length;
+    const nextLength = nextList.length;
+    let gap = nextLength - prevLength;
 
-    for (; index < prevList.length && index < nextList.length; index++) {
+    while (index < prevLength && index < nextLength) {
         // if the two values are different
         if (prevList[index] !== nextList[index]) {
             // we update the signal value with the nextList value
-            signals[index](nextList[index]);
+            parts[index].signal(nextList[index]);
         }
+        index++;
     }
 
-    /** @type {Flect.Element} */
-    const component = context.component;
+    // ADD ELEMENTS
 
     /** @type {[Element]} */
     const newElements = [];
 
     /** @type {Comment} */
-    const currentMarker = markers[index];
+    const currentFlag = parts[index].flag;
 
-    // CREATE
     while (gap > 0) {
-        /** @type {DocumentFragment} */
-        const part = fragment.cloneNode(true);
-        /** @type {Comment} */
-        const partMarker = (markers[index + 1] = createMarker());
-        /** @type {Flect.Signal} */
-        const partSignal = (signals[index] = signal(nextList[index]));
+        // clone the template fragment
+        const fragment = elementCloneNode(definition.template, true);
 
-        // push the part and the marker into newElements array
-        newElements.push(part, partMarker);
+        // we create the part corresponding to the fragment
+        // the part will be stored into an array of parts
+        // for each par we can retrieve the flag, the signal
+        // for the current array item, and the component which
+        // store the context and the hydration methods
+        const part =
+            parts[index + 1] ||
+            (parts[index + 1] = createPart(context, key, nextList[index]));
 
-        // hydrate the fragment with custom context
-        component.hydrate(part.children, definition.schema, {
-            ...context,
-            [key]: partSignal,
-        });
+        // push the template and the flag into newElements array
+        newElements.push(fragment, part.flag);
+
+        // is there is a cached schema, hydrate the fragment
+        definition.schema &&
+            part.component.hydrate(fragment.children, definition.schema);
+
+        // TODO -> conversion de classes en prototypes + double héritage
 
         // update indexes
         gap--;
         index++;
     }
 
-    // TODO -> test si plus rapide de replace un seul tableau ou replace au fur et a mesure dans while
+    // replace the current flag by the new elements
+    // at the end of the list
     if (newElements.length) {
-        currentMarker.replaceWith(currentMarker, ...newElements);
+        currentFlag.replaceWith(currentFlag, ...newElements);
     }
 
-    // REMOVE
-    while (gap < 0) {
-        // unbind using signal dependencies directly
-        // remove + unbind + append at the end
-        gap++;
+    // REMOVE ELEMENTS
+    else if (gap < 0) {
+        /**
+         * get the head and tail flags
+         * @type {Comment}
+         */
+        let head = flags[index];
+        const tail = flags[index - gap];
+
+        /**
+         * Remove all the elements between head and tail
+         * move head forward after every deletion and stop
+         * when head and tail are equals
+         */
+        while (head !== tail) {
+            const next = head;
+            head = head.nextSibling;
+            next.remove();
+        }
     }
 }
-
-/*
- On a une liste de valeurs
-    - on stocke la liste
-    - on créer une liste de signaux correspondants
-
-    On change la liste
-    pour chaque element:
-    - si element identique = on fait rien
-    - sinon = on met a jour la valeur du signal
-
-    - hydrate(nodeList, schema, {...datas, [key]: arrayItem})
-
-    si la liste est plus grande, on créer les elements correspondants
-    si la liste est plus petite, on supprime les elements coorepondants
-*/
