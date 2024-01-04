@@ -88,10 +88,10 @@ export class xElement extends HTMLElement {
         let template = definition.template;
         /** @type {FLECT.Schema} */
         let schema = definition.schema;
-        /** @type {Number} */
+        /** @type {number} */
         let selectorId = self.static.selectorId;
 
-        /** @type {FLECT.Method.Define.Render.Signal} */
+        /** @type {FLECT.Method.Signal} */
         const data = signal;
         /** @type {FLECT.Method.Define.Render.HTML} */
         const html = template ? createEmptyTemplate : createLiteralTemplate;
@@ -105,7 +105,7 @@ export class xElement extends HTMLElement {
 
         /**
          * Execute the renderFunction to get the template and hydrate this.datas
-         * @type {String|NodeList}
+         * @type {string|NodeList}
          */
         const renderResult = renderFunction.call(self.datas, data, html, css);
 

@@ -16,7 +16,7 @@ export const FLECT = {};
  * -- Element.Datas
  * @typedef {{ref: FLECT.Element.Datas.Reference, component: FLECT.Element}} FLECT.Element.Datas Object containing component's relative datas
  * -- Element.References
- * @typedef {{name: [Function]}} FLECT.Element.References Object containing component's relative references with callback list
+ * @typedef {{name: FLECT.Element.References.Array}} FLECT.Element.References Object containing component's relative references with callback list
  * -- Element.References.Array
  * @typedef {[Function, signal: FLECT.Signal]} FLECT.Element.References.Array Array containing reference callback list
  */
@@ -26,7 +26,7 @@ export const FLECT = {};
  */
 /** - Element.Datas.Reference
  * @callback FLECT.Element.Datas.Reference Function used to apply effects to a DOM reference
- * @param {String} name The matching name of the DOM references
+ * @param {string} name The matching name of the DOM references
  * @param {FLECT.Element.Datas.Reference.Callback} callback Function to play when the reference is found in the DOM
  */
 /** - Element.Datas.Reference.Callback
@@ -44,11 +44,11 @@ export const FLECT = {};
 /**
  * Hydration
  * -- Definition
- * @typedef {{index: Number, template: FLECT.Template, schema: FLECT.Schema, reactive: Boolean, attrs: FLECT.Attributes}} FLECT.Definition Object representing the definition of a HTMLElement
+ * @typedef {{index: number, template: FLECT.Template, schema: FLECT.Schema, reactive: boolean, attrs: FLECT.Attributes}} FLECT.Definition Object representing the definition of a HTMLElement
  * -- Attributes
- * @typedef {Schema<String, FLECT.Action>} FLECT.Attributes Schema of attributes with associated actions
+ * @typedef {Object<string, FLECT.Action>} FLECT.Attributes Schema of attributes with associated actions
  * -- Action
- * @typedef {{expression: FLECT.Expression|String, directive: Function}} FLECT.Action Object defining a directive and the associated expression
+ * @typedef {{expression: FLECT.Expression|string, directive: Function}} FLECT.Action Object defining a directive and the associated expression
  * -- Handler
  * @typedef {xHandler} FLECT.Handler Class representing an event handler object
  */
@@ -56,8 +56,8 @@ export const FLECT = {};
  * @callback FLECT.Directive Function creating a reactive function
  * @param {FLECT.Element.Datas} context The context of the expression passed throught "with"
  * @param {HTMLElement} element The element affected by the directive
- * @param {FLECT.Expression|String} expression The expression executed
- * @param {String} attributeName The attribute responsible of the directive
+ * @param {FLECT.Expression|string} expression The expression executed
+ * @param {string} attributeName The attribute responsible of the directive
  * @returns {FLECT.Reactive|void}
  */
 /** - Expression
@@ -69,20 +69,25 @@ export const FLECT = {};
 
 /**
  * Reactivity
- * -- Dependencies...
+ * -- Dependencies
+ * -- Dependencies.Trail
  * @typedef {Set<FLECT.Reactive|FLECT.Element>} FLECT.Dependencies.Trail Set of reactive functions and elements
+ * -- Dependencies.Reactives
  * @typedef {Set<FLECT.Reactive>} FLECT.Dependencies.Reactives Set of reactive functions trigerred by signal
+ * -- Dependencies.Signals
  * @typedef {Set<FLECT.Dependencies.Reactives>} FLECT.Dependencies.Signals Set of reactive functions trigerred by signal
  */
 /** - Reactive
  * @callback FLECT.Reactive Function running everytime a containing signal value change
- * @returns
+ * @property {FLECT.Dependencies.Signals} signals All signals dependencies containing that reactive function
+ * @returns {any}
  */
 /** - Signal
  * @callback FLECT.Signal Function used to get or change value rerunning dependencies functions
  * @param {any?} updatedValue The (optional) new value of the variable
  * @property {any} data That property access data without triggering signal
- * @property {Boolean} issignal That property is used to test if a property is a signal
+ * @property {boolean} issignal That property is used to test if a property is a signal
+ * @property {FLECT.Dependencies.Reactives} reactives All reactives functions in dependencies
  * @returns {any} Returns the variable value
  */
 
@@ -96,28 +101,28 @@ export const FLECT = {};
  * @returns {FLECT.Element} The customElement class
  */
 /** - Define.Name
- * @typedef {String} FLECT.Method.Define.Name The name of the customElement without x- prefix
+ * @typedef {string} FLECT.Method.Define.Name The name of the customElement without x- prefix
  */
 /** - Define.Render
  * @callback FLECT.Method.Define.Render Function used to hydrate datas and create component template & schema
- * @param {FLECT.Method.Define.Render.Signal} signal Function used to create a signal that can trigger changes through reactives functions
+ * @param {FLECT.Method.Signal} signal Function used to create a signal that can trigger changes through reactives functions
  * @param {FLECT.Method.Define.Render.HTML} html Function used to create html template
  * @param {FLECT.Method.Define.Render.CSS} css Function used to create css template
  * @this {FLECT.Element.Datas}
  * @returns {FLECT.Template} The final template of the component
  */
-/** - Define.Render.Signal
- * @callback FLECT.Method.Define.Render.Signal Function used to create a signal that can trigger changes through reactives functions
- * @param {any?} value Default value of signal data
- * @returns {FLECT.Signal} A signal that can be used to create reactive variables
- */
 /** - Define.Render.HTML
  * @callback FLECT.Method.Define.Render.HTML Function used to create html template
- * @param {String?} templateLiteral String representation of html template
+ * @param {string?} templateLiteral String representation of html template
  * @returns {FLECT.Template|null} The component template
  */
 /** - Define.Render.CSS
  * @callback FLECT.Method.Define.Render.CSS Function used to create css template and also define css selectors
- * @param {String?} templateLiteral String representation of css template or the name of the selector
- * @returns {String} String representation of css template
+ * @param {string?} templateLiteral String representation of css template or the name of the selector
+ * @returns {string} String representation of css template
+ */
+/** - Signal
+ * @callback FLECT.Method.Signal Function used to create a signal that can trigger changes through reactives functions
+ * @param {any?} value Default value of signal data
+ * @returns {FLECT.Signal} A signal that can be used to create reactive variables
  */

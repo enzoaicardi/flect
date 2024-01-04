@@ -20,7 +20,7 @@ import { templateDirective } from "../directives/template.js";
 /**
  * Create a xElement template schema
  * @param {NodeList} nodeList
- * @returns {Boolean|FLECT.Schema}
+ * @returns {boolean|FLECT.Schema}
  */
 export const createTemplateSchema = (nodeList) => {
     /** @type {FLECT.Schema} */
@@ -48,16 +48,16 @@ export const createTemplateSchema = (nodeList) => {
             const attr = element.attributes[index];
 
             if (isXAttribute(attr)) {
-                /** @type {Boolean} */
+                /** @type {boolean} */
                 const isxevent = isXEventAttribute(attr);
-                /** @type {String} */
+                /** @type {string} */
                 const name = isxevent
                     ? attr.name.substring(5)
                     : attr.name.substring(2);
 
                 /**
                  * get the expression function or the attribute value for ref or css
-                 * @type {FLECT.Expression|String}
+                 * @type {FLECT.Expression|string}
                  */
                 const expression =
                     attr.value &&
@@ -116,7 +116,7 @@ export const createTemplateSchema = (nodeList) => {
     /**
      * If there is no definition current schema return false
      * else return the array of definitions
-     * @type {Boolean|FLECT.Schema}
+     * @type {boolean|FLECT.Schema}
      */
     return schema.length > 0 && schema;
 };

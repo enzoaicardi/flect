@@ -14,7 +14,7 @@ export const createFlag = () => elementCloneNode(xcomment);
 /**
  * create an abstract DOM part to manipulate a fragment
  * @param {FLECT.Element.Datas} context
- * @param {String} key
+ * @param {string} key
  * @param {any} value
  * @returns {FLECT.Part}
  */

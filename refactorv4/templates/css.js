@@ -1,7 +1,7 @@
 import { documentCreateElement, dom } from "../utils/shortcuts.js";
 import { createLiteralTemplate } from "./generic.js";
 
-/** @type {Number} css selectors needs to be unique so we need to store a global id */
+/** @type {number} css selectors needs to be unique so we need to store a global id */
 const xstyle = documentCreateElement("style");
 
 export const cssAttributeName = "css-x";
@@ -9,14 +9,14 @@ export let cssSelectorsId = 1;
 
 /**
  * increment global id of css selectors
- * @returns {Number}
+ * @returns {number}
  */
 export const cssNextId = () => cssSelectorsId++;
 
 /**
  * used to create a css selector attribute used in css and html templates
  * selector start by "css-" because we to want to interfere with x- attributes
- * @returns {String} css attribute value
+ * @returns {string} css attribute value
  */
 export const createCssSelector = (selectorName, selectorId) =>
     "$" + (selectorId || cssSelectorsId) + selectorName;
@@ -24,9 +24,9 @@ export const createCssSelector = (selectorName, selectorId) =>
 /**
  * Used to create CSS templates or CSS selectors from components renderFunction
  * and also append style tag into document's head
- * @param {[String]|String} strings
+ * @param {[string]|string} strings
  * @param {...any} values
- * @returns {String}
+ * @returns {string}
  */
 export const createCssTemplateOrSelector = (strings, ...values) => {
     // in case of an unique string we define a new selector

@@ -56,7 +56,7 @@ export const xAbstract = {
 
             /**
              * loop over all hydratable attributes
-             * @type {[String, FLECT.Action]}
+             * @type {[string, FLECT.Action]}
              */
             for (const [name, action] of definition.attrs) {
                 // apply the corresponding directive
@@ -71,6 +71,8 @@ export const xAbstract = {
                 // push the reactiveFunction into component trail
                 // only if the directive return a reactive function
                 if (reactiveFunction) {
+                    // TODO -> changer, envoyer seulement les dependences
+                    // reactiveFunction.signals
                     self.trail.add(reactiveFunction);
                 }
             }

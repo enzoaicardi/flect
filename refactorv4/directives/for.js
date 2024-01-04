@@ -14,7 +14,7 @@ export const forDirective = (context, element, expression) => {
     /** @type {[FLECT.Part]} */
     const parts = [{ flag: createFlag() }];
 
-    /** @type {String} */
+    /** @type {string} */
     const key = element.getAttribute("key") || "item";
 
     // replace the current element by the main flag
@@ -39,18 +39,18 @@ export const forDirective = (context, element, expression) => {
  * @param {[any]} prevList
  * @param {[any]} nextList
  * @param {[FLECT.Part]} parts
- * @param {String} key
+ * @param {string} key
  */
 function reconcile(context, element, prevList, nextList, parts, key) {
     /** @type {FLECT.Definition} */
     const definition = element.cacheDefinition;
 
-    /** @type {Number} */
+    /** @type {number} */
     let index = 0;
     const prevLength = prevList.length;
     const nextLength = nextList.length;
 
-    /** @type {Number} */
+    /** @type {number} */
     let gap = nextLength - prevLength;
 
     // UPDATE ELEMENTS

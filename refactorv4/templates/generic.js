@@ -6,9 +6,9 @@ export const createEmptyTemplate = () => {};
 
 /**
  * Used to return HTML and CSS templates from components renderFunction
- * @param {[String]} strings
+ * @param {[string]} strings
  * @param {...any} values
- * @returns {String}
+ * @returns {string}
  */
 export const createLiteralTemplate = (strings, ...values) =>
     strings.reduce(

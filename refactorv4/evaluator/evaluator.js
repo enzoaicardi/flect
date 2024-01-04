@@ -13,7 +13,7 @@ const evaluatorMemo = {};
 
 /**
  * Create a secure executable function from string expression
- * @param {String} expression Javascript expression formatted as string
+ * @param {string} expression Javascript expression formatted as string
  * @returns {FLECT.Expression}
  */
 export const generateFunctionFromString = (expression) => {

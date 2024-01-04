@@ -8,7 +8,7 @@ import { FLECT } from "../utils/types.js";
 export const showDirective = (context, element, expression) => {
     /**
      * store the initial display value
-     * @type {String}
+     * @type {string}
      */
     const initialValue = element.style.display;
 

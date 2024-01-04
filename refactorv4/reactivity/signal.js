@@ -8,7 +8,7 @@ let currentReactive = null;
 
 /**
  * Create a signal function
- * @type {FLECT.Method.Define.Render.Signal}
+ * @type {FLECT.Method.Signal}
  */
 export const signal = (value) => {
     // create the getter function

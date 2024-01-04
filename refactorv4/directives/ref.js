@@ -18,7 +18,7 @@ export const createReferenceArray = () => {
  * @type {FLECT.Directive}
  */
 export const refDirective = (context, element, expression) => {
-    /** @type {String} */
+    /** @type {string} */
     const referenceName = expression;
 
     /** @type {FLECT.Element.References.Array} */

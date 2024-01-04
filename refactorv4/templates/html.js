@@ -10,7 +10,7 @@ export let xfragment = dom.createDocumentFragment();
 
 /**
  * Create a DocumentFragment from a string literal
- * @param {String} string
+ * @param {string} string
  * @returns {DocumentFragment}
  */
 export const createTemplateFragmentFromString = (string) => {
