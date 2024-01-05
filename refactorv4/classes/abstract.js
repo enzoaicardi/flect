@@ -41,8 +41,18 @@ export const xAbstract = {
      */
     hydrate(nodeList, schema) {
         let self = this;
-        /** @type {FLECT.Definition} */
-        for (const definition of schema) {
+
+        /** @type {number} */
+        let index = schema.length - 1;
+
+        // we play the schema in reverse order because the nodeList
+        // can change during the hydration process by adding or removing
+        // elements at the current index, so next indexes could change
+        // for that reason we must use previous indexes
+        while (index >= 0) {
+            /** @type {FLECT.Definition} */
+            const definition = schema[index];
+
             /**
              * retrieve the HTMLElement from the index
              * @type {HTMLElement}
@@ -81,6 +91,8 @@ export const xAbstract = {
             if (!definition.reactive && definition.schema) {
                 self.hydrate(element.children, definition.schema);
             }
+
+            index--;
         }
     },
 

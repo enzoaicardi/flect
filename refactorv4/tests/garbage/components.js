@@ -29,7 +29,6 @@ setTimeout(() => {
     //     static properties = {
     //         array: {},
     //     };
-
     //     constructor() {
     //         super();
     //         this.array = prev;
@@ -40,7 +39,6 @@ setTimeout(() => {
     //             this.array = final;
     //         }, 2000);
     //     }
-
     //     render() {
     //         return html`
     //             <ul>
@@ -57,28 +55,46 @@ setTimeout(() => {
     //     }
     // }
     // customElements.define("basic-element", BasicElement);
+    // console.log("flect");
+    // Flect.define("p", function (signal, html, css) {
+    //     this.array = signal(prev);
+    //     // this.array = signal([1, 2, 3, 4, 5]);
+    //     setTimeout(() => {
+    //         this.array(next);
+    //         // this.array([6]);
+    //     }, 1000);
+    //     setTimeout(() => {
+    //         this.array(final);
+    //         // this.array([7, 8, 9, 10, 11, 12, 13, 14]);
+    //     }, 2000);
+    //     return html` <ul>
+    //         <template x-for="array()">
+    //             <li x-text="item()"></li>
+    //             <p x-class="'fake-class and ' + item()">a</p>
+    //             <p x-data-number="item()">b</p>
+    //             <p>c</p>
+    //             <p>d</p>
+    //         </template>
+    //     </ul>`;
+    // });
+}, 1000);
 
-    console.log("flect");
-    Flect.define("p", function (signal, html, css) {
-        this.array = signal(prev);
-        // this.array = signal([1, 2, 3, 4, 5]);
-        setTimeout(() => {
-            this.array(next);
-            // this.array([6]);
-        }, 1000);
-        setTimeout(() => {
-            this.array(final);
-            // this.array([7, 8, 9, 10, 11, 12, 13, 14]);
-        }, 2000);
+Flect.define("test", function (signal, html, css) {
+    this.array = signal([[1, 2], [3, 4], [5]]);
+    setTimeout(() => {
+        this.array([[6, 7]]);
+    }, 1000);
+    css`
+        [${css("a")}] {
+            background: red;
+        }`;
 
-        return html` <ul>
-            <template x-for="array()">
+    return html` <ul>
+        <template x-for="array()">
+            <template x-for="item()">
                 <li x-text="item()"></li>
-                <p x-class="'fake-class and ' + item()">a</p>
-                <p x-data-number="item()">b</p>
-                <p>c</p>
-                <p>d</p>
             </template>
-        </ul>`;
-    });
-}, 100);
+            <p x-css="a" x-text="'lol the bug'">----</p>
+        </template>
+    </ul>`;
+});
