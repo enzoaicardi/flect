@@ -1,3 +1,8 @@
+/*
+    Flect signals implementation based on S.js
+    https://github.com/adamhaile/S/blob/master/src/S.ts
+*/
+
 import { FLECT } from "../utils/types.js";
 
 /**
@@ -46,6 +51,16 @@ export const signal = (value) => {
     return getter;
 };
 
+/** @returns {FLECT.Element.DisconnectCallback} */
+export const disconnectReactive = (reactive) => () => {
+    /** @type {FLECT.Dependencies.Reactives} */
+    for (const signalReactives of reactive.signals) {
+        // remove the function from the signal dependencies
+        // by doing this signal will not trigger the function on change
+        signalReactives.delete(reactive);
+    }
+};
+
 /**
  * Run a function, if signal is played add the function to it's dependencies
  * then return the function as a reactive function
@@ -63,6 +78,9 @@ export const reactive = (callback) => {
      * @type {FLECT.Dependencies.Signals}
      */
     currentReactive.signals = new Set();
+
+    /** @type {FLECT.Element.DisconnectCallback} */
+    currentReactive.disconnectCallback = disconnectReactive(currentReactive);
 
     // call the function
     callback();

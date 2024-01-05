@@ -2,6 +2,8 @@
     TODO -> explain
 */
 
+import { FLECT } from "../utils/types.js";
+
 export const xAbstract = {
     setup(datas) {
         let self = this;
@@ -27,7 +29,7 @@ export const xAbstract = {
         self.trail = new Set();
     },
 
-    // used to unHydrate the current element
+    /** @type {FLECT.Element.DisconnectCallback} */
     disconnectCallback() {
         this.unHydrate();
     },
@@ -71,8 +73,6 @@ export const xAbstract = {
                 // push the reactiveFunction into component trail
                 // only if the directive return a reactive function
                 if (reactiveFunction) {
-                    // TODO -> changer, envoyer seulement les dependences
-                    // reactiveFunction.signals
                     self.trail.add(reactiveFunction);
                 }
             }
@@ -88,15 +88,15 @@ export const xAbstract = {
      * UnHydrate HTMLElements based on trail
      * @param {FLECT.Dependencies.Reactives} trail
      */
+    // -> TODO -> voir dans quelle mesure un argument freeze serait utile
+    // au lieu de delet reactive on passe a reactive.frozen = !reactive.frozen
+    // et dans signal !reactive.frozen && reactive()
+    // cela permettrait de geler et rétablir l'état d'un composant
+    // mais utile dans quel cas de figure ? x-for ? x-if ? ssr ?
     unHydrate() {
-        /** @type {FLECT.Reactive} */
-        for (const reactiveFunction of trail) {
-            /** @type {FLECT.Dependencies.Signals} */
-            for (const signalDependencies of reactiveFunction.signals) {
-                // remove the function from the signal dependencies
-                // by doing this signal will not trigger the function on change
-                signalDependencies.delete(reactiveFunction);
-            }
+        /** @type {FLECT.Reactive|FLECT.Element} */
+        for (const reactive of this.trail) {
+            reactive.disconnectCallback();
         }
         // clear the trail dependencies
         this.trail.clear();

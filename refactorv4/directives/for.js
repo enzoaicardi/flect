@@ -7,6 +7,9 @@ import { elementCloneNode } from "../utils/shortcuts.js";
 import { FLECT } from "../utils/types.js";
 import { createFlag, createPart } from "./template.js";
 
+/*
+    TODO -> explain
+*/
 export const forDirective = (context, element, expression) => {
     /** @type {[any]} */
     let prevList = [];
@@ -16,6 +19,13 @@ export const forDirective = (context, element, expression) => {
 
     /** @type {string} */
     const key = element.getAttribute("key") || "item";
+
+    /** @type {FLECT.Element.DisconnectCallback} */
+    element.disconnectCallback = () => {
+        for (let x = 1; x < parts.length; x++) {
+            parts[x].manager.disconnectCallback();
+        }
+    };
 
     // replace the current element by the main flag
     element.replaceWith(parts[0].flag);
@@ -58,7 +68,7 @@ function reconcile(context, element, prevList, nextList, parts, key) {
         // if the two values are different
         if (prevList[index] !== nextList[index]) {
             // we update the signal value with the nextList value
-            parts[index].property(nextList[index]);
+            parts[index + 1].property(nextList[index]);
         }
         index++;
     }
@@ -71,17 +81,21 @@ function reconcile(context, element, prevList, nextList, parts, key) {
     const currentFlag = parts[index].flag;
 
     while (gap > 0) {
+        let part;
         // clone the template fragment
         const fragment = elementCloneNode(definition.template, true);
 
         // we create the part corresponding to the fragment
         // the part will be stored into an array of parts
-        // for each par we can retrieve the flag, the signal
+        // for each part we can retrieve the flag, the signal
         // for the current array item, and the manager which
         // store the context and the hydration methods
-        const part =
-            parts[index + 1] ||
-            (parts[index + 1] = createPart(context, key, nextList[index]));
+        // if the part already exist, update the property value
+        if ((part = parts[index + 1])) {
+            part.property(nextList[index]);
+        } else {
+            part = parts[index + 1] = createPart(context, key, nextList[index]);
+        }
 
         // push the template fragment and the flag into newElements array
         newElements.push(fragment, part.flag);
@@ -89,7 +103,6 @@ function reconcile(context, element, prevList, nextList, parts, key) {
         // if there is a cached schema, hydrate the fragment
         definition.schema &&
             part.manager.hydrate(fragment.children, definition.schema);
-        // TODO -> recheck le process de binding ici juste pour bien se souvenir
 
         // update indexes
         gap--;
@@ -103,17 +116,13 @@ function reconcile(context, element, prevList, nextList, parts, key) {
     }
 
     // REMOVE ELEMENTS
-    else if (gap < 0) {
+    while (gap < 0) {
         /**
          * get the head and tail flags
          * @type {Comment}
          */
-        let head = flags[index];
-        const tail = flags[index - gap];
-
-        // TODO -> loop sur les parts
-        // marker -> while remove()
-        // unbind avant
+        let head = parts[index].flag.nextSibling;
+        const tail = parts[index + 1].flag;
 
         /**
          * Remove all the elements between head and tail
@@ -121,9 +130,14 @@ function reconcile(context, element, prevList, nextList, parts, key) {
          * when head and tail are equals
          */
         while (head !== tail) {
-            const next = head;
+            const prev = head;
             head = head.nextSibling;
-            next.remove();
+            prev.remove();
         }
+        // unHydrate the element
+        parts[index + 1].manager.disconnectCallback();
+
+        gap++;
+        index++;
     }
 }
