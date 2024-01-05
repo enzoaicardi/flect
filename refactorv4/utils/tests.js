@@ -34,4 +34,4 @@ export const isXElement = (element) => element.tagName.indexOf("X-") === 0;
  * @param {HTMLTemplateElement} element
  * @returns {boolean}
  */
-export const isXTemplate = (element) => element.tagName === "X-TEMPLATE";
+export const isXTemplate = (element) => !!element.content;

@@ -88,7 +88,7 @@ export const createTemplateSchema = (nodeList) => {
             }
         }
 
-        if (element.childNodes.length) {
+        if ((element.content || element).childNodes.length) {
             if (isxelement) {
                 /**
                  * If the element is a flect custom element
@@ -96,6 +96,7 @@ export const createTemplateSchema = (nodeList) => {
                  * @type {DocumentFragment}
                  */
                 element = definition.template =
+                    element.content ||
                     createTemplateFragmentFromNodeList(element.childNodes);
             }
 

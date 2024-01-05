@@ -1,10 +1,3 @@
-import { reactive } from "../reactivity/signal.js";
-import { FLECT } from "../utils/types.js";
-import { cssDirective } from "./css.js";
-import { refDirective } from "./ref.js";
-import { showDirective } from "./show.js";
-import { textDirective } from "./text.js";
-
 /*
     What append in a directive function ?
     1 - the directive function is stored inside component's schema
@@ -14,6 +7,13 @@ import { textDirective } from "./text.js";
         expression with the new context (contains all this... values)
     4 - the result of the expression based on the context is used to update the directive
 */
+
+import { reactive } from "../reactivity/signal.js";
+import { FLECT } from "../utils/types.js";
+import { cssDirective } from "./css.js";
+import { refDirective } from "./ref.js";
+import { showDirective } from "./show.js";
+import { textDirective } from "./text.js";
 
 /**
  * Set HTMLElement attribute from the expression result

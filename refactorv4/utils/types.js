@@ -1,7 +1,5 @@
 /*
-TODO -> traduire
-    Définition de l'ensemble des types grace à JsDoc pour mieux fournir plus de détails
-    sur l'implémentation de la librairie
+    All FLECT types definitions via JSDoc, used in major IDEs
 */
 
 import { xHandler } from "../directives/event.js";
@@ -20,10 +18,6 @@ export const FLECT = {};
  * -- Element.References.Array
  * @typedef {[Function, signal: FLECT.Signal]} FLECT.Element.References.Array Array containing reference callback list
  */
-/**
- * -- Part
- * @typedef {{flag: Comment, property: FLECT.Signal, manager: FLECT.Element}} FLECT.Part Abstract DOM part used to manipulate a fragment
- */
 /** - Element.Datas.Reference
  * @callback FLECT.Element.Datas.Reference Function used to apply effects to a DOM reference
  * @param {string} name The matching name of the DOM references
@@ -33,12 +27,20 @@ export const FLECT = {};
  * @callback FLECT.Element.Datas.Reference.Callback
  * @param {HTMLElement} element The element affected by the callback
  */
+/** - Element.DisconnectCallback
+ * @callback FLECT.Element.DisconnectCallback Function used to clear signals dependencies: enabled on xManager, xElement and xReactive
+ * @param {FLECT.Element.Datas} [datas] Datas of the element
+ */
 /**
  * Element static representation
  * -- Template
  * @typedef {DocumentFragment} FLECT.Template HTML templates used in components
  * -- Schema
  * @typedef {[FLECT.Definition]} FLECT.Schema Array of definitions
+ */
+/**
+ * -- Part
+ * @typedef {{flag: Comment, property: FLECT.Signal, manager: FLECT.Element}} FLECT.Part Abstract DOM part used to manipulate a fragment
  */
 
 /**

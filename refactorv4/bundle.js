@@ -12,7 +12,7 @@ import { signal } from "./reactivity/signal.js";
 import { FLECT } from "./utils/types.js";
 
 /**
- * @type {{define: FLECT.Method.Define, signal: FLECT.Method.Define.Render.Signal, observe: FLECT.Method.Observe}}
+ * @type {{define: FLECT.Method.Define, signal: FLECT.Method.Signal, observe: FLECT.Method.Observe}}
  */
 const Flect = {
     define: define,
