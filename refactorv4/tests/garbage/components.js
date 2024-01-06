@@ -9,19 +9,19 @@ const prev = [...Array(4000)].map((_) => Math.ceil(Math.random() * 10));
 const next = [...Array(20)].map((_) => Math.ceil(Math.random() * 1000));
 const final = [...Array(2000)].map((_) => Math.ceil(Math.random() * 1000));
 
-let o = performance.now();
+// let o = performance.now();
 
-function freeze() {
-    setTimeout(() => {
-        if (performance.now() - o > 30) {
-            console.log("freeze : " + (performance.now() - o));
-        }
-        o = performance.now();
-        freeze();
-    }, 1);
-}
+// function freeze() {
+//     setTimeout(() => {
+//         if (performance.now() - o > 30) {
+//             console.log("freeze : " + (performance.now() - o));
+//         }
+//         o = performance.now();
+//         freeze();
+//     }, 1);
+// }
 
-freeze();
+// freeze();
 
 setTimeout(() => {
     // console.log("lit");
@@ -69,32 +69,36 @@ setTimeout(() => {
     //     }, 2000);
     //     return html` <ul>
     //         <template x-for="array()">
-    //             <li x-text="item()"></li>
-    //             <p x-class="'fake-class and ' + item()">a</p>
-    //             <p x-data-number="item()">b</p>
-    //             <p>c</p>
-    //             <p>d</p>
+    //             <li><x-d x-item="item()"></x-d></li>
     //         </template>
     //     </ul>`;
     // });
 }, 1000);
 
-Flect.define("test", function (signal, html, css) {
-    this.array = signal([[1, 2], [3, 4], [5]]);
-    setTimeout(() => {
-        this.array([[6, 7]]);
-    }, 1000);
-    css`
-        [${css("a")}] {
-            background: red;
-        }`;
+Flect.define("e", function (signal, html) {
+    this.text = signal("XE -> success");
 
-    return html` <ul>
-        <template x-for="array()">
-            <template x-for="item()">
-                <li x-text="item()"></li>
-            </template>
-            <p x-css="a" x-text="'lol the bug'">----</p>
-        </template>
-    </ul>`;
+    setTimeout(() => {
+        this.text("XE -> success in update");
+    }, 1500);
+
+    return this.component.childNodes;
 });
+
+setTimeout(() => {
+    Flect.define("d", function (signal, html) {
+        return this.component.childNodes;
+    });
+}, 500);
+
+setTimeout(() => {
+    Flect.define("p", function (signal, html) {
+        this.text = signal(">> XP success");
+
+        setTimeout(() => {
+            this.text(">> XP success in update");
+        }, 1000);
+
+        return this.component.childNodes;
+    });
+}, 1000);

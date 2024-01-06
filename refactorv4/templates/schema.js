@@ -34,6 +34,7 @@ export const createTemplateSchema = (nodeList) => {
 
         /** @type {FLECT.Definition} */
         const definition = {
+            tagName: element.tagName, // this line is used to debug schema
             index: x,
             schema: false,
             template: false,
@@ -97,6 +98,9 @@ export const createTemplateSchema = (nodeList) => {
                  */
                 element = definition.template =
                     element.content ||
+                    // TODO -> trouver le bug dans le binding
+                    // ajuster le binding pour que l'ordre de definition des composants n'ait pas d'impact
+                    // (element.cacheDefinition || element.static).template ||
                     createTemplateFragmentFromNodeList(element.childNodes);
             }
 
@@ -109,7 +113,7 @@ export const createTemplateSchema = (nodeList) => {
         }
 
         // if the definition is not empty we add it to the schema
-        if (definition.schema || definition.attrs.size) {
+        if (definition.attrs.size || definition.schema || definition.template) {
             schema.push(definition);
         }
     }

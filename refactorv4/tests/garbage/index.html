@@ -5,6 +5,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Garbage testing</title>
         <script type="module" src="./components.js" defer></script>
+        <style>
+            .freezer {
+            }
+        </style>
     </head>
     <body>
         <h1>Primary tests here</h1>
@@ -12,10 +16,20 @@
             Here we do the primary testings, all files in this folder must be
             deleted after theses tests.
         </p>
+        <div class="freezer"></div>
 
         <main>
-            <x-test></x-test>
-            <x-p></x-p>
+            <!-- <x-p> </x-p> -->
+            <x-d preserve>
+                <x-p>
+                    <x-e>
+                        <p x-text="text()">inner</p>
+                        <p x-text="text()">inner</p>
+                        <p x-text="text()">inner</p>
+                    </x-e>
+                    <p x-text="text()">fail...</p>
+                </x-p>
+            </x-d>
             <basic-element></basic-element>
         </main>
     </body>

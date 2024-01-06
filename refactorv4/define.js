@@ -11,11 +11,11 @@ const defineMemo = {};
 
 /** @type {FLECT.Method.Define} */
 export const define = (name, renderFunction) => {
-    const className = `__flect_${name}__`;
+    const className = `_FLECT_${name}`;
 
     // check if the element is already defined
     if (window[className]) {
-        throw `customElement x-${name} is already defined !`;
+        throw `x-${name} is already defined`;
     }
 
     defineMemo[className] = class extends xElement {

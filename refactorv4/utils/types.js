@@ -100,6 +100,7 @@ export const FLECT = {};
  * @callback FLECT.Method.Define Function used to define a customElement
  * @param {FLECT.Method.Define.Name} name The name of the customElement without x- prefix
  * @param {FLECT.Method.Define.Render} renderFunction Function used to render the component
+ * @param {FLECT.Method.Define.Options} options Object used to change component's behavior
  * @returns {FLECT.Element} The customElement class
  */
 /** - Define.Name

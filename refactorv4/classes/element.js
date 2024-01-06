@@ -38,7 +38,7 @@ export class xElement extends HTMLElement {
          * @type {HTMLElement.attribute}
          */
         for (const attribute of self.attributes) {
-            self.datas[attribute.name] = attribute.value;
+            self.datas[attribute.name] = attribute.value || true;
         }
 
         /**
@@ -91,8 +91,14 @@ export class xElement extends HTMLElement {
         /** @type {number} */
         let selectorId = self.static.selectorId;
 
-        /** @type {FLECT.Method.Signal} */
-        const data = signal;
+        console.log(
+            self,
+            "\nhas template ?",
+            !!template,
+            "\nchildren are:",
+            [].slice.call(self.children)
+        );
+
         /** @type {FLECT.Method.Define.Render.HTML} */
         const html = template ? createEmptyTemplate : createLiteralTemplate;
         /** @type {FLECT.Method.Define.Render.CSS} */
@@ -107,27 +113,28 @@ export class xElement extends HTMLElement {
          * Execute the renderFunction to get the template and hydrate this.datas
          * @type {string|NodeList}
          */
-        const renderResult = renderFunction.call(self.datas, data, html, css);
+        const renderResult = renderFunction.call(self.datas, signal, html, css);
 
-        // trigger render logic only if renderFunction return template
-        if (renderResult) {
-            if (!template) {
-                // if renderResult came from templateLiteral
-                if (typeof renderResult === "string") {
-                    template = definition.template =
-                        createTemplateFragmentFromString(renderResult);
-                }
-
-                // else we consider renderResult as a NodeList
-                else {
-                    template = createTemplateFragmentFromNodeList(renderResult);
-                }
-
-                // build the component schema
-                schema = definition.schema = createTemplateSchema(
-                    template.children
-                );
+        // trigger render logic only if renderFunction return a template
+        if (renderResult && !template) {
+            // if renderResult came from templateLiteral
+            if (typeof renderResult === "string") {
+                template = definition.template =
+                    createTemplateFragmentFromString(renderResult);
             }
+
+            // else we consider renderResult as a NodeList, if renderResult is
+            // equal to "this" we don't want to build a new fragment
+            else if (renderResult !== self) {
+                template = createTemplateFragmentFromNodeList(renderResult);
+            } else {
+                template = self;
+            }
+
+            // build the component schema
+            schema = definition.schema = createTemplateSchema(
+                template.children
+            );
         }
 
         // if there is no selectorId we add it to the definition
@@ -146,8 +153,10 @@ export class xElement extends HTMLElement {
             self.hydrate(template.children, schema);
         }
 
+        console.log("schema is", schema);
+
         // replace xElement by template
-        self.replaceWith(template);
+        template !== self && self.replaceWith(template);
     }
 
     /**
