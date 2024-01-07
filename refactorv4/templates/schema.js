@@ -16,6 +16,7 @@ import {
 import { createTemplateFragmentFromNodeList } from "./html.js";
 import { FLECT } from "../utils/types.js";
 import { templateDirective } from "../directives/template.js";
+import { childNodesOf, childrenOf } from "../utils/shortcuts.js";
 
 /**
  * Create a xElement template schema
@@ -31,6 +32,16 @@ export const createTemplateSchema = (nodeList) => {
         let element = nodeList[x];
         const isxtemplate = isXTemplate(element);
         const isxelement = isxtemplate || isXElement(element);
+
+        if (element.cacheChildren) {
+            console.log(
+                "SCHEMA modified children from ->",
+                element,
+                "\nchildren:",
+                element.cacheChildren,
+                element.children
+            );
+        }
 
         /** @type {FLECT.Definition} */
         const definition = {
@@ -89,8 +100,9 @@ export const createTemplateSchema = (nodeList) => {
             }
         }
 
-        if ((element.content || element).childNodes.length) {
+        if (childNodesOf(element.content || element).length) {
             if (isxelement) {
+                element.ishydrated = true;
                 /**
                  * If the element is a flect custom element
                  * we generate a template and store it in the cache
@@ -101,7 +113,7 @@ export const createTemplateSchema = (nodeList) => {
                     // TODO -> trouver le bug dans le binding
                     // ajuster le binding pour que l'ordre de definition des composants n'ait pas d'impact
                     // (element.cacheDefinition || element.static).template ||
-                    createTemplateFragmentFromNodeList(element.childNodes);
+                    createTemplateFragmentFromNodeList(childNodesOf(element));
             }
 
             /**
@@ -109,7 +121,7 @@ export const createTemplateSchema = (nodeList) => {
              * we build the definition of the element
              * @type {FLECT.Schema}
              */
-            definition.schema = createTemplateSchema(element.children);
+            definition.schema = createTemplateSchema(childrenOf(element));
         }
 
         // if the definition is not empty we add it to the schema

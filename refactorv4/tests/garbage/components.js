@@ -76,10 +76,10 @@ setTimeout(() => {
 }, 1000);
 
 Flect.define("e", function (signal, html) {
-    this.text = signal("XE -> success");
+    this.text = signal("x-e -> success");
 
     setTimeout(() => {
-        this.text("XE -> success in update");
+        this.text("x-e -> success update");
     }, 1500);
 
     return this.component.childNodes;
@@ -87,16 +87,22 @@ Flect.define("e", function (signal, html) {
 
 setTimeout(() => {
     Flect.define("d", function (signal, html) {
+        this.text = signal("x-d -> success");
+
+        setTimeout(() => {
+            this.text("x-d -> success update");
+        }, 1000);
+
         return this.component.childNodes;
     });
 }, 500);
 
 setTimeout(() => {
     Flect.define("p", function (signal, html) {
-        this.text = signal(">> XP success");
+        this.text = signal("x-p -> success");
 
         setTimeout(() => {
-            this.text(">> XP success in update");
+            this.text("x-p -> success update");
         }, 1000);
 
         return this.component.childNodes;

@@ -62,6 +62,7 @@ export const xAbstract = {
             // if the element is a Flect component we give the cache
             if (definition.reactive) {
                 /** @type {FLECT.Definition} */
+                // TODO CHILDREN - element.ishydrated = true;
                 element.cacheDefinition = definition;
                 self.trail.add(element);
             }

@@ -19,16 +19,14 @@
         <div class="freezer"></div>
 
         <main>
-            <!-- <x-p> </x-p> -->
-            <x-d preserve>
+            <x-d>
                 <x-p>
                     <x-e>
-                        <p x-text="text()">inner</p>
-                        <p x-text="text()">inner</p>
-                        <p x-text="text()">inner</p>
+                        <p x-text="text()">x-e fail...</p>
                     </x-e>
-                    <p x-text="text()">fail...</p>
+                    <p x-text="text()">x-p fail...</p>
                 </x-p>
+                <p x-text="text()">x-d fail...</p>
             </x-d>
             <basic-element></basic-element>
         </main>

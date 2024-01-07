@@ -54,6 +54,27 @@ export class xElement extends HTMLElement {
         self.datas.ref = self.reference;
 
         /**
+         * every component hydrated inside of an other is marked as hydrated
+         * if a component isn't marker as hydrated it can be for two reasons :
+         * 1 - the component is a root component so there is no side effect
+         * 2 - the component is registred before it's parent, it can result
+         *     in multiples side effects, for that reason we keep the original
+         *     array of children in a cacheChildren property on the parentElement.
+         */
+        if (!self.ishydrated) {
+            const parent = self.parentElement;
+            parent.cacheChildNodes = [].slice.call(parent.children);
+            parent.cacheChildren = [].slice.call(parent.children);
+            console.log(
+                "ELEMENT cache parent from ->",
+                self.tagName,
+                "\nparent:",
+                parent,
+                parent.cacheChildren
+            );
+        }
+
+        /**
          * onMount is an user custom function defined with :
          * myClassReturnedByDefine.prototype.onMount = function(){ stuff here... }
          * @type {Function}
@@ -91,13 +112,13 @@ export class xElement extends HTMLElement {
         /** @type {number} */
         let selectorId = self.static.selectorId;
 
-        console.log(
-            self,
-            "\nhas template ?",
-            !!template,
-            "\nchildren are:",
-            [].slice.call(self.children)
-        );
+        // console.log(
+        //     self,
+        //     "\nhas template ?",
+        //     !!template,
+        //     "\nchildren are:",
+        //     [].slice.call(self.children)
+        // );
 
         /** @type {FLECT.Method.Define.Render.HTML} */
         const html = template ? createEmptyTemplate : createLiteralTemplate;
@@ -153,7 +174,8 @@ export class xElement extends HTMLElement {
             self.hydrate(template.children, schema);
         }
 
-        console.log("schema is", schema);
+        console.log("schema is ->", self.tagName, schema);
+        console.log("template is ->", self.tagName, template.childNodes);
 
         // replace xElement by template
         template !== self && self.replaceWith(template);
