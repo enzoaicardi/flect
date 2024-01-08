@@ -8,7 +8,7 @@
     4 - the result of the expression based on the context is used to update the directive
 */
 
-import { reactive, signal } from "../reactivity/signal.js";
+import { reactive } from "../reactivity/signal.js";
 import { FLECT } from "../utils/types.js";
 
 /**
@@ -19,16 +19,18 @@ export const dataDirective = (context, element, expression, attributeName) => {
     /** @type {FLECT.Element.Datas} */
     element.datas = element.datas || {};
 
-    return reactive(() => {
+    const reactiveFunction = () => {
         const data = element.datas[attributeName];
         const value = expression(context);
 
         if (data && data.issignal) {
             // we use the signal function
-            data(value);
+            data(value, reactiveFunction);
         } else {
-            // we create the signal function
-            element.datas[attributeName] = signal(value);
+            // we store the value, later the signal will be built by the element
+            element.datas[attributeName] = value;
         }
-    });
+    };
+
+    return reactive(reactiveFunction);
 };

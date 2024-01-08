@@ -13,10 +13,9 @@ import {
     isXEventAttribute,
     isXTemplate,
 } from "../utils/tests.js";
-import { createTemplateFragmentFromNodeList } from "./html.js";
 import { FLECT } from "../utils/types.js";
 import { templateDirective } from "../directives/template.js";
-import { childNodesOf, childrenOf } from "../utils/shortcuts.js";
+import { childrenOf } from "../utils/shortcuts.js";
 
 /**
  * Create a xElement template schema
@@ -31,25 +30,14 @@ export const createTemplateSchema = (nodeList) => {
         /** @type {HTMLElement} */
         let element = nodeList[x];
         const isxtemplate = isXTemplate(element);
-        const isxelement = isxtemplate || isXElement(element);
-
-        if (element.cacheChildren) {
-            console.log(
-                "SCHEMA modified children from ->",
-                element,
-                "\nchildren:",
-                element.cacheChildren,
-                element.children
-            );
-        }
+        const isxelement = isXElement(element);
 
         /** @type {FLECT.Definition} */
         const definition = {
             tagName: element.tagName, // this line is used to debug schema
             index: x,
             schema: false,
-            template: false,
-            reactive: isxelement,
+            reactive: isxtemplate || isxelement,
             attrs: new Map(),
         };
 
@@ -96,32 +84,28 @@ export const createTemplateSchema = (nodeList) => {
                 definition.attrs.set(name, action);
 
                 // clear element attribute
-                element.removeAttribute(attr.name);
+                // if the element is an x-element we need to keep the attribute
+                // because it will be used to bind the corresponding signal
+                !isxelement && element.removeAttribute(attr.name);
             }
         }
 
-        if (childNodesOf(element.content || element).length) {
-            if (isxelement) {
-                element.ishydrated = true;
-                /**
-                 * If the element is a flect custom element
-                 * we generate a template and store it in the cache
-                 * @type {DocumentFragment}
-                 */
-                element = definition.template =
-                    element.content ||
-                    // TODO -> trouver le bug dans le binding
-                    // ajuster le binding pour que l'ordre de definition des composants n'ait pas d'impact
-                    // (element.cacheDefinition || element.static).template ||
-                    createTemplateFragmentFromNodeList(childNodesOf(element));
-            }
+        // get the first of element.content.children | element.immutableChildren | element.children
+        const childs = childrenOf((element = element.content || element));
 
+        if (childs.length) {
             /**
-             * If the element has children
+             * If the element has children or immutableChildren
              * we build the definition of the element
              * @type {FLECT.Schema}
              */
-            definition.schema = createTemplateSchema(childrenOf(element));
+            definition.schema = createTemplateSchema(childs);
+
+            // is the element is an xelement create the immutableSchema
+            // property, used with immutableChildren to hydrate an abstract DOM
+            if (isxelement) {
+                element.immutableSchema = definition.schema;
+            }
         }
 
         // if the definition is not empty we add it to the schema

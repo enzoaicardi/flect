@@ -75,36 +75,37 @@ setTimeout(() => {
     // });
 }, 1000);
 
-Flect.define("e", function (signal, html) {
-    this.text = signal("x-e -> success");
-
-    setTimeout(() => {
-        this.text("x-e -> success update");
-    }, 1500);
-
-    return this.component.childNodes;
-});
-
 setTimeout(() => {
-    Flect.define("d", function (signal, html) {
-        this.text = signal("x-d -> success");
+    Flect.define("two", function (signal, html) {
+        this.text = signal("x-two -> success");
+        this.array = signal([1, 2, 3]);
 
-        setTimeout(() => {
-            this.text("x-d -> success update");
-        }, 1000);
+        // setTimeout(() => {
+        //     this.text("x-two -> success update");
+        // }, 1000);
 
         return this.component.childNodes;
     });
 }, 500);
 
 setTimeout(() => {
-    Flect.define("p", function (signal, html) {
-        this.text = signal("x-p -> success");
+    Flect.define("three", function (signal, html) {
+        this.text = signal("x-three -> success");
 
         setTimeout(() => {
-            this.text("x-p -> success update");
+            this.text("x-three -> success update");
         }, 1000);
 
         return this.component.childNodes;
     });
 }, 1000);
+
+Flect.define("one", function (signal, html) {
+    // this.text = signal("x-one -> success");
+
+    // setTimeout(() => {
+    //     this.text("x-one -> success update");
+    // }, 1000);
+
+    return this.component.childNodes;
+});

@@ -12,7 +12,7 @@ export const xAbstract = {
          * cacheDefinition can be used instead of static definition
          * @type {FLECT.Definition}
          */
-        // self.cacheDefinition = self.cacheDefinition;
+        // self.cacheDefinition = {};
 
         /**
          * datas is used as a context for the render function
@@ -59,11 +59,17 @@ export const xAbstract = {
              */
             const element = nodeList[definition.index];
 
-            // if the element is a Flect component we give the cache
+            console.log(">>> hydrate element", element);
+
+            // if the element is a Flect component we add it to the trail
             if (definition.reactive) {
-                /** @type {FLECT.Definition} */
-                // TODO CHILDREN - element.ishydrated = true;
-                element.cacheDefinition = definition;
+                // for performance concerns, if the element is hydratable
+                // we hydrate it immediatly, by doing this elements outside of
+                // the current DOM will be rendered faster. That should not affect
+                // templates directives because xManager doesn't have a connectCallback method
+                // if (element.connectCallback) {
+                //     element.connectCallback();
+                // }
                 self.trail.add(element);
             }
 
@@ -90,7 +96,10 @@ export const xAbstract = {
 
             // if the element is not a Flect component we hydrate children
             if (!definition.reactive && definition.schema) {
-                self.hydrate(element.children, definition.schema);
+                self.hydrate(
+                    element.immutableChildren || element.children,
+                    definition.schema
+                );
             }
 
             index--;

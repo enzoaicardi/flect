@@ -18,6 +18,7 @@ import {
 import { createCssTemplateOrSelector, cssNextId } from "../templates/css.js";
 import { elementCloneNode } from "../utils/shortcuts.js";
 import { xAbstract } from "./abstract.js";
+import { isXAttribute } from "../utils/tests.js";
 
 export class xElement extends HTMLElement {
     constructor() {
@@ -32,13 +33,25 @@ export class xElement extends HTMLElement {
 
     onMount() {}
     connectedCallback() {
+        this.connectCallback();
+    }
+    connectCallback() {
         let self = this;
+        console.log("-------------------------");
+        console.log("ELEMENT find in dom", self.tagName);
         /**
          * hydrate datas with (non x) attributes values
+         * create signals for every x- attributes
          * @type {HTMLElement.attribute}
          */
         for (const attribute of self.attributes) {
-            self.datas[attribute.name] = attribute.value || true;
+            if (isXAttribute(attribute)) {
+                const data = attribute.name.substring(2);
+                self.datas[data] = signal(self.datas[data]);
+                console.log("::: signal defined", data);
+            } else {
+                self.datas[attribute.name] = attribute.value || true;
+            }
         }
 
         /**
@@ -52,27 +65,6 @@ export class xElement extends HTMLElement {
          * @type {FLECT.Element.Datas.Reference}
          */
         self.datas.ref = self.reference;
-
-        /**
-         * every component hydrated inside of an other is marked as hydrated
-         * if a component isn't marker as hydrated it can be for two reasons :
-         * 1 - the component is a root component so there is no side effect
-         * 2 - the component is registred before it's parent, it can result
-         *     in multiples side effects, for that reason we keep the original
-         *     array of children in a cacheChildren property on the parentElement.
-         */
-        if (!self.ishydrated) {
-            const parent = self.parentElement;
-            parent.cacheChildNodes = [].slice.call(parent.children);
-            parent.cacheChildren = [].slice.call(parent.children);
-            console.log(
-                "ELEMENT cache parent from ->",
-                self.tagName,
-                "\nparent:",
-                parent,
-                parent.cacheChildren
-            );
-        }
 
         /**
          * onMount is an user custom function defined with :
@@ -102,23 +94,18 @@ export class xElement extends HTMLElement {
 
     render() {
         let self = this;
+        console.log("... immutableChildren ?", self.immutableChildren);
+        console.log("... immutableSchema ?", self.immutableSchema);
 
         /** @type {FLECT.Definition} */
-        const definition = self.cacheDefinition || self.static;
+        const definition = self.static;
+
         /** @type {FLECT.Template} */
         let template = definition.template;
         /** @type {FLECT.Schema} */
         let schema = definition.schema;
         /** @type {number} */
-        let selectorId = self.static.selectorId;
-
-        // console.log(
-        //     self,
-        //     "\nhas template ?",
-        //     !!template,
-        //     "\nchildren are:",
-        //     [].slice.call(self.children)
-        // );
+        let selectorId = definition.selectorId;
 
         /** @type {FLECT.Method.Define.Render.HTML} */
         const html = template ? createEmptyTemplate : createLiteralTemplate;
@@ -128,7 +115,7 @@ export class xElement extends HTMLElement {
             : createCssTemplateOrSelector;
 
         /** @type {FLECT.Method.Define.Render} */
-        const renderFunction = self.static.renderFunction;
+        const renderFunction = definition.renderFunction;
 
         /**
          * Execute the renderFunction to get the template and hydrate this.datas
@@ -137,15 +124,17 @@ export class xElement extends HTMLElement {
         const renderResult = renderFunction.call(self.datas, signal, html, css);
 
         // trigger render logic only if renderFunction return a template
-        if (renderResult && !template) {
+        if (renderResult) {
             // if renderResult came from templateLiteral
             if (typeof renderResult === "string") {
+                // we update the template value and also the static.template
                 template = definition.template =
                     createTemplateFragmentFromString(renderResult);
             }
 
             // else we consider renderResult as a NodeList, if renderResult is
             // equal to "this" we don't want to build a new fragment
+            // in both case we update the template value without changing static.template
             else if (renderResult !== self) {
                 template = createTemplateFragmentFromNodeList(renderResult);
             } else {
@@ -153,29 +142,43 @@ export class xElement extends HTMLElement {
             }
 
             // build the component schema
-            schema = definition.schema = createTemplateSchema(
-                template.children
-            );
+            if (self.immutableSchema) {
+                schema = self.immutableSchema;
+            } else {
+                schema = definition.schema = createTemplateSchema(
+                    self.immutableChildren || template.children
+                );
+            }
         }
 
         // if there is no selectorId we add it to the definition
         // and to the context.component property (used in cssDirective)
         // and finaly increment the cssSelectorsId if necessary
-        self.selectorId = self.static.selectorId = selectorId || cssNextId();
+        self.selectorId = definition.selectorId = selectorId || cssNextId();
 
         // if the template is stored (cache or static)
         // we want to clone it before hydration
         if (definition.template) {
             template = elementCloneNode(template, true);
         }
+        // else we want to store the immutableChildren as parentNode property
+        else if (!self.parentNode.immutableChildren) {
+            const parent = self.parentNode;
+            parent.immutableChildren = [].slice.call(parent.children);
+            console.log("... define immutable children");
+        }
 
         // hydrate template schema
         if (schema) {
-            self.hydrate(template.children, schema);
+            console.log(
+                "... final hydration",
+                self.immutableChildren || template.children
+            );
+            self.hydrate(self.immutableChildren || template.children, schema);
         }
 
-        console.log("schema is ->", self.tagName, schema);
-        console.log("template is ->", self.tagName, template.childNodes);
+        console.log("... final schema", schema);
+        console.log("... final trail", self.trail);
 
         // replace xElement by template
         template !== self && self.replaceWith(template);

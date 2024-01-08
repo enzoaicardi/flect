@@ -19,15 +19,28 @@
         <div class="freezer"></div>
 
         <main>
-            <x-d>
-                <x-p>
-                    <x-e>
-                        <p x-text="text()">x-e fail...</p>
-                    </x-e>
-                    <p x-text="text()">x-p fail...</p>
-                </x-p>
-                <p x-text="text()">x-d fail...</p>
-            </x-d>
+            <!-- x-two, basic-element -> x-three, p, basic-element -->
+            <!-- n°2 -->
+            <x-two>
+                <template x-for="array()">
+                    <!-- n°3 -->
+                    <x-three>
+                        <!-- x-one, p -> [p], p -->
+                        <!-- n°1 -->
+                        <x-one x-text="text()">
+                            <!-- stop here -->
+                            <p x-text="text()">x-one fail...</p>
+                        </x-one>
+                        <!-- n°1 -->
+                        <x-two>
+                            <!-- stop here -->
+                            <p x-text="text()">x-two fail...</p>
+                        </x-two>
+                        <p x-text="text()">x-three fail...</p>
+                    </x-three>
+                    <p x-text="text()">x-two fail...</p>
+                </template>
+            </x-two>
             <basic-element></basic-element>
         </main>
     </body>
