@@ -100,12 +100,6 @@ export const createTemplateSchema = (nodeList) => {
              * @type {FLECT.Schema}
              */
             definition.schema = createTemplateSchema(childs);
-
-            // is the element is an xelement create the immutableSchema
-            // property, used with immutableChildren to hydrate an abstract DOM
-            if (isxelement) {
-                element.immutableSchema = definition.schema;
-            }
         }
 
         // if the definition is not empty we add it to the schema

@@ -70,6 +70,8 @@ export const xAbstract = {
                 // if (element.connectCallback) {
                 //     element.connectCallback();
                 // }
+                console.log(">>> hydrate schema", definition.schema);
+                element.immutableSchema = definition.schema;
                 self.trail.add(element);
             }
 

@@ -78,7 +78,7 @@ setTimeout(() => {
 setTimeout(() => {
     Flect.define("two", function (signal, html) {
         this.text = signal("x-two -> success");
-        this.array = signal([1, 2, 3]);
+        this.array = signal([1]);
 
         // setTimeout(() => {
         //     this.text("x-two -> success update");

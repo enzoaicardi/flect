@@ -52,8 +52,8 @@ export const forDirective = (context, element, expression) => {
  * @param {string} key
  */
 function reconcile(context, element, prevList, nextList, parts, key) {
-    /** @type {FLECT.Definition} */
-    const definition = element.cacheDefinition;
+    /** @type {DocumentFragment} */
+    const content = element.content;
 
     /** @type {number} */
     let index = 0;
@@ -83,7 +83,7 @@ function reconcile(context, element, prevList, nextList, parts, key) {
     while (gap > 0) {
         let part;
         // clone the template fragment
-        const fragment = elementCloneNode(definition.template, true);
+        const fragment = elementCloneNode(content, true);
 
         // we create the part corresponding to the fragment
         // the part will be stored into an array of parts
@@ -100,9 +100,14 @@ function reconcile(context, element, prevList, nextList, parts, key) {
         // push the template fragment and the flag into newElements array
         newElements.push(fragment, part.flag);
 
+        console.log(
+            "+++ hydrate children",
+            fragment.children,
+            element.immutableSchema
+        );
         // if there is a cached schema, hydrate the fragment
-        definition.schema &&
-            part.manager.hydrate(fragment.children, definition.schema);
+        element.immutableSchema &&
+            part.manager.hydrate(fragment.children, element.immutableSchema);
 
         // update indexes
         gap--;
