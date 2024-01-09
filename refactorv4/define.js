@@ -6,15 +6,18 @@
 import { xElement } from "./classes/element.js";
 import { FLECT } from "./utils/types.js";
 
-// keep track of defined components
-const defineMemo = {};
+/**
+ * keep track of defined components
+ * @type {{X-TAG: class}}
+ */
+export const defineMemo = {};
 
 /** @type {FLECT.Method.Define} */
 export const define = (name, renderFunction) => {
-    const className = `_FLECT_${name}`;
+    const className = "X-" + name.toUpperCase();
 
     // check if the element is already defined
-    if (window[className]) {
+    if (defineMemo[className]) {
         throw `x-${name} is already defined`;
     }
 

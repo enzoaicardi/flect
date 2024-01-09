@@ -5,6 +5,7 @@
     X- tags
 */
 
+import { defineMemo } from "../define.js";
 import { FLECT } from "../utils/types.js";
 
 /**
@@ -35,3 +36,10 @@ export const isXElement = (element) => element.tagName.indexOf("X-") === 0;
  * @returns {boolean}
  */
 export const isXTemplate = (element) => !!element.content;
+
+/**
+ * Test if an element is already defined
+ * @param {HTMLElement} element
+ * @returns {boolean}
+ */
+export const isDefined = (element) => !!defineMemo[element.tagName];
