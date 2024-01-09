@@ -74,6 +74,8 @@ export const xAbstract = {
                 // we hydrate it immediatly, by doing this elements outside of
                 // the current DOM will be rendered faster. That should not affect
                 // templates directives because xManager doesn't have a connectCallback method
+                // TODO -> voir si bonne idée car dans les faits l'element pas dans le dom
+                // n'aura jamais de connectcallback à dispo, meme si bien défini
                 // if (element.connectCallback) {
                 //     element.connectCallback();
                 // }
