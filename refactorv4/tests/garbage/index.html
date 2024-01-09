@@ -25,14 +25,20 @@
                 <template x-for="array()">
                     ---------
                     <!-- n°3 -->
-                    <x-three x-text="text()">
-                        <!-- x-one, p -> [p], p -->
-                        <x-one x-text="text()">
-                            <!-- stop here -->
-                            <p x-text="text()">x-one fail...</p>
-                        </x-one>
-                        <p x-text="text()">x-three fail...</p>
-                    </x-three>
+                    <div>
+                        <div>
+                            <x-three x-text="text()">
+                                <div>
+                                    <!-- x-one, p -> [p], p -->
+                                    <x-one x-text="text()">
+                                        <!-- stop here -->
+                                        <p x-text="text()">x-one fail...</p>
+                                    </x-one>
+                                    <p x-text="text()">x-three fail...</p>
+                                </div>
+                            </x-three>
+                        </div>
+                    </div>
                     <p x-text="text()">x-two fail...</p>
                 </template>
             </x-two>
