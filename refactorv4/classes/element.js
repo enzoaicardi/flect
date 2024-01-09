@@ -130,24 +130,29 @@ export class xElement extends HTMLElement {
                 // we update the template value and also the static.template
                 template = definition.template =
                     createTemplateFragmentFromString(renderResult);
+
+                // we create the schema based on template children
+                schema = definition.schema = createTemplateSchema(
+                    template.children
+                );
             }
 
             // else we consider renderResult as a NodeList, if renderResult is
             // equal to "this" we don't want to build a new fragment
             // in both case we update the template value without changing static.template
-            else if (renderResult !== self) {
-                template = createTemplateFragmentFromNodeList(renderResult);
-            } else {
-                template = self;
-            }
+            else {
+                template =
+                    renderResult === self
+                        ? self
+                        : createTemplateFragmentFromNodeList(renderResult);
 
-            // build the component schema
-            if (self.immutableSchema) {
-                schema = self.immutableSchema;
-            } else {
-                schema = definition.schema = createTemplateSchema(
-                    self.immutableChildren || template.children
-                );
+                // we create the schema equal to immutableSchema
+                // or based on template immutableChildren or current children
+                schema =
+                    self.immutableSchema ||
+                    createTemplateSchema(
+                        self.immutableChildren || template.children
+                    );
             }
         }
 
