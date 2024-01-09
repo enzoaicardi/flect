@@ -145,4 +145,6 @@ function reconcile(context, element, prevList, nextList, parts, key) {
         gap++;
         index++;
     }
+
+    console.log("+++ for parts", parts);
 }

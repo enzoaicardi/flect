@@ -23,14 +23,14 @@
             <!-- n°2 -->
             <x-two>
                 <template x-for="array()">
+                    ---------
                     <!-- n°3 -->
-                    <x-three>
+                    <x-three x-text="text()">
                         <!-- x-one, p -> [p], p -->
-
-                        <x-two>
+                        <x-one x-text="text()">
                             <!-- stop here -->
-                            <p x-text="text()">x-two fail...</p>
-                        </x-two>
+                            <p x-text="text()">x-one fail...</p>
+                        </x-one>
                         <p x-text="text()">x-three fail...</p>
                     </x-three>
                     <p x-text="text()">x-two fail...</p>

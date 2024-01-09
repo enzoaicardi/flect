@@ -161,12 +161,6 @@ export class xElement extends HTMLElement {
         if (definition.template) {
             template = elementCloneNode(template, true);
         }
-        // else we want to store the immutableChildren as parentNode property
-        else if (!self.parentNode.immutableChildren) {
-            const parent = self.parentNode;
-            parent.immutableChildren = [].slice.call(parent.children);
-            console.log("... define immutable children");
-        }
 
         // hydrate template schema
         if (schema) {
@@ -180,8 +174,22 @@ export class xElement extends HTMLElement {
         console.log("... final schema", schema);
         console.log("... final trail", self.trail);
 
-        // replace xElement by template
-        template !== self && self.replaceWith(template);
+        if (template !== self) {
+            // store the immutableChildren as parentNode property
+            // by doing this in case of defered hydration we can retrieve
+            // the original DOM structure
+            const parent = self.parentNode;
+            parent.immutableChildren ||
+                (parent.immutableChildren = [].slice.call(parent.children));
+
+            // TODO -> delete after testing
+            if (!parent.immutableChildren) {
+                console.log("... define immutable children");
+            }
+
+            // replace xElement by template
+            self.replaceWith(template);
+        }
     }
 
     /**

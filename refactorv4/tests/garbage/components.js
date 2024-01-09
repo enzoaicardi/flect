@@ -80,9 +80,16 @@ setTimeout(() => {
         this.text = signal("x-two -> success");
         this.array = signal([1]);
 
-        // setTimeout(() => {
-        //     this.text("x-two -> success update");
-        // }, 1000);
+        setTimeout(() => {
+            this.array([]);
+        }, 50);
+        setTimeout(() => {
+            this.array([1, 2, 3]);
+        }, 500);
+
+        setTimeout(() => {
+            this.text("x-two -> success update");
+        }, 1000);
 
         return this.component.childNodes;
     });
@@ -90,18 +97,18 @@ setTimeout(() => {
 
 setTimeout(() => {
     Flect.define("three", function (signal, html) {
-        this.text = signal("x-three -> success");
+        this.text = this.text || (() => {});
 
-        setTimeout(() => {
-            this.text("x-three -> success update");
-        }, 1000);
+        // setTimeout(() => {
+        //     this.text("x-three -> success update");
+        // }, 1000);
 
         return this.component.childNodes;
     });
 }, 1000);
 
 Flect.define("one", function (signal, html) {
-    // this.text = signal("x-one -> success");
+    // this.text = this.text || signal("x-one -> success");
 
     // setTimeout(() => {
     //     this.text("x-one -> success update");

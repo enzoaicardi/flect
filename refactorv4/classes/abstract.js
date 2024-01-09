@@ -2,6 +2,7 @@
     TODO -> explain
 */
 
+import { isDefined } from "../utils/tests.js";
 import { FLECT } from "../utils/types.js";
 
 export const xAbstract = {
@@ -9,16 +10,22 @@ export const xAbstract = {
         let self = this;
 
         /**
-         * cacheDefinition can be used instead of static definition
-         * @type {FLECT.Definition}
+         * immutableChildren can be used instead of template for hydration
+         * @type {NodeList}
          */
-        // self.cacheDefinition = {};
+        // self.immutableChildren = [];
+
+        /**
+         * immutableSchema can be used instead of creating schema
+         * @type {FLECT.Schema}
+         */
+        // self.immutableSchema = [];
 
         /**
          * datas is used as a context for the render function
          * @type {FLECT.Element.Datas}
          */
-        self.datas = self.datas || datas || {};
+        self.datas || (self.datas = datas || {});
 
         /**
          * every time a directive run, we store the reactive function
@@ -26,7 +33,7 @@ export const xAbstract = {
          * used to unhydrate a component or a sub set of elements
          * @type {FLECT.Dependencies.Trail}
          */
-        self.trail = new Set();
+        self.trail || (self.trail = new Set());
     },
 
     /** @type {FLECT.Element.DisconnectCallback} */
@@ -39,7 +46,7 @@ export const xAbstract = {
      * @param {NodeList} nodeList
      * @param {FLECT.Schema} schema
      */
-    hydrate(nodeList, schema) {
+    hydrate(nodeList, schema, trail) {
         let self = this;
 
         /** @type {number} */
@@ -70,37 +77,67 @@ export const xAbstract = {
                 // if (element.connectCallback) {
                 //     element.connectCallback();
                 // }
-                console.log(">>> hydrate schema", definition.schema);
+                console.log(">>> hydrate schema", definition.schema, element);
+
+                // we pass the current schema as immutableSchema
+                // avoiding the creation of a new schema and it's performance cost
                 element.immutableSchema = definition.schema;
-                self.trail.add(element);
+
+                // we add the current element into the component trail
+                (trail || self.trail).add(element);
             }
 
-            /**
-             * loop over all hydratable attributes
-             * @type {[string, FLECT.Action]}
-             */
-            for (const [name, action] of definition.attrs) {
-                // apply the corresponding directive
-                /** @type {FLECT.Reactive|undefined} */
-                const reactiveFunction = action.directive(
-                    self.datas,
-                    element,
-                    action.expression,
-                    name
-                );
+            if (!trail) {
+                /**
+                 * loop over all hydratable attributes
+                 * @type {[string, FLECT.Action]}
+                 */
+                for (const [name, action] of definition.attrs) {
+                    // apply the corresponding directive
+                    /** @type {FLECT.Reactive|undefined} */
+                    const reactiveFunction = action.directive(
+                        self.datas,
+                        element,
+                        action.expression,
+                        name
+                    );
 
-                // push the reactiveFunction into component trail
-                // only if the directive return a reactive function
-                if (reactiveFunction) {
-                    self.trail.add(reactiveFunction);
+                    // push the reactiveFunction into component trail
+                    // only if the directive return a reactive function
+                    if (reactiveFunction) {
+                        self.trail.add(reactiveFunction);
+                    }
                 }
             }
 
+            // TODO -> mieux include
+            if (definition.reactive) {
+                // update the trail value, used to pass immutableSchema through
+                // undefined components
+                trail =
+                    !element.content &&
+                    !isDefined(element) &&
+                    (element.trail = new Set());
+
+                console.log(
+                    ">>> set passive mode:",
+                    !!trail,
+                    element,
+                    isDefined(element)
+                );
+            }
+
             // if the element is not a Flect component we hydrate children
-            if (!definition.reactive && definition.schema) {
-                self.hydrate(
+            if ((trail || !definition.reactive) && definition.schema) {
+                console.log(
+                    ">>> explore children",
                     element.immutableChildren || element.children,
                     definition.schema
+                );
+                self.hydrate(
+                    element.immutableChildren || element.children,
+                    definition.schema,
+                    trail
                 );
             }
 
@@ -120,7 +157,10 @@ export const xAbstract = {
     unHydrate() {
         /** @type {FLECT.Reactive|FLECT.Element} */
         for (const reactive of this.trail) {
-            reactive.disconnectCallback();
+            if (reactive instanceof HTMLElement) {
+                console.log(reactive, reactive.trail);
+            }
+            reactive.disconnectCallback && reactive.disconnectCallback();
         }
         // clear the trail dependencies
         this.trail.clear();
