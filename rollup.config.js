@@ -13,6 +13,7 @@ export default {
                 properties: {
                     reserved: [
                         "connectedCallback",
+                        "handler",
                         "onMount",
                         "onUnmount",
                         "component",

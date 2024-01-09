@@ -12,7 +12,7 @@ export const eventDirective = (context, element, expression, attributeName) => {
      * the handler is deleted by the garbage collector
      * @type {FLECT.Handler}
      */
-    const eventHandler = (element.handler = element.handler || new xHandler());
+    const eventHandler = element.handler || (element.handler = new xHandler());
 
     // assign the event handler method
     eventHandler[attributeName] = expression(context);
