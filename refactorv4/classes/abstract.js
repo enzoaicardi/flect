@@ -66,27 +66,19 @@ export const xAbstract = {
              */
             const element = nodeList[definition.index];
 
-            console.log(">>> hydrate element", element);
-
-            // if the element is a Flect component we add it to the trail
+            // console.log(">>> hydrate element", element);
             if (definition.reactive) {
-                // for performance concerns, if the element is hydratable
-                // we hydrate it immediatly, by doing this elements outside of
-                // the current DOM will be rendered faster. That should not affect
-                // templates directives because xManager doesn't have a connectCallback method
-                // TODO -> voir si bonne idée car dans les faits l'element pas dans le dom
-                // n'aura jamais de connectcallback à dispo, meme si bien défini
-                // if (element.connectCallback) {
-                //     element.connectCallback();
-                // }
-                console.log(">>> hydrate schema", definition.schema, element);
-
                 // we pass the current schema as immutableSchema
                 // avoiding the creation of a new schema and it's performance cost
                 element.immutableSchema = definition.schema;
 
                 // we add the current element into the component trail
                 (trail || self.trail).add(element);
+
+                trail =
+                    !element.content &&
+                    !isDefined(element) &&
+                    (element.trail = new Set());
             }
 
             if (!trail) {
@@ -112,30 +104,23 @@ export const xAbstract = {
                 }
             }
 
-            // TODO -> mieux include
+            // if the element is a Flect element or template
             if (definition.reactive) {
-                // update the trail value, used to pass immutableSchema through
-                // undefined components
+                // update the trail value
+                // used to pass immutableSchema through non-defined components
                 trail =
                     !element.content &&
                     !isDefined(element) &&
                     (element.trail = new Set());
-
-                console.log(
-                    ">>> set passive mode:",
-                    !!trail,
-                    element,
-                    isDefined(element)
-                );
             }
 
             // if the element is not a Flect component we hydrate children
             if ((trail || !definition.reactive) && definition.schema) {
-                console.log(
-                    ">>> explore children",
-                    element.immutableChildren || element.children,
-                    definition.schema
-                );
+                // console.log(
+                //     ">>> explore children",
+                //     element.immutableChildren || element.children,
+                //     definition.schema
+                // );
                 self.hydrate(
                     element.immutableChildren || element.children,
                     definition.schema,
@@ -159,9 +144,6 @@ export const xAbstract = {
     unHydrate() {
         /** @type {FLECT.Reactive|FLECT.Element} */
         for (const reactive of this.trail) {
-            if (reactive instanceof HTMLElement) {
-                console.log(reactive, reactive.trail);
-            }
             reactive.disconnectCallback && reactive.disconnectCallback();
         }
         // clear the trail dependencies

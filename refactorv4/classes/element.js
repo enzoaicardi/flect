@@ -37,8 +37,8 @@ export class xElement extends HTMLElement {
     }
     connectCallback() {
         let self = this;
-        console.log("-------------------------");
-        console.log("ELEMENT find in dom", self.tagName);
+        // console.log("-------------------------");
+        // console.log("ELEMENT find in dom", self.tagName);
         /**
          * hydrate datas with (non x) attributes values
          * create signals for every x- attributes
@@ -48,7 +48,7 @@ export class xElement extends HTMLElement {
             if (isXAttribute(attribute)) {
                 const data = attribute.name.substring(2);
                 self.datas[data] = signal(self.datas[data]);
-                console.log("::: signal defined", data);
+                // console.log("::: signal defined", data);
             } else {
                 self.datas[attribute.name] = attribute.value || true;
             }
@@ -94,8 +94,8 @@ export class xElement extends HTMLElement {
 
     render() {
         let self = this;
-        console.log("... immutableChildren ?", self.immutableChildren);
-        console.log("... immutableSchema ?", self.immutableSchema);
+        // console.log("... immutableChildren ?", self.immutableChildren);
+        // console.log("... immutableSchema ?", self.immutableSchema);
 
         /** @type {FLECT.Definition} */
         const definition = self.static;
@@ -169,15 +169,15 @@ export class xElement extends HTMLElement {
 
         // hydrate template schema
         if (schema) {
-            console.log(
-                "... final hydration",
-                self.immutableChildren || template.children
-            );
+            // console.log(
+            //     "... final hydration",
+            //     self.immutableChildren || template.children
+            // );
             self.hydrate(self.immutableChildren || template.children, schema);
         }
 
-        console.log("... final schema", schema);
-        console.log("... final trail", self.trail);
+        // console.log("... final schema", schema);
+        // console.log("... final trail", self.trail);
 
         if (template !== self) {
             // store the immutableChildren as parentNode property
@@ -188,9 +188,9 @@ export class xElement extends HTMLElement {
                 (parent.immutableChildren = [].slice.call(parent.children));
 
             // TODO -> delete after testing
-            if (!parent.immutableChildren) {
-                console.log("... define immutable children");
-            }
+            // if (!parent.immutableChildren) {
+            //     console.log("... define immutable children");
+            // }
 
             // replace xElement by template
             self.replaceWith(template);
