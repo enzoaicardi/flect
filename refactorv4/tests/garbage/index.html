@@ -21,7 +21,31 @@
         <main>
             <!-- x-two, basic-element -> x-three, p, basic-element -->
             <!-- n°2 -->
-            <x-p></x-p>
+            <x-two>
+                <template x-for="array()">
+                    ---------
+                    <!-- n°3 -->
+                    <div>
+                        <div>
+                            <x-three x-text="text()">
+                                <div>
+                                    <!-- x-one, p -> [p], p -->
+                                    <x-one x-text="text()">
+                                        <!-- stop here -->
+                                        <p x-text="text()" x-css="bg">
+                                            x-one fail...
+                                        </p>
+                                    </x-one>
+                                    <p x-text="text()" x-css="bg">
+                                        x-three fail...
+                                    </p>
+                                </div>
+                            </x-three>
+                        </div>
+                    </div>
+                    <p x-text="text()" x-css="bg">x-two fail...</p>
+                </template>
+            </x-two>
             <basic-element></basic-element>
         </main>
     </body>
