@@ -16,7 +16,7 @@ import {
     createLiteralTemplate,
 } from "../templates/generic.js";
 import { createCssTemplateOrSelector, cssNextId } from "../templates/css.js";
-import { elementCloneNode } from "../utils/shortcuts.js";
+import { childrenOf, elementCloneNode } from "../utils/shortcuts.js";
 import { xAbstract } from "./abstract.js";
 import { isXAttribute } from "../utils/tests.js";
 
@@ -133,7 +133,7 @@ export class xElement extends HTMLElement {
 
                 // we create the schema based on template children
                 schema = definition.schema = createTemplateSchema(
-                    template.children
+                    childrenOf(template)
                 );
             }
 
@@ -173,7 +173,10 @@ export class xElement extends HTMLElement {
             //     "... final hydration",
             //     self.immutableChildren || template.children
             // );
-            self.hydrate(self.immutableChildren || template.children, schema);
+            self.hydrate(
+                self.immutableChildren || childrenOf(template),
+                schema
+            );
         }
 
         // console.log("... final schema", schema);
@@ -185,7 +188,7 @@ export class xElement extends HTMLElement {
             // the original DOM structure
             const parent = self.parentNode;
             parent.immutableChildren ||
-                (parent.immutableChildren = [].slice.call(parent.children));
+                (parent.immutableChildren = [].slice.call(childrenOf(parent)));
 
             // TODO -> delete after testing
             // if (!parent.immutableChildren) {

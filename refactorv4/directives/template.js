@@ -14,6 +14,7 @@ import { xcomment } from "../templates/html.js";
 import { elementCloneNode } from "../utils/shortcuts.js";
 import { FLECT } from "../utils/types.js";
 import { forDirective } from "./for.js";
+import { ifDirective } from "./if.js";
 
 /** @returns {Comment} */
 export const createFlag = () => elementCloneNode(xcomment);
@@ -40,15 +41,20 @@ export const createPart = (context, key, value) => {
     return { flag, property, manager };
 };
 
+export const renderTemplate = (element) => {
+    // TODO -> used to render the basics of template
+    // parts array, flag, disconnectCallback, etc...
+    // avoid repetition + help to manage x-if and x-for same element
+};
+
 /**
  * Retrieve the corresponding directive from the attribute name
- * @param {HTMLElement.attribute} attribute
+ * @param {string} attributeName
  */
-export const templateDirective = (attribute) => {
-    switch (attribute.name) {
-        case "x-for":
-            return forDirective;
-        case "x-if":
-            return;
+export const templateDirective = (attributeName) => {
+    if (attributeName === "x-for") {
+        return forDirective;
+    } else if (attributeName === "x-if") {
+        return ifDirective;
     }
 };

@@ -27,19 +27,18 @@ const defaultDirective = (context, element, expression, attributeName) => {
 
 /**
  * Retrieve the corresponding directive from the attribute name
- * @param {HTMLElement.attribute} attribute
+ * @param {string} attributeName
  */
-export const attributeDirective = (attribute) => {
-    switch (attribute.name) {
-        case "x-text":
-            return textDirective;
-        case "x-show":
-            return showDirective;
-        case "x-ref":
-            return refDirective;
-        case "x-css":
-            return cssDirective;
-        default:
-            return defaultDirective; // default attribute directive
+export const attributeDirective = (attributeName) => {
+    if (attributeName === "x-text") {
+        return textDirective;
+    } else if (attributeName === "x-show") {
+        return showDirective;
+    } else if (attributeName === "x-ref") {
+        return refDirective;
+    } else if (attributeName === "x-css") {
+        return cssDirective;
+    } else {
+        return defaultDirective; // default attribute directive
     }
 };

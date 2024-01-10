@@ -8,5 +8,7 @@ export const documentCreateElement = (tag) => dom.createElement(tag);
 
 export const elementCloneNode = (element, bool) => element.cloneNode(bool);
 
-export const childrenOf = (element) =>
+export const childrenOf = (element) => element.children;
+
+export const immutableChildrenOf = (element) =>
     element.immutableChildren || element.children;

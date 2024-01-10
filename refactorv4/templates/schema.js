@@ -15,7 +15,7 @@ import {
 } from "../utils/tests.js";
 import { FLECT } from "../utils/types.js";
 import { templateDirective } from "../directives/template.js";
-import { childrenOf } from "../utils/shortcuts.js";
+import { immutableChildrenOf } from "../utils/shortcuts.js";
 
 /**
  * Create a xElement template schema
@@ -91,7 +91,9 @@ export const createTemplateSchema = (nodeList) => {
         }
 
         // get the first of element.content.children | element.immutableChildren | element.children
-        const childs = childrenOf((element = element.content || element));
+        const childs = immutableChildrenOf(
+            (element = element.content || element)
+        );
 
         if (childs.length) {
             /**

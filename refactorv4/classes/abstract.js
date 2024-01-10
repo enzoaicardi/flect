@@ -2,6 +2,7 @@
     TODO -> explain
 */
 
+import { immutableChildrenOf } from "../utils/shortcuts.js";
 import { isDefined } from "../utils/tests.js";
 import { FLECT } from "../utils/types.js";
 
@@ -122,7 +123,7 @@ export const xAbstract = {
                 //     definition.schema
                 // );
                 self.hydrate(
-                    element.immutableChildren || element.children,
+                    immutableChildrenOf(element),
                     definition.schema,
                     trail
                 );

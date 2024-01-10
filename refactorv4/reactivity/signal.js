@@ -10,6 +10,10 @@ import { FLECT } from "../utils/types.js";
  * @type {FLECT.Reactive|null}
  */
 let currentReactive = null;
+/**
+ * The current avoided reactive function
+ * @type {FLECT.Reactive|null}
+ */
 let avoidedReactive = null;
 
 /**

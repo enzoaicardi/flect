@@ -107,7 +107,7 @@ function reconcile(context, element, prevList, nextList, parts, key) {
         // );
         // if there is a cached schema, hydrate the fragment
         element.immutableSchema &&
-            part.manager.hydrate(fragment.children, element.immutableSchema);
+            part.manager.hydrate(childrenOf(fragment), element.immutableSchema);
 
         // update indexes
         gap--;
