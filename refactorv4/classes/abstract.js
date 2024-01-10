@@ -75,10 +75,10 @@ export const xAbstract = {
                 // we add the current element into the component trail
                 (trail || self.trail).add(element);
 
-                trail =
-                    !element.content &&
-                    !isDefined(element) &&
-                    (element.trail = new Set());
+                // trail =
+                //     !element.content &&
+                //     !isDefined(element) &&
+                //     (element.trail = new Set());
             }
 
             if (!trail) {
