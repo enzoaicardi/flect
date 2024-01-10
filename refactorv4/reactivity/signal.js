@@ -21,45 +21,60 @@ let avoidedReactive = null;
  * @type {FLECT.Method.Signal}
  */
 export const signal = (value) => {
-    // create the getter function
-    const getter = function (dataUpdated, avoid) {
+    /**
+     * create the getter/setter function
+     * @type {FLECT.Method.Signal}
+     */
+    const currentSignal = function (dataUpdated, avoid) {
         let previousAvoided = avoidedReactive;
         avoid && (avoidedReactive = avoid);
 
         // if new data is sent
         if (dataUpdated !== undefined) {
             // update the value
-            getter.data = dataUpdated;
+            currentSignal.data = dataUpdated;
             // run all the dependencies
-            for (const callback of getter.reactives) {
+            for (const callback of currentSignal.reactives) {
                 callback();
             }
         } else {
             // if signal is running inside of a reactive function
             // we create all necessary dependencies
             if (currentReactive && currentReactive !== avoidedReactive) {
-                getter.reactives.add(currentReactive);
-                currentReactive.signals.add(getter.reactives);
+                currentSignal.reactives.add(currentReactive);
+                currentReactive.signals.add(currentSignal.reactives);
             }
         }
 
         avoid && (avoidedReactive = previousAvoided);
 
         // return the value
-        return getter.data;
+        return currentSignal.data;
     };
+
     // use this to access data without triggering signal
-    getter.data = value;
+    currentSignal.data = value;
+
     // use this to check if a variable is a signal
-    getter.issignal = true;
+    currentSignal.issignal = true;
+
     /**
      * setup dependencies
      * @type {FLECT.Dependencies.Reactives}
      */
-    getter.reactives = new Set();
+    currentSignal.reactives = new Set();
+
+    /**
+     * reference reactives dependencies, expose :
+     * - effect.add(callback)
+     * - effect.delete(callback)
+     * - ...
+     * @type {FLECT.Dependencies.Reactives}
+     */
+    currentSignal.effect = currentSignal.reactives;
 
     // return the signal setter/getter function
-    return getter;
+    return currentSignal;
 };
 
 /** @returns {FLECT.Element.DisconnectCallback} */
@@ -99,5 +114,6 @@ export const reactive = (callback) => {
     // set currentReactive value back to previousValue
     // this is very important for nested reactives functions
     currentReactive = previousValue;
+
     return callback;
 };

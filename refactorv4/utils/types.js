@@ -90,6 +90,7 @@ export const FLECT = {};
  * @property {any} data That property access data without triggering signal
  * @property {boolean} issignal That property is used to test if a property is a signal
  * @property {FLECT.Dependencies.Reactives} reactives All reactives functions in dependencies
+ * @property {FLECT.Dependencies.Reactives} effect Public access to dependencies
  * @returns {any} Returns the variable value
  */
 
