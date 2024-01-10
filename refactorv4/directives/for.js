@@ -129,6 +129,9 @@ function reconcile(context, element, prevList, nextList, parts, key) {
         let head = parts[index].flag.nextSibling;
         const tail = parts[index + 1].flag;
 
+        // unHydrate the element
+        parts[index + 1].manager.disconnectCallback();
+
         /**
          * Remove all the elements between head and tail
          * move head forward after every deletion and stop
@@ -139,8 +142,6 @@ function reconcile(context, element, prevList, nextList, parts, key) {
             head = head.nextSibling;
             prev.remove();
         }
-        // unHydrate the element
-        parts[index + 1].manager.disconnectCallback();
 
         gap++;
         index++;
