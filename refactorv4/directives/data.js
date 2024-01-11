@@ -17,20 +17,49 @@ import { FLECT } from "../utils/types.js";
  */
 export const dataDirective = (context, element, expression, attributeName) => {
     /** @type {FLECT.Element.Datas} */
-    element.datas = element.datas || {};
+    element.datas || (element.datas = {});
 
-    const reactiveFunction = () => {
-        const data = element.datas[attributeName];
+    /*
+        Why do we use a mutableSignal instead of a simple signal ?
+        - In a dataDirective we use a reactive function to trigger signals.
+        - So when defining the reactive function, it becomes "currentReactive"
+          which indicates that any signal triggered during its construction will
+          add the function to its dependency list.
+        - The problem is that we are asking to execute all signal dependencies
+          if we used "signal(value)". But these dependencies themselves contain
+          signals. As the "currentReactive" function is defined, they will also
+          add it to their dependency list.
+        - To solve this we use a mutableSignal which fires only when the reactive
+          function definition is completed.
+    */
+
+    let props = null;
+
+    const mutable = {
+        mutableSignal: (signal, value) => (props = { signal, value }),
+    };
+
+    const reactiveFunction = reactive(() => {
+        const signal = element.datas[attributeName];
         const value = expression(context);
 
-        if (data && data.issignal) {
-            // we use the signal function
-            data(value, reactiveFunction);
+        if (signal && signal.issignal) {
+            // we use the mutableSignal function instead of signal(value)
+            // to prevent side effects (infinite dependencies loop)
+            mutable.mutableSignal(signal, value);
         } else {
             // we store the value, later the signal will be built by the element
             element.datas[attributeName] = value;
         }
-    };
+    });
 
-    return reactive(reactiveFunction);
+    // if the signal is not defined yet, we prevent execution
+    if (props) {
+        props.signal(props.value);
+    }
+
+    // mutate the mutableSignal
+    mutable.mutableSignal = (signal, value) => signal(value);
+
+    return reactiveFunction;
 };

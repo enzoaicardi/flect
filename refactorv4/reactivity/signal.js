@@ -10,11 +10,6 @@ import { FLECT } from "../utils/types.js";
  * @type {FLECT.Reactive|null}
  */
 let currentReactive = null;
-/**
- * The current avoided reactive function
- * @type {FLECT.Reactive|null}
- */
-let avoidedReactive = null;
 
 /**
  * Create a signal function
@@ -25,10 +20,7 @@ export const signal = (value) => {
      * create the getter/setter function
      * @type {FLECT.Method.Signal}
      */
-    const currentSignal = function (dataUpdated, avoid) {
-        let previousAvoided = avoidedReactive;
-        avoid && (avoidedReactive = avoid);
-
+    const currentSignal = function (dataUpdated) {
         // if new data is sent
         if (dataUpdated !== undefined) {
             // update the value
@@ -37,16 +29,12 @@ export const signal = (value) => {
             for (const callback of currentSignal.reactives) {
                 callback();
             }
-        } else {
+        } else if (currentReactive) {
             // if signal is running inside of a reactive function
             // we create all necessary dependencies
-            if (currentReactive && currentReactive !== avoidedReactive) {
-                currentSignal.reactives.add(currentReactive);
-                currentReactive.signals.add(currentSignal.reactives);
-            }
+            currentSignal.reactives.add(currentReactive);
+            currentReactive.signals.add(currentSignal.reactives);
         }
-
-        avoid && (avoidedReactive = previousAvoided);
 
         // return the value
         return currentSignal.data;
