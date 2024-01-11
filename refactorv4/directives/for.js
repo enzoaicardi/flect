@@ -3,7 +3,7 @@
 */
 
 import { reactive } from "../reactivity/signal.js";
-import { elementCloneNode } from "../utils/shortcuts.js";
+import { childrenOf, elementCloneNode } from "../utils/shortcuts.js";
 import { FLECT } from "../utils/types.js";
 import { createFlag, createPart } from "./template.js";
 
