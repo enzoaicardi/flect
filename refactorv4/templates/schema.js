@@ -105,7 +105,7 @@ export const createTemplateSchema = (nodeList) => {
         }
 
         // if the definition is not empty we add it to the schema
-        if (definition.attrs.size || definition.schema || definition.template) {
+        if (definition.attrs.size || definition.schema) {
             schema.push(definition);
         }
     }
