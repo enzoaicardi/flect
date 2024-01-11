@@ -30,7 +30,7 @@ export const createTemplateSchema = (nodeList) => {
         /** @type {HTMLElement} */
         let element = nodeList[x];
         const isxtemplate = isXTemplate(element);
-        const isxelement = isXElement(element);
+        const isxelement = !isxtemplate && isXElement(element);
 
         /** @type {FLECT.Definition} */
         const definition = {
@@ -69,10 +69,10 @@ export const createTemplateSchema = (nodeList) => {
                  * extract the corresponding attribute or data directive
                  * @type {FLECT.Directive}
                  */
-                const directive = isxtemplate
-                    ? templateDirective(attr.name)
-                    : isxelement
+                const directive = isxelement
                     ? dataDirective
+                    : isxtemplate
+                    ? templateDirective(attr.name)
                     : isxevent
                     ? eventDirective
                     : attributeDirective(attr.name);
