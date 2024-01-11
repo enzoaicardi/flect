@@ -16,11 +16,7 @@ export const defineMemo = {};
 export const define = (name, renderFunction) => {
     const className = "X-" + name.toUpperCase();
 
-    // check if the element is already defined
-    if (defineMemo[className]) {
-        throw `x-${name} is already defined`;
-    }
-
+    // create the customElement class
     defineMemo[className] = class extends xElement {
         constructor() {
             super();

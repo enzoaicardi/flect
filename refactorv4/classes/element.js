@@ -180,8 +180,10 @@ export class xElement extends HTMLElement {
             // by doing this in case of defered hydration we can retrieve
             // the original DOM structure
             const parent = self.parentNode;
-            parent.immutableChildren ||
-                (parent.immutableChildren = [].slice.call(childrenOf(parent)));
+
+            if (!parent.immutableChildren) {
+                parent.immutableChildren = [].slice.call(childrenOf(parent));
+            }
 
             // replace xElement by template
             self.replaceWith(template);

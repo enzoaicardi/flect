@@ -46,8 +46,9 @@ export const xAbstract = {
      * Hydrate HTMLElements based on schema
      * @param {NodeList} nodeList
      * @param {FLECT.Schema} schema
+     * @param {FLECT.Dependencies.Trail} immutableTrail
      */
-    hydrate(nodeList, schema, trail) {
+    hydrate(nodeList, schema, immutableTrail) {
         let self = this;
 
         /** @type {number} */
@@ -73,15 +74,10 @@ export const xAbstract = {
                 element.immutableSchema = definition.schema;
 
                 // we add the current element into the component trail
-                (trail || self.trail).add(element);
-
-                // trail =
-                //     !element.content &&
-                //     !isDefined(element) &&
-                //     (element.trail = new Set());
+                (immutableTrail || self.trail).add(element);
             }
 
-            if (!trail) {
+            if (!immutableTrail) {
                 /**
                  * loop over all hydratable attributes
                  * @type {[string, FLECT.Action]}
@@ -104,23 +100,22 @@ export const xAbstract = {
                 }
             }
 
-            // if the element is a Flect element or template
-            if (definition.reactive) {
-                // update the trail value
-                // used to pass immutableSchema through non-defined components
-                trail =
-                    !element.content &&
-                    !isDefined(element) &&
-                    (element.trail = new Set());
-            }
+            if (definition.schema) {
+                // check if the element is hydratable and update the immutableTrail at same time
+                // immutableTrail should be updated only if the element is reactive
+                const ishydratable =
+                    !definition.reactive ||
+                    (immutableTrail =
+                        !isDefined(element) && (element.trail = new Set()));
 
-            // if the element is not a Flect component we hydrate children
-            if ((trail || !definition.reactive) && definition.schema) {
-                self.hydrate(
-                    immutableChildrenOf(element),
-                    definition.schema,
-                    trail
-                );
+                // if the element is not a Flect component we hydrate children
+                if (ishydratable) {
+                    self.hydrate(
+                        immutableChildrenOf(element),
+                        definition.schema,
+                        immutableTrail
+                    );
+                }
             }
 
             index--;

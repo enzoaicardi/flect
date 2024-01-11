@@ -42,4 +42,5 @@ export const isXTemplate = (element) => !!element.content;
  * @param {HTMLElement} element
  * @returns {boolean}
  */
-export const isDefined = (element) => !!defineMemo[element.tagName];
+export const isDefined = (element) =>
+    !!defineMemo[element.tagName] || isXTemplate(element);
