@@ -70,12 +70,12 @@ export const createTemplateSchema = (nodeList) => {
                  * @type {FLECT.Directive}
                  */
                 const directive = isxtemplate
-                    ? templateDirective(attr)
+                    ? templateDirective(attr.name)
                     : isxelement
                     ? dataDirective
                     : isxevent
                     ? eventDirective
-                    : attributeDirective(attr);
+                    : attributeDirective(attr.name);
 
                 /** @type {FLECT.Action} */
                 const action = { expression, directive };
