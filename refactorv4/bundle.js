@@ -15,8 +15,8 @@ import { FLECT } from "./utils/types.js";
  * @type {{define: FLECT.Method.Define, signal: FLECT.Method.Signal, observe: FLECT.Method.Observe}}
  */
 const Flect = {
-    define: define,
-    signal: signal,
+    define,
+    signal,
 };
 
 export default Flect;

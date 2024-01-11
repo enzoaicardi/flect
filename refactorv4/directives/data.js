@@ -36,30 +36,30 @@ export const dataDirective = (context, element, expression, attributeName) => {
     let props = null;
 
     const mutable = {
-        mutableSignal: (signal, value) => (props = { signal, value }),
+        mutableSignal: (data, updatedValue) => (props = { data, updatedValue }),
     };
 
     const reactiveFunction = reactive(() => {
-        const signal = element.datas[attributeName];
-        const value = expression(context);
+        const data = element.datas[attributeName];
+        const updatedValue = expression(context);
 
-        if (signal && signal.issignal) {
+        if (data && data.issignal) {
             // we use the mutableSignal function instead of signal(value)
             // to prevent side effects (infinite dependencies loop)
-            mutable.mutableSignal(signal, value);
+            mutable.mutableSignal(data, updatedValue);
         } else {
             // we store the value, later the signal will be built by the element
-            element.datas[attributeName] = value;
+            element.datas[attributeName] = updatedValue;
         }
     });
 
     // if the signal is not defined yet, we prevent execution
     if (props) {
-        props.signal(props.value);
+        props.data(props.updatedValue);
     }
 
     // mutate the mutableSignal
-    mutable.mutableSignal = (signal, value) => signal(value);
+    mutable.mutableSignal = (data, updatedValue) => data(updatedValue);
 
     return reactiveFunction;
 };
