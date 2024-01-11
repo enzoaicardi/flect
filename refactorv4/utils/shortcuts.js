@@ -12,3 +12,6 @@ export const childrenOf = (element) => element.children;
 
 export const immutableChildrenOf = (element) =>
     element.immutableChildren || element.children;
+
+export const attributeNameSubstring = (attribute, start) =>
+    attribute.name.substring(start);

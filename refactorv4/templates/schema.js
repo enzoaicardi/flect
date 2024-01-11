@@ -15,7 +15,10 @@ import {
 } from "../utils/tests.js";
 import { FLECT } from "../utils/types.js";
 import { templateDirective } from "../directives/template.js";
-import { immutableChildrenOf } from "../utils/shortcuts.js";
+import {
+    attributeNameSubstring,
+    immutableChildrenOf,
+} from "../utils/shortcuts.js";
 
 /**
  * Create a xElement template schema
@@ -52,8 +55,8 @@ export const createTemplateSchema = (nodeList) => {
                 const isxevent = isXEventAttribute(attr);
                 /** @type {string} */
                 const name = isxevent
-                    ? attr.name.substring(5)
-                    : attr.name.substring(2);
+                    ? attributeNameSubstring(attr, 5)
+                    : attributeNameSubstring(attr, 2);
 
                 /**
                  * get the expression function or the attribute value for ref or css

@@ -16,7 +16,11 @@ import {
     createLiteralTemplate,
 } from "../templates/generic.js";
 import { createCssTemplateOrSelector, cssNextId } from "../templates/css.js";
-import { childrenOf, elementCloneNode } from "../utils/shortcuts.js";
+import {
+    attributeNameSubstring,
+    childrenOf,
+    elementCloneNode,
+} from "../utils/shortcuts.js";
 import { xAbstract } from "./abstract.js";
 import { isXAttribute } from "../utils/tests.js";
 
@@ -33,21 +37,22 @@ export class xElement extends HTMLElement {
 
     onMount() {}
     connectedCallback() {
-        this.connectCallback();
-    }
-    connectCallback() {
         let self = this;
+        let datas = self.datas;
         /**
          * hydrate datas with (non x) attributes values
          * create signals for every x- attributes
          * @type {HTMLElement.attribute}
          */
         for (const attribute of self.attributes) {
+            // if the attribute is an x- attribute, create the corresponding signal
             if (isXAttribute(attribute)) {
-                const dataName = attribute.name.substring(2);
-                self.datas[dataName] = signal(self.datas[dataName]);
-            } else {
-                self.datas[attribute.name] = attribute.value || true;
+                const dataName = attributeNameSubstring(attribute, 2);
+                datas[dataName] = signal(datas[dataName]);
+            }
+            // else add the attribute value to the corresponding datas property
+            else {
+                datas[attribute.name] = attribute.value || true;
             }
         }
 
@@ -55,20 +60,20 @@ export class xElement extends HTMLElement {
          * define the component property
          * @type {FLECT.Element}
          */
-        self.datas.component = self;
+        datas.component = self;
 
         /**
          * create the context.ref method
          * @type {FLECT.Element.Datas.Reference}
          */
-        self.datas.ref = self.reference;
+        datas.ref = self.reference;
 
         /**
          * onMount is an user custom function defined with :
          * myClassReturnedByDefine.prototype.onMount = function(){ stuff here... }
          * @type {Function}
          */
-        self.onMount(self.datas);
+        self.onMount(datas);
 
         // render the component logic
         self.render();
@@ -146,7 +151,7 @@ export class xElement extends HTMLElement {
                 schema =
                     self.immutableSchema ||
                     createTemplateSchema(
-                        self.immutableChildren || template.children
+                        self.immutableChildren || childrenOf(template)
                     );
             }
         }
