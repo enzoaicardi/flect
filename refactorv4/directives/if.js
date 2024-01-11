@@ -4,7 +4,7 @@
     Fait partie des attr directives
 */
 
-import { reactive } from "../reactivity/signal";
+import { reactive } from "../reactivity/signal.js";
 import { createFlag } from "./template.js";
 
 /*
