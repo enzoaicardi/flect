@@ -46,9 +46,8 @@ export class xElement extends HTMLElement {
          */
         for (const attribute of self.attributes) {
             if (isXAttribute(attribute)) {
-                const data = attribute.name.substring(2);
-                self.datas[data] = signal(self.datas[data]);
-                // console.log("::: signal defined", data);
+                const dataName = attribute.name.substring(2);
+                self.datas[dataName] = signal(self.datas[dataName]);
             } else {
                 self.datas[attribute.name] = attribute.value || true;
             }
