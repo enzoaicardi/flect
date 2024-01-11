@@ -46,7 +46,7 @@ export const FLECT = {};
 /**
  * Hydration
  * -- Definition
- * @typedef {{index: number, template: FLECT.Template, schema: FLECT.Schema, reactive: boolean, attrs: FLECT.Attributes}} FLECT.Definition Object representing the definition of a HTMLElement
+ * @typedef {{pos: number schema: FLECT.Schema, reactive: boolean, attrs: FLECT.Attributes}} FLECT.Definition Object representing the definition of a HTMLElement
  * -- Attributes
  * @typedef {Object<string, FLECT.Action>} FLECT.Attributes Schema of attributes with associated actions
  * -- Action

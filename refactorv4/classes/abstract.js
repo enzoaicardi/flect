@@ -65,7 +65,7 @@ export const xAbstract = {
              * retrieve the HTMLElement from the index
              * @type {HTMLElement}
              */
-            const element = nodeList[definition.index];
+            const element = nodeList[definition.pos];
 
             // console.log(">>> hydrate element", element);
             if (definition.reactive) {
