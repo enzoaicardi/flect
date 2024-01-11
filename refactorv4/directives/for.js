@@ -100,11 +100,6 @@ function reconcile(context, element, prevList, nextList, parts, key) {
         // push the template fragment and the flag into newElements array
         newElements.push(fragment, part.flag);
 
-        // console.log(
-        //     "+++ hydrate children",
-        //     fragment.children,
-        //     element.immutableSchema
-        // );
         // if there is a cached schema, hydrate the fragment
         element.immutableSchema &&
             part.manager.hydrate(childrenOf(fragment), element.immutableSchema);
@@ -146,6 +141,4 @@ function reconcile(context, element, prevList, nextList, parts, key) {
         gap++;
         index++;
     }
-
-    // console.log("+++ for parts", parts);
 }

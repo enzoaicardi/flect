@@ -67,7 +67,6 @@ export const xAbstract = {
              */
             const element = nodeList[definition.pos];
 
-            // console.log(">>> hydrate element", element);
             if (definition.reactive) {
                 // we pass the current schema as immutableSchema
                 // avoiding the creation of a new schema and it's performance cost
@@ -117,11 +116,6 @@ export const xAbstract = {
 
             // if the element is not a Flect component we hydrate children
             if ((trail || !definition.reactive) && definition.schema) {
-                // console.log(
-                //     ">>> explore children",
-                //     element.immutableChildren || element.children,
-                //     definition.schema
-                // );
                 self.hydrate(
                     immutableChildrenOf(element),
                     definition.schema,
