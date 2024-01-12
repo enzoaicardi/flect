@@ -105,12 +105,12 @@ export class xElement extends HTMLElement {
         /** @type {FLECT.Schema} */
         let schema = definition.schema;
         /** @type {number} */
-        let selectorId = definition.selectorId;
+        let identifier = definition.identifier;
 
         /** @type {FLECT.Method.Define.Render.HTML} */
         const html = template ? createEmptyTemplate : createLiteralTemplate;
         /** @type {FLECT.Method.Define.Render.CSS} */
-        const css = selectorId
+        const css = identifier
             ? createEmptyTemplate
             : createCssTemplateOrSelector;
 
@@ -156,10 +156,10 @@ export class xElement extends HTMLElement {
             }
         }
 
-        // if there is no selectorId we add it to the definition
+        // if there is no identifier we add it to the definition
         // and to the context.component property (used in cssDirective)
         // and finaly increment the cssSelectorsId if necessary
-        self.selectorId = definition.selectorId = selectorId || cssNextId();
+        self.identifier = definition.identifier = identifier || cssNextId();
 
         // if the template is stored (cache or static)
         // we want to clone it before hydration
@@ -195,13 +195,14 @@ export class xElement extends HTMLElement {
      * @type {FLECT.Element.Datas.Reference}
      */
     reference(name, callback) {
+        const componentReferences = this.component.references;
         /**
          * get the reference's callback array or create it
          * @type {FLECT.Element.References.Array}
          */
         const referenceArray =
-            this.component.references[name] ||
-            (this.component.references[name] = createReferenceArray());
+            componentReferences[name] ||
+            (componentReferences[name] = createReferenceArray());
 
         if (callback) {
             // we push the callback into the reference array
