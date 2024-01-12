@@ -8,6 +8,10 @@
     Flect.lazy({
         elementName: ()=>import('the url of the element .define')
     })
+
+    TODO cette implémentation est mauvaise, en terme de performance on doit laisser trainer
+    un observeur de mutation, et d'un point de vue technique, il n'est meme pas capable de detecter
+    les customelements avant leur bind. Trouver une autre solution détournée. passer par les schemas ?
 */
 
 import { dom } from "../utils/shortcuts.js";
@@ -25,7 +29,6 @@ const domObserverCallback = (mutations) => {
             // check added nodes
             for (const node of mutation.addedNodes) {
                 let tag;
-
                 // if node is an xElement and have an associated action
                 if (
                     node.nodeType === 1 &&
