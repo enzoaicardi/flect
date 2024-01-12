@@ -8,7 +8,7 @@
     },
     "scripts": {
         "minify": "rollup --config",
-        "build": "rollup --config && gzip dist/flect.js",
+        "gzip": "gzip dist/flect.js",
         "docs:dev": "vitepress dev docs/dev",
         "docs:build": "vitepress build docs/dev",
         "docs:preview": "vitepress preview docs/dev"
