@@ -73,6 +73,8 @@ setTimeout(() => {
         this.text = signal("x-two -> success");
         this.array = signal([1]);
 
+        this.navigate = Flect.navigate;
+
         setTimeout(() => {
             this.array([]);
         }, 50);

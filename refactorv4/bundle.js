@@ -8,15 +8,17 @@
 */
 
 import { define } from "./define.js";
+import { navigate } from "./features/navigate.js";
 import { signal } from "./reactivity/signal.js";
 import { FLECT } from "./utils/types.js";
 
 /**
- * @type {{define: FLECT.Method.Define, signal: FLECT.Method.Signal, observe: FLECT.Method.Observe}}
+ * @type {{define: FLECT.Method.Define, signal: FLECT.Method.Signal, observe: FLECT.Method.Observe, navigate: FLECT.Method.Navigate}}
  */
 const Flect = {
     define,
     signal,
+    navigate,
 };
 
 export default Flect;
