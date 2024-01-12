@@ -130,3 +130,8 @@ export const FLECT = {};
  * @param {any?} value Default value of signal data
  * @returns {FLECT.Signal} A signal that can be used to create reactive variables
  */
+/** - Navigate
+ * @callback FLECT.Method.Navigate Function used to navigate between routes with browser history
+ * @param {string|Event} data String representing an absolute or relative URL | Event triggered by an element with href attribute
+ * @returns {string} String representing the updated URL
+ */
