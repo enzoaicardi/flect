@@ -8,7 +8,7 @@ import { FLECT } from "./utils/types.js";
 
 /**
  * keep track of defined components
- * @type {{X-TAG: class}}
+ * @type {{elementTag: class}}
  */
 export const defineMemo = {};
 

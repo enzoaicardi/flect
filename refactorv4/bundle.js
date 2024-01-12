@@ -9,6 +9,7 @@
 
 import { define } from "./define.js";
 import { navigate } from "./features/navigate.js";
+import { observe } from "./features/observe.js";
 import { signal } from "./reactivity/signal.js";
 import { FLECT } from "./utils/types.js";
 
@@ -18,6 +19,7 @@ import { FLECT } from "./utils/types.js";
 const Flect = {
     define,
     signal,
+    observe,
     navigate,
 };
 

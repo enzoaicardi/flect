@@ -68,6 +68,10 @@ setTimeout(() => {
     // });
 }, 1000);
 
+Flect.observe({
+    "x-two": () => console.log("x-two found"),
+});
+
 setTimeout(() => {
     Flect.define("two", function (signal, html, css) {
         this.text = signal("x-two -> success");
