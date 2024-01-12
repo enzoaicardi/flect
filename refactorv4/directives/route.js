@@ -1,0 +1,3 @@
+/*
+    Route directive for templates
+*/
