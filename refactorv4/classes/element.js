@@ -105,12 +105,12 @@ export class xElement extends HTMLElement {
         /** @type {FLECT.Schema} */
         let schema = definition.schema;
         /** @type {number} */
-        let identifier = definition.identifier;
+        let indicator = definition.indicator;
 
         /** @type {FLECT.Method.Define.Render.HTML} */
         const html = template ? createEmptyTemplate : createLiteralTemplate;
         /** @type {FLECT.Method.Define.Render.CSS} */
-        const css = identifier
+        const css = indicator
             ? createEmptyTemplate
             : createCssTemplateOrSelector;
 
@@ -156,10 +156,10 @@ export class xElement extends HTMLElement {
             }
         }
 
-        // if there is no identifier we add it to the definition
+        // if there is no indicator we add it to the definition
         // and to the context.component property (used in cssDirective)
         // and finaly increment the cssSelectorsId if necessary
-        self.identifier = definition.identifier = identifier || cssNextId();
+        self.indicator = definition.indicator = indicator || cssNextId();
 
         // if the template is stored (cache or static)
         // we want to clone it before hydration

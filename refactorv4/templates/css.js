@@ -17,8 +17,8 @@ export const cssNextId = () => cssSelectorsId++;
  * selector start by "css-" to avoid conflicts with x- attributes
  * @returns {string} css attribute value
  */
-export const createCssSelector = (selector, identifier) =>
-    "$" + (identifier || cssSelectorsId) + selector;
+export const createCssSelector = (selector, indicator) =>
+    "$" + (indicator || cssSelectorsId) + selector;
 
 /**
  * Used to create CSS templates or CSS selectors from components renderFunction

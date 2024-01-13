@@ -20,7 +20,7 @@ export const signal = (value) => {
      * create the getter/setter function
      * @type {FLECT.Method.Signal}
      */
-    const currentSignal = function (dataUpdated) {
+    const currentSignal = (dataUpdated) => {
         // if new data is sent
         if (dataUpdated !== undefined) {
             // update the value

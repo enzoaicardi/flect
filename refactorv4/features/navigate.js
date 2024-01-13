@@ -21,9 +21,9 @@ addEventListener("popstate", () => {
 });
 
 // TODO -> remove
-currentRoute.reactives.add(() =>
-    console.log("the current route change", currentRoute.data)
-);
+// currentRoute.reactives.add(() =>
+//     console.log("the current route change", currentRoute.data)
+// );
 
 /**
  * function used to navigate between routes

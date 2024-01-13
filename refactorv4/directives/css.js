@@ -6,13 +6,13 @@ import { FLECT } from "../utils/types.js";
  * @type {FLECT.Directive}
  */
 export const cssDirective = (context, element, expression) => {
-    // get select the selector and the identifier
+    // get select the selector and the indicator
     const selector = expression;
-    const identifier = context.component.identifier;
+    const indicator = context.component.indicator;
 
     // set the css-x attribute to the element
     element.setAttribute(
         cssAttributeName,
-        createCssSelector(selector, identifier)
+        createCssSelector(selector, indicator)
     );
 };
