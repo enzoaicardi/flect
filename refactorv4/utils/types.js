@@ -135,3 +135,7 @@ export const FLECT = {};
  * @param {string|Event} data String representing an absolute or relative URL | Event triggered by an element with href attribute
  * @returns {string} String representing the updated URL
  */
+/** - Observe
+ * @callback FLECT.Method.Observe Function used to observe the first addition of an x-element to the DOM
+ * @param {{elementTag: function}} actions Object representing a function associated to an X-ELEMENT tagName
+ */

@@ -19,6 +19,7 @@ import {
     attributeNameSubstring,
     immutableChildrenOf,
 } from "../utils/shortcuts.js";
+import { observerDispatch } from "../features/observe.js";
 
 /**
  * Create a xElement template schema
@@ -44,8 +45,13 @@ export const createTemplateSchema = (nodeList) => {
             attrs: new Map(),
         };
 
+        if (isxelement && observerDispatch) {
+            observerDispatch(element.tagName);
+        }
+
         let index = element.attributes.length;
 
+        // explore element attributes
         while (index--) {
             /** @type {HTMLElement.attribute} */
             const attr = element.attributes[index];
@@ -59,14 +65,13 @@ export const createTemplateSchema = (nodeList) => {
                     : attributeNameSubstring(attr, 2);
 
                 /**
-                 * get the expression function or the attribute value for ref or css
+                 * get the expression function or the attribute value for ref, css or route
                  * @type {FLECT.Expression|string}
                  */
                 const expression =
-                    attr.value &&
-                    (name === "ref" || name === "css"
+                    name === "ref" || name === "css" || name === "route"
                         ? attr.value
-                        : generateFunctionFromString(attr.value));
+                        : generateFunctionFromString(attr.value || "");
 
                 /**
                  * extract the corresponding attribute or data directive
