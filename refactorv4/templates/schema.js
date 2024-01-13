@@ -38,7 +38,7 @@ export const createTemplateSchema = (nodeList) => {
 
         /** @type {FLECT.Definition} */
         const definition = {
-            // tagName: element.tagName, // DEBUG
+            tagName: element.tagName, // DEBUG
             pos: x,
             schema: false,
             reactive: isxtemplate || isxelement,

@@ -54,6 +54,11 @@ export const xAbstract = {
         /** @type {number} */
         let index = schema.length - 1;
 
+        // TODO -> la immutableTrail influence le reste des elements de la liste
+        // mais on ne veut qu'une influence sur les enfants, il faut donc créer une variable
+        // pour la modification, et une qui est passée en argument, on ne se fie qu'a celle qui
+        // est passée en argument
+
         // we play the schema in reverse order because the nodeList
         // can change during the hydration process by adding or removing
         // elements at the current index, so next indexes could change
