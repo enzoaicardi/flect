@@ -4,11 +4,8 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Garbage testing</title>
+        <!-- <script src="../../../dist/flect.js"></script> -->
         <script type="module" src="./components.js" defer></script>
-        <style>
-            .freezer {
-            }
-        </style>
     </head>
     <body>
         <h1>Primary tests here</h1>
@@ -19,6 +16,20 @@
         <div class="freezer"></div>
 
         <main>
+            <x-app>
+                <x-two>
+                    <!-- 
+                        TODO -> probleme de binding ICI, inspecter hydrate et schema !!!
+                        certainement un soucis dans l'ordre du binding
+                    -->
+                    <!-- <template x-for="array()"> -->
+                    <p x-text="'two' + text()"></p>
+                    <x-three>
+                        <p x-text="'three' + text()"></p>
+                    </x-three>
+                    <!-- </template> -->
+                </x-two>
+            </x-app>
             <x-p></x-p>
             <basic-element></basic-element>
         </main>
