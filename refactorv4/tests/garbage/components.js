@@ -1,9 +1,9 @@
 import Flect from "../../bundle.js";
 
-import {
-    LitElement,
-    html,
-} from "https://cdn.jsdelivr.net/gh/lit/dist@2/core/lit-core.min.js";
+// import {
+//     LitElement,
+//     html,
+// } from "https://cdn.jsdelivr.net/gh/lit/dist@2/core/lit-core.min.js";
 
 const prev = [...Array(8000)].map((_) => Math.ceil(Math.random() * 10));
 const next = [...Array(20)].map((_) => Math.ceil(Math.random() * 1000));
@@ -92,7 +92,9 @@ Flect.observe({
     "X-THREE": () => console.log("x-three found"),
 });
 
-Flect.define("app", function () {
+Flect.define("app", function (signal) {
+    this.navigate = Flect.navigate;
+
     return this.component;
 });
 

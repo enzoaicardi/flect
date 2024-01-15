@@ -5,15 +5,31 @@
 */
 
 import { reactive } from "../reactivity/signal.js";
-import { createFlag } from "./template.js";
+import { addPart, removePart, setupTemplateDirective } from "./template.js";
 
 /*
     TODO -> explain
 */
 export const ifDirective = (context, element, expression) => {
-    // const flag = createFlag()
+    setupTemplateDirective(element);
+
+    /** @type {boolean} */
+    let previousValue = false;
 
     return reactive(() => {
-        const bool = !!expression(context);
+        /** @type {boolean} */
+        const value = !!expression(context);
+
+        if (value !== previousValue) {
+            // update previousValue
+            previousValue = value;
+
+            // add or remove parts
+            if (value) {
+                addPart(element, context, 0);
+            } else {
+                removePart(element, 0);
+            }
+        }
     });
 };

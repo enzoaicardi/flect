@@ -17,18 +17,12 @@
 
         <main>
             <x-app>
-                <x-two>
-                    <!-- 
-                        TODO -> probleme de binding ICI, inspecter hydrate et schema !!!
-                        certainement un soucis dans l'ordre du binding
-                    -->
-                    <template x-for="array()">
-                        <p x-text="'two' + text()"></p>
-                        <x-three>
-                            <p x-text="'three' + text()"></p>
-                        </x-three>
-                    </template>
-                </x-two>
+                <a href="?name=jack" x-on:click="navigate">nav NAME</a>
+                <a href="?id=5" x-on:click="navigate">nav ID</a>
+                <template x-route="name=([a-z]+)">
+                    correct route for name:
+                    <span x-text="params()[1]"></span>
+                </template>
             </x-app>
             <x-p></x-p>
             <basic-element></basic-element>

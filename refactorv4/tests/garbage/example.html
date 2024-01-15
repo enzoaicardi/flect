@@ -82,6 +82,30 @@
                 <!-- for [array] -->
                 <x-card x-values="item()"> </x-card>
             </x-products>
+
+            <!--
+                Cette première approche est assez verbeuse, mais semble
+                avoir la commodité d'une mise en place rapide et fiable
+                cependant on créer de nouvelles "parties" de DOM à chaque
+                fois, ce qui peut ne pas être optimum au niveau des
+                performances, c'est un détail mais à réfléchir
+             -->
+            <template x-if="Array.isArray(array())">
+                <template x-for="array()"> </template>
+            </template>
+
+            <!-- 
+                Cette approche, moins verbeuse, plus lisible, semble être
+                la meilleure approche, mais cela necessite un plan d'action
+                robuste pour etre mise en place, avec un ordre de priorité
+                for < route < if
+
+                Dans ce cas de figure l'ordre devient extremement important
+                pour les performances, x-if doit toujours etre avant x-for
+                de meme pour x-route...
+             -->
+            <template x-if="Array.isArray(array())" x-for="array()" item="item">
+            </template>
         </x-app>
     </body>
 </html>

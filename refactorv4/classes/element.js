@@ -169,15 +169,6 @@ export class xElement extends HTMLElement {
 
         // hydrate template schema
         if (schema) {
-            console.log(
-                "Hydrate on -> " + self.tagName,
-                "\nschema :",
-                schema,
-                "\nchildren :",
-                childrenOf(template),
-                "\nimmutable :",
-                self.immutableChildren
-            );
             self.hydrate(
                 self.immutableChildren || childrenOf(template),
                 schema
