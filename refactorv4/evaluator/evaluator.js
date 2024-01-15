@@ -43,12 +43,12 @@ export const generateFunctionFromString = (expression) => {
             );
 
             Object.defineProperty(func, "name", {
-                value: `FlectExpression ${expression}`,
+                value: `FlectExp "${expression}"`,
             });
 
             return func;
         } catch (error) {
-            console.error("FlectExpression error : " + expression, error);
+            console.error("FlectExp error : " + expression, error);
             return false;
         }
     };

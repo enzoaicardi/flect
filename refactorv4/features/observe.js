@@ -22,9 +22,9 @@ const observerDispacther = (elementTag) => {
 
 /** @type {FLECT.Method.Observe} */
 export const observe = (actions) => {
-    // we need to invert params of Object.assign because
+    // we need to invert params in Object spread because
     // we don't want to erase properties of observerMemo
-    observerMemo = Object.assign(actions, observerMemo);
+    observerMemo = { ...actions, ...observerMemo };
 
     // setup observeDispatch value equal to dispatcher
     // we do that for performances, because we don't want to
