@@ -127,9 +127,9 @@ setTimeout(() => {
     Flect.define("three", function (signal, html, css) {
         this.text = signal("x-three -> success");
 
-        // setTimeout(() => {
-        //     this.text("x-three -> success update");
-        // }, 1000);
+        setTimeout(() => {
+            this.text("x-three -> success update");
+        }, 1000);
 
         css`
             [${css("bg")}]::before {

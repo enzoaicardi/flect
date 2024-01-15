@@ -22,12 +22,12 @@
                         TODO -> probleme de binding ICI, inspecter hydrate et schema !!!
                         certainement un soucis dans l'ordre du binding
                     -->
-                    <!-- <template x-for="array()"> -->
-                    <p x-text="'two' + text()"></p>
-                    <x-three>
-                        <p x-text="'three' + text()"></p>
-                    </x-three>
-                    <!-- </template> -->
+                    <template x-for="array()">
+                        <p x-text="'two' + text()"></p>
+                        <x-three>
+                            <p x-text="'three' + text()"></p>
+                        </x-three>
+                    </template>
                 </x-two>
             </x-app>
             <x-p></x-p>

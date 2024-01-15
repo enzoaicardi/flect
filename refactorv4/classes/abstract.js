@@ -46,18 +46,20 @@ export const xAbstract = {
      * Hydrate HTMLElements based on schema
      * @param {NodeList} nodeList
      * @param {FLECT.Schema} schema
-     * @param {FLECT.Dependencies.Trail} immutableTrail
+     * @param {FLECT.Dependencies.Trail} trail
      */
-    hydrate(nodeList, schema, immutableTrail) {
+    hydrate(nodeList, schema, trail) {
         let self = this;
 
         /** @type {number} */
         let index = schema.length - 1;
 
-        // TODO -> la immutableTrail influence le reste des elements de la liste
-        // mais on ne veut qu'une influence sur les enfants, il faut donc créer une variable
-        // pour la modification, et une qui est passée en argument, on ne se fie qu'a celle qui
-        // est passée en argument
+        /**
+         * we need immutableTrail as a duplicate of trail because changing trail
+         * inside the while loop will influence sibling elements as a side effect
+         * @type {FLECT.Dependencies.Trail}
+         */
+        let immutableTrail = trail;
 
         // we play the schema in reverse order because the nodeList
         // can change during the hydration process by adding or removing
@@ -79,10 +81,10 @@ export const xAbstract = {
                 element.immutableSchema = definition.schema;
 
                 // we add the current element into the component trail
-                (immutableTrail || self.trail).add(element);
+                (trail || self.trail).add(element);
             }
 
-            if (!immutableTrail) {
+            if (!trail) {
                 /**
                  * loop over all hydratable attributes
                  * @type {[string, FLECT.Action]}
@@ -106,8 +108,8 @@ export const xAbstract = {
             }
 
             if (definition.schema) {
-                // check if the element is hydratable and update the immutableTrail at same time
-                // immutableTrail should be updated only if the element is reactive
+                // check if the element is hydratable and update the trail at same time
+                // trail should be updated only if the element is reactive
                 const ishydratable =
                     !definition.reactive ||
                     (immutableTrail =
@@ -131,11 +133,6 @@ export const xAbstract = {
      * UnHydrate HTMLElements based on trail
      * @param {FLECT.Dependencies.Reactives} trail
      */
-    // -> TODO -> voir dans quelle mesure un argument freeze serait utile
-    // au lieu de delet reactive on passe a reactive.frozen = !reactive.frozen
-    // et dans signal !reactive.frozen && reactive()
-    // cela permettrait de geler et rétablir l'état d'un composant
-    // mais utile dans quel cas de figure ? x-for ? x-if ? ssr ?
     unHydrate() {
         /** @type {FLECT.Reactive|FLECT.Element} */
         for (const reactive of this.trail) {
