@@ -20,11 +20,6 @@ addEventListener("popstate", () => {
     currentRoute(getFormattedRoute());
 });
 
-// TODO -> remove
-// currentRoute.reactives.add(() =>
-//     console.log("the current route change", currentRoute.data)
-// );
-
 /**
  * function used to navigate between routes
  * @param {string|Event} data
@@ -32,13 +27,20 @@ addEventListener("popstate", () => {
 export const navigate = (data) => {
     // if the argument is a string, navigate to the route
     if (typeof data === "string") {
-        // update the currentLocation based on link
-        currentLocation = new URL(data, currentLocation);
-        // update the history based on new location
-        history.pushState({}, "", currentLocation);
-        // update the currentRoute signal based on new location
-        currentRoute(getFormattedRoute());
+        // get the new location object based on currentLocation
+        const newLocation = new URL(data, currentLocation);
+
+        // check if newLocation is different of currentLocation
+        if (currentLocation.href !== newLocation.href) {
+            // update the currentLocation based on link
+            currentLocation = newLocation;
+            // update the history based on new location
+            history.pushState({}, "", currentLocation);
+            // update the currentRoute signal based on new location
+            currentRoute(getFormattedRoute());
+        }
     }
+
     // if the argument is not a string, it is considered as Event
     // this strategy can be used to manage routing in SPA context
     // without affecting the crawlers strategies
