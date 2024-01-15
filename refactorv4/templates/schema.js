@@ -38,7 +38,7 @@ export const createTemplateSchema = (nodeList) => {
 
         /** @type {FLECT.Definition} */
         const definition = {
-            tagName: element.tagName, // DEBUG
+            // tagName: element.tagName, // DEBUG
             pos: x,
             schema: false,
             reactive: isxtemplate || isxelement,
@@ -46,9 +46,11 @@ export const createTemplateSchema = (nodeList) => {
         };
 
         if (isxelement && observerDispatch) {
+            // dispatch the element tagName to the observer
             observerDispatch(element.tagName);
         }
 
+        /** @type {number} */
         let index = element.attributes.length;
 
         // explore element attributes
