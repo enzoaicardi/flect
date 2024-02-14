@@ -1,0 +1,30 @@
+<svg
+              class="logo"
+              viewBox="0 0 48 52"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+          >
+              <circle
+                  cx="24"
+                  cy="9.33333"
+                  r="6.59966"
+                  transform="rotate(45 24 9.33333)"
+                  fill="#ff661a"
+              ></circle>
+              <rect
+                  x="12"
+                  y="16"
+                  width="16.9706"
+                  height="16.9706"
+                  transform="rotate(45 12 16)"
+                  fill="#ff661a"
+              ></rect>
+              <rect
+                  x="35.9999"
+                  y="16"
+                  width="16.9706"
+                  height="33.9411"
+                  transform="rotate(45 35.9999 16)"
+                  fill="#FFC700"
+              ></rect>
+          </svg>
