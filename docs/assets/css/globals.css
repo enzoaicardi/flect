@@ -1,8 +1,7 @@
-:root{
-
+:root {
     /* fonts */
-    --font-sans: 'Manrope', 'Inter', Arial, sans-serif;
-    --font-mono: 'Roboto Mono', monospace;
+    --font-sans: "Manrope", "Inter", Arial, sans-serif;
+    --font-mono: "Roboto Mono", monospace;
     font-family: var(--font-sans);
 
     /* colors */
@@ -16,86 +15,89 @@
     color: var(--color-text);
 
     /* gradients */
-    --gradient: linear-gradient(45deg, var(--color-secondary), var(--color-primary));
+    --gradient: linear-gradient(
+        45deg,
+        var(--color-secondary),
+        var(--color-primary)
+    );
 
     /* sizes */
     --size-heading: 40rem;
-
 }
 
-body{
+body {
     background-color: var(--color-dark);
 }
 
-body > *{
+body > * {
     margin-top: 6rem;
     margin-bottom: 6rem;
 }
 
-*{
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-h2{
+h2 {
     font-size: 3rem;
     font-weight: 800;
 }
 
 @media screen and (max-width: 720px) {
-    h2{
+    h2 {
         font-size: 2.2rem;
     }
 }
 
-h3{
+h3 {
     font-size: 2rem;
     font-weight: 800;
 }
 
-a{
+a {
     text-decoration: none;
     color: inherit;
     line-height: 1;
 }
 
-.link{
+.link {
     color: var(--color-secondary);
 }
 
 code,
-.code{
+.code {
     display: block;
     width: 100%;
     font-family: var(--font-mono);
 }
 
-.code{
+.code {
     overflow: hidden;
     padding: 1rem;
     background-color: var(--color-background-alpha);
 }
 
 code,
-pre{
+pre {
     background-color: transparent !important;
     width: max-content;
     padding: 0;
 }
 
 .code:hover,
-.code:focus{
+.code:focus {
     overflow: auto;
 }
 
 @media screen and (max-width: 720px) {
-    .code{
+    .code {
         overflow: auto;
     }
 }
 
-section{
+section {
     width: 100%;
     max-width: 67rem;
     margin-left: auto;
@@ -104,8 +106,34 @@ section{
     padding-right: 1rem;
 }
 
+header {
+    text-align: center;
+    margin: 0;
+    padding: 4rem 2rem;
+    background-color: #ff661a;
+    color: white;
+}
+
+header h2 {
+    font-size: 3rem;
+    margin-bottom: 2rem;
+}
+
+header svg {
+    width: 4rem;
+    height: 4rem;
+    margin-top: 2rem;
+    border-radius: 50%;
+    background-color: white;
+    padding: 1rem;
+}
+
+header a {
+    display: block;
+}
+
 button,
-.button{
+.button {
     display: block;
     cursor: pointer;
     min-height: 2.5rem;
@@ -121,12 +149,12 @@ button,
 }
 
 button:hover,
-.button:hover{
+.button:hover {
     color: var(--color-secondary);
 }
 
 button.selected,
-.button.selected{
+.button.selected {
     background-color: var(--color-light);
     color: var(--color-dark);
 }
@@ -135,29 +163,29 @@ button.selected,
 
 /* - icons */
 
-.icon{
+.icon {
     width: 1.5rem;
     height: 1.5rem;
 }
 
-.icon-medium{
+.icon-medium {
     width: 2rem;
     height: 2rem;
 }
 
-.icon-large{
+.icon-large {
     width: 2.5rem;
     height: 2.5rem;
 }
 
 /* - gradient text */
 
-.text-gradient{
+.text-gradient {
     background-image: var(--gradient);
     background-clip: text;
     text-fill-color: transparent;
     -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent; 
+    -webkit-text-fill-color: transparent;
     -moz-background-clip: text;
     -moz-text-fill-color: transparent;
 }

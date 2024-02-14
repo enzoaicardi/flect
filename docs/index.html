@@ -1,169 +1,213 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Flect, the 2kb fuly reactive component library</title>
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flect, the 2kb fuly reactive component library</title>
-
-    <script type="application/ld+json">
-        {
-            "@context": "https://schema.org",
-            "@type": "WebSite",
-            "name": "Flect",
-            "url": "https://flect.aicardi.pro"
-        }
-    </script>
-
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org/",
-        "@type": "WebApplication",
-        "applicationCategory": "Javascript Library",
-        "operatingSystem": "Chromium",
-        "fileSize": "2KB",
-        "installUrl": "https://cdn.jsdelivr.net/npm/flect/flect.js",
-        "abstract": "2kb javascript reactive component library",
-        "name": "Flect",
-        "alternateName": "flect.js",
-        "author": {
-            "@type": "Person",
-            "name": "Enzo Aicardi"
-        },
-        "screenshot": "https://flect.aicardi.pro/assets/logo.svg",
-        "keywords": "flect, reflect, components, web-components, es6 components, javascript, js, reactive, hydration, binding, state, attribute",
-        "datePublished": "2023-07-08",
-        "description": "2kb javascript reactive component library",
-        "license": "GPL-3.0-only"
-    }
-    </script>
-
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": [
+        <script type="application/ld+json">
             {
-                "@type": "ListItem",
-                "position": 1,
-                "item": {
-                    "@id": "https://flect.aicardi.pro/doc/starter/get-started.html",
-                    "name": "Get started"
-                }
-            },
-            {
-                "@type": "ListItem",
-                "position": 2,
-                "item": {
-                    "@id": "https://flect.aicardi.pro/doc/starter/render.html",
-                    "name": "Render Function"
-                }
-            },
-            {
-                "@type": "ListItem",
-                "position": 3,
-                "item": {
-                    "@id": "https://flect.aicardi.pro/doc/resources/attributes.html",
-                    "name": "Attributes"
-                }
-            },
-            {
-                "@type": "ListItem",
-                "position": 4,
-                "item": {
-                    "@id": "https://flect.aicardi.pro/try-it.html",
-                    "name": "Try-it on CodePen"
-                }
+                "@context": "https://schema.org",
+                "@type": "WebSite",
+                "name": "Flect",
+                "url": "https://flect.aicardi.pro"
             }
-        ]
-    }
-    </script>
+        </script>
 
-    <link rel="stylesheet" href="./assets/css/globals.css">
-    <link rel="stylesheet" href="./assets/css/styles.css">
+        <script type="application/ld+json">
+            {
+                "@context": "https://schema.org/",
+                "@type": "WebApplication",
+                "applicationCategory": "Javascript Library",
+                "operatingSystem": "Chromium",
+                "fileSize": "2KB",
+                "installUrl": "https://cdn.jsdelivr.net/npm/flect/flect.js",
+                "abstract": "2kb javascript reactive component library",
+                "name": "Flect",
+                "alternateName": "flect.js",
+                "author": {
+                    "@type": "Person",
+                    "name": "Enzo Aicardi"
+                },
+                "screenshot": "https://flect.aicardi.pro/assets/logo.svg",
+                "keywords": "flect, reflect, components, web-components, es6 components, javascript, js, reactive, hydration, binding, state, attribute",
+                "datePublished": "2023-07-08",
+                "description": "2kb javascript reactive component library",
+                "license": "GPL-3.0-only"
+            }
+        </script>
 
-    <script type="module" src="https://cdn.jsdelivr.net/npm/flect/flect.js"></script>
-    <script type="module" src="./assets/js/components.js"></script>
+        <script type="application/ld+json">
+            {
+                "@context": "https://schema.org",
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "item": {
+                            "@id": "https://flect.aicardi.pro/doc/starter/get-started.html",
+                            "name": "Get started"
+                        }
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "item": {
+                            "@id": "https://flect.aicardi.pro/doc/starter/render.html",
+                            "name": "Render Function"
+                        }
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "item": {
+                            "@id": "https://flect.aicardi.pro/doc/resources/attributes.html",
+                            "name": "Attributes"
+                        }
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "item": {
+                            "@id": "https://flect.aicardi.pro/try-it.html",
+                            "name": "Try-it on CodePen"
+                        }
+                    }
+                ]
+            }
+        </script>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;800&family=Roboto+Mono:wght@500&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="./assets/css/globals.css" />
+        <link rel="stylesheet" href="./assets/css/styles.css" />
 
-</head>
-<body>
-    
-    <nav class="navigation">
+        <script
+            type="module"
+            src="https://cdn.jsdelivr.net/npm/flect/flect.js"
+        ></script>
+        <script type="module" src="./assets/js/components.js"></script>
 
-        <section>
-
-            <img class="icon-large" src="./assets/logo.svg" alt="logo">
-            <a href="./doc/starter/get-started.html">Documentation</a>
-            <a class="space" href="./try-it.html" target="_blank">Try-it</a>
-
-            <a href="https://github.com/enzoaicardi/flect">
-                <svg class="icon-medium icon-github"><use xlink:href="#icon-github"></use></svg>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;800&family=Roboto+Mono:wght@500&display=swap"
+            rel="stylesheet"
+        />
+    </head>
+    <body>
+        <header>
+            <a href="https://vifjs.dev">
+                <h2>Warning</h2>
+                <p>
+                    Flect is currently depreciated, please consider switching to
+                    Vif.js
+                </p>
+                <svg
+                    class="logo"
+                    viewBox="0 0 48 52"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+                    <circle
+                        cx="24"
+                        cy="9.33333"
+                        r="6.59966"
+                        transform="rotate(45 24 9.33333)"
+                        fill="#ff661a"
+                    ></circle>
+                    <rect
+                        x="12"
+                        y="16"
+                        width="16.9706"
+                        height="16.9706"
+                        transform="rotate(45 12 16)"
+                        fill="#ff661a"
+                    ></rect>
+                    <rect
+                        x="35.9999"
+                        y="16"
+                        width="16.9706"
+                        height="33.9411"
+                        transform="rotate(45 35.9999 16)"
+                        fill="#FFC700"
+                    ></rect>
+                </svg>
             </a>
+        </header>
+        <nav class="navigation">
+            <section>
+                <img class="icon-large" src="./assets/logo.svg" alt="logo" />
+                <a href="./doc/starter/get-started.html">Documentation</a>
+                <a class="space" href="./try-it.html" target="_blank">Try-it</a>
 
+                <a href="https://github.com/enzoaicardi/flect">
+                    <svg class="icon-medium icon-github">
+                        <use xlink:href="#icon-github"></use>
+                    </svg>
+                </a>
+            </section>
+        </nav>
+
+        <section class="heading">
+            <div class="logo-with-backdrop">
+                <img class="logo" src="./assets/logo.svg" alt="logo" />
+                <div class="backdrop"></div>
+            </div>
+
+            <h2 class="text-gradient">Flect.js</h2>
+            <h2>the 2kb reactive component library.</h2>
         </section>
 
-    </nav>
+        <section class="get-started">
+            <div class="code">
+                <pre
+                    class="shiki github-dark"
+                    style="background-color: #24292e"
+                    tabindex="0"
+                ><code><span class="line"><span style="color: #E1E4E8">&lt;</span><span style="color: #85E89D">script</span><span style="color: #E1E4E8"> </span><span style="color: #B392F0">src</span><span style="color: #E1E4E8">=</span><span style="color: #9ECBFF">"https://cdn.jsdelivr.net/npm/flect/flect.js"</span><span style="color: #E1E4E8"> </span><span style="color: #B392F0">defer</span><span style="color: #E1E4E8">&gt;&lt;/</span><span style="color: #85E89D">script</span><span style="color: #E1E4E8">&gt;</span></span><br><span class="line"><span style="color: #E1E4E8">&lt;</span><span style="color: #85E89D">script</span><span style="color: #E1E4E8"> </span><span style="color: #B392F0">src</span><span style="color: #E1E4E8">=</span><span style="color: #9ECBFF">"./my-components.js"</span><span style="color: #E1E4E8"> </span><span style="color: #B392F0">defer</span><span style="color: #E1E4E8">&gt;&lt;/</span><span style="color: #85E89D">script</span><span style="color: #E1E4E8">&gt;</span></span></code></pre>
+            </div>
 
-    <section class="heading">
-
-        <div class="logo-with-backdrop">
-            <img class="logo" src="./assets/logo.svg" alt="logo">
-            <div class="backdrop"></div>
-        </div>
-
-        <h2 class="text-gradient">Flect.js</h2>
-        <h2>the 2kb reactive component library.</h2>
-
-    </section>
-
-    <section class="get-started">
-
-        <div class="code">    
-            <pre class="shiki github-dark" style="background-color: #24292e" tabindex="0"><code><span class="line"><span style="color: #E1E4E8">&lt;</span><span style="color: #85E89D">script</span><span style="color: #E1E4E8"> </span><span style="color: #B392F0">src</span><span style="color: #E1E4E8">=</span><span style="color: #9ECBFF">"https://cdn.jsdelivr.net/npm/flect/flect.js"</span><span style="color: #E1E4E8"> </span><span style="color: #B392F0">defer</span><span style="color: #E1E4E8">&gt;&lt;/</span><span style="color: #85E89D">script</span><span style="color: #E1E4E8">&gt;</span></span><br><span class="line"><span style="color: #E1E4E8">&lt;</span><span style="color: #85E89D">script</span><span style="color: #E1E4E8"> </span><span style="color: #B392F0">src</span><span style="color: #E1E4E8">=</span><span style="color: #9ECBFF">"./my-components.js"</span><span style="color: #E1E4E8"> </span><span style="color: #B392F0">defer</span><span style="color: #E1E4E8">&gt;&lt;/</span><span style="color: #85E89D">script</span><span style="color: #E1E4E8">&gt;</span></span></code></pre>
-        </div>
-
-        <p>Put these two script tags directly into your document’s head, and you are ready to code.</p>
-
-    </section>
-
-    <section>
-
-        <h2>x-Fast.<br>
-            x-Light.<br>
-            x-Reactive.<br>
-            x-Easy to use.</h2>
-
-    </section>
-
-    <section>
-
-        <x-features></x-features>
-
-    </section>
-
-    <footer class="footer">
+            <p>
+                Put these two script tags directly into your document’s head,
+                and you are ready to code.
+            </p>
+        </section>
 
         <section>
-
-            <p>GNU GPL-3.0-only License</p>
-            <p>Copyright © Flect - 2022-present</p>
-            <p>@enzoaicardi</p>
-
+            <h2>
+                x-Fast.<br />
+                x-Light.<br />
+                x-Reactive.<br />
+                x-Easy to use.
+            </h2>
         </section>
 
-    </footer>
+        <section>
+            <x-features></x-features>
+        </section>
 
-    <svg aria-hidden="true" style="position: absolute; width: 0; height: 0; overflow: hidden;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-        <defs>
-            <symbol id="icon-github" viewBox="0 0 32 32">
-                <path d="M16 0.395c-8.836 0-16 7.163-16 16 0 7.069 4.585 13.067 10.942 15.182 0.8 0.148 1.094-0.347 1.094-0.77 0-0.381-0.015-1.642-0.022-2.979-4.452 0.968-5.391-1.888-5.391-1.888-0.728-1.849-1.776-2.341-1.776-2.341-1.452-0.993 0.11-0.973 0.11-0.973 1.606 0.113 2.452 1.649 2.452 1.649 1.427 2.446 3.743 1.739 4.656 1.33 0.143-1.034 0.558-1.74 1.016-2.14-3.554-0.404-7.29-1.777-7.29-7.907 0-1.747 0.625-3.174 1.649-4.295-0.166-0.403-0.714-2.030 0.155-4.234 0 0 1.344-0.43 4.401 1.64 1.276-0.355 2.645-0.532 4.005-0.539 1.359 0.006 2.729 0.184 4.008 0.539 3.054-2.070 4.395-1.64 4.395-1.64 0.871 2.204 0.323 3.831 0.157 4.234 1.026 1.12 1.647 2.548 1.647 4.295 0 6.145-3.743 7.498-7.306 7.895 0.574 0.497 1.085 1.47 1.085 2.963 0 2.141-0.019 3.864-0.019 4.391 0 0.426 0.288 0.925 1.099 0.768 6.354-2.118 10.933-8.113 10.933-15.18 0-8.837-7.164-16-16-16z"></path>
-            </symbol>
-        </defs>
-    </svg>
+        <footer class="footer">
+            <section>
+                <p>GNU GPL-3.0-only License</p>
+                <p>Copyright © Flect - 2022-present</p>
+                <p>@enzoaicardi</p>
+            </section>
+        </footer>
 
-</body>
+        <svg
+            aria-hidden="true"
+            style="position: absolute; width: 0; height: 0; overflow: hidden"
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+        >
+            <defs>
+                <symbol id="icon-github" viewBox="0 0 32 32">
+                    <path
+                        d="M16 0.395c-8.836 0-16 7.163-16 16 0 7.069 4.585 13.067 10.942 15.182 0.8 0.148 1.094-0.347 1.094-0.77 0-0.381-0.015-1.642-0.022-2.979-4.452 0.968-5.391-1.888-5.391-1.888-0.728-1.849-1.776-2.341-1.776-2.341-1.452-0.993 0.11-0.973 0.11-0.973 1.606 0.113 2.452 1.649 2.452 1.649 1.427 2.446 3.743 1.739 4.656 1.33 0.143-1.034 0.558-1.74 1.016-2.14-3.554-0.404-7.29-1.777-7.29-7.907 0-1.747 0.625-3.174 1.649-4.295-0.166-0.403-0.714-2.030 0.155-4.234 0 0 1.344-0.43 4.401 1.64 1.276-0.355 2.645-0.532 4.005-0.539 1.359 0.006 2.729 0.184 4.008 0.539 3.054-2.070 4.395-1.64 4.395-1.64 0.871 2.204 0.323 3.831 0.157 4.234 1.026 1.12 1.647 2.548 1.647 4.295 0 6.145-3.743 7.498-7.306 7.895 0.574 0.497 1.085 1.47 1.085 2.963 0 2.141-0.019 3.864-0.019 4.391 0 0.426 0.288 0.925 1.099 0.768 6.354-2.118 10.933-8.113 10.933-15.18 0-8.837-7.164-16-16-16z"
+                    ></path>
+                </symbol>
+            </defs>
+        </svg>
+    </body>
 </html>
